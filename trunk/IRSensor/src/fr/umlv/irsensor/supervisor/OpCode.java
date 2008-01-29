@@ -17,7 +17,7 @@ public enum OpCode {
   private final Byte code;
 
   private OpCode(String code) {
-    this.code = new Byte(code);
+    this.code = Byte.parseByte(code, 2);
   }
 
   public Byte getCode() {
