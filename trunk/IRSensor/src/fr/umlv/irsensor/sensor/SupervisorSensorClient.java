@@ -22,6 +22,9 @@ public class SupervisorSensorClient {
     buffer.put(new Byte("00000000"));
 
     channel.write(buffer);
+    buffer.clear();
+    
+    channel.read(buffer);
 
     channel.close();
   }
