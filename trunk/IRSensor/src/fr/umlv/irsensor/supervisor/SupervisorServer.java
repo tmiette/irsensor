@@ -23,7 +23,7 @@ public class SupervisorServer {
 
       while (socket.read(readBuffer) != -1) {
         readBuffer.flip();
-        System.err.println(readBuffer.array());
+        System.err.println(readBuffer);
         readBuffer.clear();
       }
 

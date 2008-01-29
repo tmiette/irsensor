@@ -5,6 +5,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import fr.umlv.irsensor.supervisor.OpCode;
+
 public class SupervisorSensorClient {
 
   private static final String serverName = "localhost";
@@ -19,7 +21,7 @@ public class SupervisorSensorClient {
     channel.connect(new InetSocketAddress(serverName, serverPort));
 
     ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-    buffer.put(new Byte("00000000"));
+    buffer.put(OpCode.REQCON.getCode());
 
     channel.write(buffer);
     buffer.clear();
