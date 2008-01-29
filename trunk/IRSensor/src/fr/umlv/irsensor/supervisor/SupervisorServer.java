@@ -29,10 +29,6 @@ public class SupervisorServer {
     ServerSocketChannel servChannel = ServerSocketChannel.open();
     servChannel.socket().bind(new InetSocketAddress(serverPort));
 
-    for (OpCode code : OpCode.values()) {
-      System.err.println(code.getCode());
-    }
-
     for (;;) {
       final SocketChannel sensorChannel = servChannel.accept();
 
@@ -46,12 +42,14 @@ public class SupervisorServer {
 
             // wait for REQCON packet
             sensorChannel.read(readBuffer);
-            //readBuffer.flip();
-            System.err.println(DecodeOpCode.decodeByteBuffer(readBuffer));
 
             synchronized (lock) {
+              // send REPCON packet to the sensor
               sensorChannel.write(BufferFactory
-                  .createRepConPacket(sensorAlreadyConnected++));
+                  .createRepConPacket(sensorAlreadyConnected));
+              // store it in the list of sensors
+              sensors.put(sensorAlreadyConnected, sensorChannel);
+              sensorAlreadyConnected++;
             }
 
             sensorChannel.close();

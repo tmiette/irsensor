@@ -6,7 +6,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import fr.umlv.irsensor.supervisor.OpCode;
+import fr.umlv.irsensor.supervisor.BufferFactory;
 
 public class SupervisorSensorClient {
 
@@ -20,20 +20,18 @@ public class SupervisorSensorClient {
 
   public void launch() throws IOException {
     SocketChannel channel = SocketChannel.open();
-    channel.connect(new InetSocketAddress(InetAddress
-        .getByName("localhost"), serverPort));
+    channel.connect(new InetSocketAddress(InetAddress.getByName("localhost"),
+        serverPort));
 
-    ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-    
-    // REQCON packet to supervision server
-    buffer.put(OpCode.GETCONF.getCode());
-    channel.write(buffer);
-    buffer.clear();
+    ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
+
+    // send REQCON packet to supervision server
+    channel.write(BufferFactory.createReqConPacket());
 
     // wait for REPCON packet
-    channel.read(buffer);
-    buffer.flip();
-    
+    channel.read(readBuffer);
+    readBuffer.flip();
+    System.out.println(readBuffer.getInt());
 
     channel.close();
   }
