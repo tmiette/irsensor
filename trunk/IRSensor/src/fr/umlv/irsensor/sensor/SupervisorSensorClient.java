@@ -10,7 +10,7 @@ import fr.umlv.irsensor.supervisor.BufferFactory;
 
 public class SupervisorSensorClient {
 
-  private static final byte[] serverAdress = new byte[] { (byte) 192,
+  private static final byte[] serverAddress = new byte[] { (byte) 192,
       (byte) 168, (byte) 1, (byte) 2 };
   private static final int serverPort = 31000;
   private static final int BUFFER_SIZE = 512;
