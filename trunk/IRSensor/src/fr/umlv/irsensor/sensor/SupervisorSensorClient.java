@@ -25,7 +25,7 @@ public class SupervisorSensorClient {
 
     ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     buffer.put(OpCode.REQCON.getCode());
-
+    
     channel.write(buffer);
     buffer.clear();
 

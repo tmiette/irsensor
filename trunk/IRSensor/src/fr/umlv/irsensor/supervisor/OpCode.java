@@ -23,5 +23,8 @@ public enum OpCode {
   public Byte getCode() {
     return this.code;
   }
-
+  
+  public static int getOpCodeByteSize(){
+	  return 1;
+  }
 }
