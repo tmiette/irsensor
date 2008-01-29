@@ -16,7 +16,7 @@ public class BufferFactory {
 	 * 
 	 * @return a buffered packet
 	 */
-	public ByteBuffer createRepConPacket(int id){
+	public static ByteBuffer createRepConPacket(int id){
 		final ByteBuffer buffer = ByteBuffer.allocate(OpCode.getOpCodeByteSize()+4);
 		buffer.put(OpCode.REPCON.getCode());
 		buffer.putInt(id);
@@ -28,7 +28,7 @@ public class BufferFactory {
 	 * 
 	 * @return a buffered packet
 	 */
-	public ByteBuffer createReqConPacket(){
+	public static ByteBuffer createReqConPacket(){
 		final ByteBuffer buffer = ByteBuffer.allocate(OpCode.getOpCodeByteSize());
 		buffer.put(OpCode.REQCON.getCode());
 		

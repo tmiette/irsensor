@@ -13,7 +13,7 @@ public class SupervisorSensorClient {
   private static final byte[] serverAdress = new byte[] { (byte) 192,
       (byte) 168, (byte) 1, (byte) 2 };
   private static final int serverPort = 31000;
-  private static final int BUFFER_SIZE = 1024;
+  private static final int BUFFER_SIZE = 512;
 
   public SupervisorSensorClient() {
   }
@@ -21,15 +21,19 @@ public class SupervisorSensorClient {
   public void launch() throws IOException {
     SocketChannel channel = SocketChannel.open();
     channel.connect(new InetSocketAddress(InetAddress
-        .getByAddress(serverAdress), serverPort));
+        .getByName("localhost"), serverPort));
 
     ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-    buffer.put(OpCode.REQCON.getCode());
     
+    // REQCON packet to supervision server
+    buffer.put(OpCode.GETCONF.getCode());
     channel.write(buffer);
     buffer.clear();
 
+    // wait for REPCON packet
     channel.read(buffer);
+    buffer.flip();
+    
 
     channel.close();
   }
