@@ -23,10 +23,19 @@ public class SupervisorSensorClient {
 
     channel.write(buffer);
     buffer.clear();
-    
+
     channel.read(buffer);
 
     channel.close();
+  }
+
+  public static void main(String[] args) {
+    try {
+      new SupervisorSensorClient().launch();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
 }
