@@ -18,8 +18,8 @@ public class BufferFactory {
 	 */
 	public static ByteBuffer createRepConPacket(int id){
 		final ByteBuffer buffer = ByteBuffer.allocate(OpCode.getOpCodeByteSize()+4);
-		buffer.put(OpCode.REPCON.getCode());
-		buffer.putInt(id);
+		buffer.put(0,OpCode.REPCON.getCode());
+		buffer.putInt(OpCode.getOpCodeByteSize(),id);
 		
 		return buffer;
 	}
@@ -30,10 +30,8 @@ public class BufferFactory {
 	 */
 	public static ByteBuffer createReqConPacket(){
 		final ByteBuffer buffer = ByteBuffer.allocate(OpCode.getOpCodeByteSize());
-		buffer.put(OpCode.REQCON.getCode());
+		buffer.put(0, OpCode.REQCON.getCode());
 		
 		return buffer;
 	}
-	
-	
 }

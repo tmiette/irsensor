@@ -24,10 +24,10 @@ public class SupervisorSensorClient {
         serverPort));
 
     ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
-
+    
     // send REQCON packet to supervision server
-    channel.write(BufferFactory.createReqConPacket());
-
+    channel.write(BufferFactory.createRepConPacket(5));
+    
     // wait for REPCON packet
     channel.read(readBuffer);
     readBuffer.flip();

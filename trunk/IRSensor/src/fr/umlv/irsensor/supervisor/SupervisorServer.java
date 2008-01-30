@@ -42,6 +42,12 @@ public class SupervisorServer {
 
             // wait for REQCON packet
             sensorChannel.read(readBuffer);
+            readBuffer.flip();
+            
+            
+            System.err.println("Opcode "+readBuffer.get());
+            System.err.println("Id "+readBuffer.getInt(1));
+            //System.err.println(DecodeOpCode.decodeByteBuffer(readBuffer));
 
             synchronized (lock) {
               // send REPCON packet to the sensor
