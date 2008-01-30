@@ -10,8 +10,12 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 /**
- * @author sebastienmouret
  * 
+ * @author MIETTE Tom
+ * @author MOREAU Alan
+ * @author MOURET Sebastien
+ * @author PONS Julien
+ *
  */
 public class MyLogger {
   public static final String loggerName = "logger";
