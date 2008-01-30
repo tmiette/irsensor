@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import fr.umlv.irsensor.supervisor.BufferFactory;
+import fr.umlv.irsensor.supervisor.DecodePacket;
 
 public class SupervisorSensorClient {
 
@@ -31,7 +32,7 @@ public class SupervisorSensorClient {
     // wait for REPCON packet
     channel.read(readBuffer);
     readBuffer.flip();
-    System.out.println(readBuffer.getInt());
+    System.out.println("id : " + DecodePacket.getId(readBuffer));
 
     channel.close();
   }
