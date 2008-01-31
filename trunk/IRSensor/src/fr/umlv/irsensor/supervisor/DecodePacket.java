@@ -2,6 +2,7 @@ package fr.umlv.irsensor.supervisor;
 
 import java.nio.ByteBuffer;
 
+import fr.umlv.irsensor.sensor.CatchArea;
 import fr.umlv.irsensor.sensor.ErrorCode;
 
 /**
@@ -40,6 +41,7 @@ public class DecodePacket {
       ByteBuffer bb = packet.duplicate();
       bb.rewind();
       byte[] errorCode = new byte[ErrorCode.getOpCodeByteSize()];
+      // Opcode | id | ErrorCode
       bb.position(OpCode.getOpCodeByteSize() + (Integer.SIZE / 8));
       bb.get(errorCode, 0, ErrorCode.getOpCodeByteSize());
       for (int i = 0; i < ErrorCode.getOpCodeByteSize(); i++) {
@@ -62,6 +64,7 @@ public class DecodePacket {
     if (packet != null) {
       ByteBuffer bb = packet.duplicate();
       byte[] code = new byte[OpCode.getOpCodeByteSize()];
+      // Opcode
       bb.position(0);
       bb.get(code, 0, OpCode.getOpCodeByteSize());
       for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
@@ -74,4 +77,38 @@ public class DecodePacket {
     }
     return null;
   }
+  
+  /**
+   * Returns the area contained in the packet.ñ
+   * @param packet packet to read.
+   * @return CatchArea contained in the packet.
+   */
+  public static CatchArea getCatchArea(ByteBuffer packet) {
+    
+    CatchArea area = null;
+    if (packet != null) {
+      ByteBuffer bb = packet.duplicate();
+      // Opcode | id | catch area
+      bb.position(OpCode.getOpCodeByteSize() + (Integer.SIZE / 8));
+      area = new CatchArea(bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt());
+    }
+    return area;
+  }
+  
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
