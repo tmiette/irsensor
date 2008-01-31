@@ -20,24 +20,19 @@ public class DecodePacket {
    * @param bb bytebuffer which contains the id.
    * @return int which represents the id.
    */
-  public static int getId(ByteBuffer bb) {
-    int id = -1;
-    try {
-      id = bb.getInt(OpCode.getOpCodeByteSize());
-    } catch (IndexOutOfBoundsException e) {
-      return id;
-    }
-    return id;
+  public static int getId(ByteBuffer packet) {
+    ByteBuffer bb = packet.duplicate();
+    return bb.getInt(OpCode.getOpCodeByteSize());
   }
 
   /**
-   * Returns the error code 
+   * Returns the error code
    * @param packet
    * @return
    */
   public static ErrorCode getErrorCode(ByteBuffer packet) {
     byte[] errorCode = null;
-    packet.get(errorCode, ErrorCode.getOpCodeByteSize() + (Integer.SIZE / 8),
+    packet.get(errorCode, OpCode.getOpCodeByteSize() + (Integer.SIZE / 8),
         ErrorCode.getOpCodeByteSize());
     for (int i = 0; i < ErrorCode.getOpCodeByteSize(); i++) {
       for (ErrorCode code : ErrorCode.values()) {
