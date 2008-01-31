@@ -53,7 +53,11 @@ public class SupervisorServer {
 						sensorChannel.read(readBuffer);
 						readBuffer.flip();
 						
-						if(DecodePacket.getOpCode(readBuffer) != OpCode.REQCON) return;
+						if(DecodePacket.getOpCode(readBuffer) != OpCode.REQCON) {
+							sensorChannel.close();
+							return;
+						}
+						
 						readBuffer.clear();
 						
 						synchronized (lock) {
@@ -66,18 +70,18 @@ public class SupervisorServer {
 							sensorChannel.read(readBuffer);
 							readBuffer.flip();
 							
-							if(DecodePacket.getErrorCode(readBuffer) != ErrorCode.OK) return;
+							if(DecodePacket.getErrorCode(readBuffer) != ErrorCode.OK){
+								sensorChannel.close();
+								return;
+							}
 							
 							// store it in the list of sensors
 							sensors.put(sensorAlreadyConnected, new SensorNode(sensorChannel));
 							
 							sensorAlreadyConnected++;
 						}
-
-						sensorChannel.close();
-
+						
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -92,7 +96,6 @@ public class SupervisorServer {
 		try {
 			new SupervisorServer().launch();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
