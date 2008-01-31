@@ -19,11 +19,10 @@ public enum ErrorCode {
   }
   
   public boolean isServerSide(ErrorCode code) {
-    byte mask = Byte.parseByte("0000", 2);
-    
+    return (code.getCode() >> 4) > 1;
   }
   
   public boolean isSensorSide(ErrorCode code) {
-    
+    return !isServerSide(code);
   }
 }
