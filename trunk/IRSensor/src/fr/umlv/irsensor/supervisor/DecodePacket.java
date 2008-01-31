@@ -21,37 +21,54 @@ public class DecodePacket {
    * @return int which represents the id.
    */
   public static int getId(ByteBuffer packet) {
-    ByteBuffer bb = packet.duplicate();
-    return bb.getInt(OpCode.getOpCodeByteSize());
+    int id = -1;
+    if (packet != null) {
+      ByteBuffer bb = packet.duplicate();
+      id = bb.getInt(OpCode.getOpCodeByteSize());
+    }
+    return id;
   }
 
   /**
-   * Returns the error code
-   * @param packet
-   * @return
+   * Returns the error code contained in the given packet or null if no
+   * ErrorCode is present.
+   * @param packet packet to read.
+   * @return ErrorCode contained in the packet.
    */
   public static ErrorCode getErrorCode(ByteBuffer packet) {
-    byte[] errorCode = null;
-    packet.get(errorCode, OpCode.getOpCodeByteSize() + (Integer.SIZE / 8),
-        ErrorCode.getOpCodeByteSize());
-    for (int i = 0; i < ErrorCode.getOpCodeByteSize(); i++) {
-      for (ErrorCode code : ErrorCode.values()) {
-        if (code.getCode() == (errorCode[i])) {
-          return code;
+    if (packet != null) {
+      ByteBuffer bb = packet.duplicate();
+      bb.rewind();
+      byte[] errorCode = new byte[ErrorCode.getOpCodeByteSize()];
+      bb.position(OpCode.getOpCodeByteSize() + (Integer.SIZE / 8));
+      bb.get(errorCode, 0, ErrorCode.getOpCodeByteSize());
+      for (int i = 0; i < ErrorCode.getOpCodeByteSize(); i++) {
+        for (ErrorCode code : ErrorCode.values()) {
+          if (code.getCode() == (errorCode[i])) {
+            return code;
+          }
         }
       }
     }
     return null;
   }
 
+  /**
+   * Returns the opcode of the packet. Returns null if no opcode is present.
+   * @param packet packet to read.
+   * @return OpCode of the packet
+   */
   public static OpCode getOpCode(ByteBuffer packet) {
-    byte[] code = null;
-    packet.get(code, OpCode.getOpCodeByteSize() + (Integer.SIZE / 8), OpCode
-        .getOpCodeByteSize());
-    for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
-      for (OpCode opCode : OpCode.values()) {
-        if (opCode.getCode() == (code[i])) {
-          return opCode;
+    if (packet != null) {
+      ByteBuffer bb = packet.duplicate();
+      byte[] code = new byte[OpCode.getOpCodeByteSize()];
+      bb.position(0);
+      bb.get(code, 0, OpCode.getOpCodeByteSize());
+      for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
+        for (OpCode opCode : OpCode.values()) {
+          if (opCode.getCode() == (code[i])) {
+            return opCode;
+          }
         }
       }
     }
