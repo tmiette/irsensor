@@ -1,4 +1,5 @@
 package fr.umlv.irsensor.sensor;
+
 public class Sensor {
 
   private final int id;

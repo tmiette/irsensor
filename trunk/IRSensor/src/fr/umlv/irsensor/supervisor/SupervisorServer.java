@@ -9,76 +9,92 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import fr.umlv.irsensor.sensor.ErrorCode;
+
 public class SupervisorServer {
 
-  private static int MAX_THREADS = 2;
-  private static final int BUFFER_SIZE = 512;
-  private static final int serverPort = 31000;
-  private static final Object lock = new Object();
-  private final ExecutorService executor;
-  private final HashMap<Integer, SocketChannel> sensors;
-  private int sensorAlreadyConnected;
+	private static int MAX_THREADS = 2;
+	private static final int BUFFER_SIZE = 512;
+	private static final int serverPort = 31000;
 
-  public SupervisorServer() {
-    this.executor = Executors.newFixedThreadPool(MAX_THREADS);
-    this.sensors = new HashMap<Integer, SocketChannel>();
-    this.sensorAlreadyConnected = 0;
-  }
+	private static final Object lock = new Object();
+	private final ExecutorService executor;
 
-  public void launch() throws IOException {
-    ServerSocketChannel servChannel = ServerSocketChannel.open();
-    servChannel.socket().bind(new InetSocketAddress(serverPort));
+	private final HashMap<Integer, SensorNode> sensors;
+	private int sensorAlreadyConnected;
+	
+	private static final int nbrSensor = 3;
+	
+	public SupervisorServer() {
+		this.executor = Executors.newFixedThreadPool(MAX_THREADS);
+		this.sensors = new HashMap<Integer, SensorNode>();
+		this.sensorAlreadyConnected = 0;
+	}
 
-    for (;;) {
-      final SocketChannel sensorChannel = servChannel.accept();
+	public void launch() throws IOException {
+		ServerSocketChannel servChannel = ServerSocketChannel.open();
+		servChannel.socket().bind(new InetSocketAddress(serverPort));
 
-      // new connection
-      this.executor.execute(new Runnable() {
-        @Override
-        public void run() {
-          final ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
+		for (;;) {
+			//all the sensors have already been configured
+			if(this.sensorAlreadyConnected == nbrSensor) break;
+			
+			final SocketChannel sensorChannel = servChannel.accept();
+			
+			// new connection
+			this.executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					final ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
 
-          try {
+					try {
 
-            // wait for REQCON packet
-            sensorChannel.read(readBuffer);
-            readBuffer.flip();
-            
-            
-            System.err.println("Opcode "+readBuffer.get());
-            System.err.println("Id "+readBuffer.getInt(1));
-            //System.err.println(DecodeOpCode.decodeByteBuffer(readBuffer));
+						// wait for REQCON packet
+						sensorChannel.read(readBuffer);
+						readBuffer.flip();
+						
+						if(DecodePacket.getOpCode(readBuffer) != OpCode.REQCON) return;
+						readBuffer.clear();
+						
+						synchronized (lock) {
+							// send REPCON packet to the sensor
+							sensorChannel.write(PacketFactory
+									.createRepConPacket(sensorAlreadyConnected));
+							
+							
+							// wait for ACK packet
+							sensorChannel.read(readBuffer);
+							readBuffer.flip();
+							
+							if(DecodePacket.getErrorCode(readBuffer) != ErrorCode.OK) return;
+							
+							// store it in the list of sensors
+							sensors.put(sensorAlreadyConnected, new SensorNode(sensorChannel));
+							
+							sensorAlreadyConnected++;
+						}
 
-            synchronized (lock) {
-              // send REPCON packet to the sensor
-              sensorChannel.write(BufferFactory
-                  .createRepConPacket(sensorAlreadyConnected));
-              // store it in the list of sensors
-              sensors.put(sensorAlreadyConnected, sensorChannel);
-              sensorAlreadyConnected++;
-            }
+						sensorChannel.close();
 
-            sensorChannel.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
 
-          } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-        }
-      });
+		}
 
-    }
+	}
 
-  }
+	public static void main(String[] args) {
 
-  public static void main(String[] args) {
+		try {
+			new SupervisorServer().launch();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    try {
-      new SupervisorServer().launch();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
-  }
+	}
 }

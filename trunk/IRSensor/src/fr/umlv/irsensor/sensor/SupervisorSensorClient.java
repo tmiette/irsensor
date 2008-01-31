@@ -6,7 +6,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import fr.umlv.irsensor.supervisor.BufferFactory;
+import fr.umlv.irsensor.supervisor.PacketFactory;
 import fr.umlv.irsensor.supervisor.DecodePacket;
 
 public class SupervisorSensorClient {
@@ -27,7 +27,7 @@ public class SupervisorSensorClient {
     ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
     
     // send REQCON packet to supervision server
-    channel.write(BufferFactory.createRepConPacket(5));
+    channel.write(PacketFactory.createRepConPacket(5));
     
     // wait for REPCON packet
     channel.read(readBuffer);
