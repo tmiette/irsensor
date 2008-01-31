@@ -14,7 +14,7 @@ import fr.umlv.irsensor.sensor.SensorState;
  * @author Mouret Sebastien
  * @author Pons Julien
  */
-public class BufferFactory {
+public class PacketFactory {
   /**
    * Create a new REPCON packet according to the given parameters
    * @return a buffered packet
