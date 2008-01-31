@@ -29,16 +29,37 @@ public class DecodePacket {
     }
     return id;
   }
-  
+
+  /**
+   * Returns the error code 
+   * @param packet
+   * @return
+   */
   public static ErrorCode getErrorCode(ByteBuffer packet) {
     byte[] errorCode = null;
-   packet.get(errorCode, OpCode.getOpCodeByteSize() + (Integer.SIZE / 8), ErrorCode.getOpCodeByteSize());
-   for (byte b : errorCode) {
-    
-  }
+    packet.get(errorCode, ErrorCode.getOpCodeByteSize() + (Integer.SIZE / 8),
+        ErrorCode.getOpCodeByteSize());
+    for (int i = 0; i < ErrorCode.getOpCodeByteSize(); i++) {
+      for (ErrorCode code : ErrorCode.values()) {
+        if (code.getCode() == (errorCode[i])) {
+          return code;
+        }
+      }
+    }
+    return null;
   }
 
-  public static OpCode getOpCode(ByteBuffer bb) {
-    
+  public static OpCode getOpCode(ByteBuffer packet) {
+    byte[] code = null;
+    packet.get(code, OpCode.getOpCodeByteSize() + (Integer.SIZE / 8), OpCode
+        .getOpCodeByteSize());
+    for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
+      for (OpCode opCode : OpCode.values()) {
+        if (opCode.getCode() == (code[i])) {
+          return opCode;
+        }
+      }
+    }
+    return null;
   }
 }
