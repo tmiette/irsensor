@@ -9,10 +9,11 @@ import fr.umlv.irsensor.sensor.SensorState;
 /**
  * BufferFactory is in charge of creating the supervisor protocol packets A
  * packet is represented by a <code>ByteBuffer</code>
- * @author Miette Tom
- * @author Moreau Alan
- * @author Mouret Sebastien
- * @author Pons Julien
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  */
 public class PacketFactory {
   /**
@@ -70,7 +71,7 @@ public class PacketFactory {
     index += Integer.SIZE / 8;
     buffer.putInt(index, payload);
     index += Integer.SIZE / 8;
-    buffer.put(root, index, root.length);
+    buffer.put(root, 0, root.length);
     return buffer;
   }
 

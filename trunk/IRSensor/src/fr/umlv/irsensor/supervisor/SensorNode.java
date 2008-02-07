@@ -24,6 +24,15 @@ public class SensorNode {
 	
 	public SensorNode(SocketChannel socketChannel) {
 		this.channel = socketChannel;
+		this.state = State.DOWN;
+	}
+	
+	/**Change the current state of a sensor
+	 * 
+	 * @param state <code>State</code>
+	 */
+	public void setState(State state){
+		this.state = state;
 	}
 	
 	/**

@@ -79,7 +79,7 @@ public class DecodePacket {
   }
   
   /**
-   * Returns the area contained in the packet.ñ
+   * Returns the area contained in the packet.ï¿½
    * @param packet packet to read.
    * @return CatchArea contained in the packet.
    */
