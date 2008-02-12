@@ -1,0 +1,5 @@
+package fr.umlv.irsensor.sensor.networkClients;
+
+public class DataClient {
+
+}
