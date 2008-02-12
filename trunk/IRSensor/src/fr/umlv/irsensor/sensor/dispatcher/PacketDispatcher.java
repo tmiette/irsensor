@@ -7,8 +7,8 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 
+import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
-import fr.umlv.irsensor.supervisor.DecodePacket;
 
 /**
  * <code>PacketDispatcher</code> implements a TCP server socket

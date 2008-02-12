@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.sensor;
+package fr.umlv.irsensor.common.packets;
 
 
 public enum ErrorCode {

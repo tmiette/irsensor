@@ -1,9 +1,8 @@
-package fr.umlv.irsensor.common;
+package fr.umlv.irsensor.common.packets;
 
 import java.nio.ByteBuffer;
 
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
-import fr.umlv.irsensor.supervisor.OpCode;
 
 public class RepConPacket implements SupervisorPacket {
 	

@@ -1,16 +1,34 @@
 package fr.umlv.irsensor.sensor;
 
+import java.io.IOException;
+
+import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.sensor.networkClients.DataClient;
+import fr.umlv.irsensor.sensor.networkClients.SensorClient;
+import fr.umlv.irsensor.sensor.networkClients.SupervisorClient;
+
 public class Sensor {
 
-	private final int id;
 	private CatchArea area;
 	private int quality;
 	private int clock;
 	private int autonomy;
 	private int payload;
-
-	public Sensor(int id) {
-		this.id = id;
+	
+	private SensorState state = SensorState.DOWN;
+	
+	private final SupervisorClient supervisorClient;
+	private final DataClient dataClient = new DataClient();
+	private final SensorClient sensorClient = new SensorClient();
+	
+	public Sensor() throws IOException {
+		this.supervisorClient = new SupervisorClient(this);
+		try {
+			this.supervisorClient.registrySensor();
+			this.state = SensorState.UP;
+		} catch (MalformedPacketException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public CatchArea getArea() {
@@ -54,7 +72,11 @@ public class Sensor {
 	}
 
 	public int getId() {
-		return this.id;
+		return this.supervisorClient.getId();
+	}
+	
+	public SupervisorClient getSupervisorClient(){
+		return this.supervisorClient;
 	}
 
 }

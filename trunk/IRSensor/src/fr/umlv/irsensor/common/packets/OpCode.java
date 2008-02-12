@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.supervisor;
+package fr.umlv.irsensor.common.packets;
 
 
 public enum OpCode {

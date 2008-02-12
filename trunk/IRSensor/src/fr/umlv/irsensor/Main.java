@@ -3,9 +3,10 @@ package fr.umlv.irsensor;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import fr.umlv.irsensor.sensor.SupervisorSensorClient;
+import fr.umlv.irsensor.sensor.Sensor;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
+import fr.umlv.irsensor.sensor.networkClients.SupervisorClient;
 import fr.umlv.irsensor.supervisor.SupervisorServer;
 import fr.umlv.irsensor.util.IRSensorLogger;
 
@@ -23,10 +24,9 @@ public class Main {
 	  
 	  final PacketDispatcher dispatcher = new PacketDispatcher(31000);
 	  for(int i=0; i<2; i++){
-		  final SupervisorSensorClient client = new SupervisorSensorClient();
+		  final Sensor sensor = new Sensor();
 		  try {
-			client.launch();
-			dispatcher.register(client);
+			dispatcher.register(sensor.getSupervisorClient());
 		} catch (IdAlreadyUsedException e) {
 			System.out.println(e.getMessage());
 		}
@@ -34,5 +34,4 @@ public class Main {
 	  }
 	  dispatcher.startDispatcher();
   }
-  
 }

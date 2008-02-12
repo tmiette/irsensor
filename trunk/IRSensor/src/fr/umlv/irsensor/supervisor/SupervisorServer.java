@@ -1,7 +1,6 @@
 package fr.umlv.irsensor.supervisor;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
@@ -10,8 +9,10 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import fr.umlv.irsensor.common.packets.DecodePacket;
+import fr.umlv.irsensor.common.packets.OpCode;
+import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.sensor.CatchArea;
-import fr.umlv.irsensor.sensor.ErrorCode;
 import fr.umlv.irsensor.sensor.CatchArea.Point;
 
 public class SupervisorServer {
@@ -70,7 +71,6 @@ public class SupervisorServer {
 						sensorChannel.read(readBuffer);
 						readBuffer.flip();
 						
-						 
 
 						// store it in the list of sensors
 						final SensorNode node = new SensorNode(sensorChannel);
@@ -90,14 +90,15 @@ public class SupervisorServer {
 						}
 					}
 				}
+				
 				try {
 					// Just an Hack cause of the dispatcher is not established at the moment, waiting for it
 					Thread.sleep(1000); 
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-				//set a new configuration
 				
+				//set a new configuration
 				try {
 										
 					for(int i=0; i<nbrSensor; i++){

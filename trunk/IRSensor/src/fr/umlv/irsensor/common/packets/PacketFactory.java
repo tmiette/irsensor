@@ -1,9 +1,8 @@
-package fr.umlv.irsensor.supervisor;
+package fr.umlv.irsensor.common.packets;
 
 import java.nio.ByteBuffer;
 
 import fr.umlv.irsensor.sensor.CatchArea;
-import fr.umlv.irsensor.sensor.ErrorCode;
 import fr.umlv.irsensor.sensor.SensorState;
 
 /**
