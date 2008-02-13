@@ -1,5 +1,6 @@
 package fr.umlv.irsensor.supervisor;
 
+import java.net.InetAddress;
 import java.nio.channels.SocketChannel;
 
 /**This defines a sensor node
@@ -9,8 +10,7 @@ import java.nio.channels.SocketChannel;
  */
 public class SensorNode {
 	
-	//just an hack to host many sensors on a same machine
-	private final SocketChannel channel;
+	private final InetAddress ipAddress;
 	
 	/**
 	 * the state of the sensor. please refer to <code>State</code> enum
@@ -22,8 +22,8 @@ public class SensorNode {
 	 */
 	private boolean isConfigured;
 	
-	public SensorNode(SocketChannel socketChannel) {
-		this.channel = socketChannel;
+	public SensorNode(InetAddress ipAddress) {
+		this.ipAddress = ipAddress;
 		this.state = State.DOWN;
 	}
 	

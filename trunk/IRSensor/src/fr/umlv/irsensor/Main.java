@@ -20,7 +20,7 @@ public class Main {
 	  
 	  
 	  final SupervisorServer server = new SupervisorServer();
-	  server.launch();
+	  //server.launch();
 	  
 	  final PacketDispatcher dispatcher = new PacketDispatcher(31000);
 	  for(int i=0; i<2; i++){

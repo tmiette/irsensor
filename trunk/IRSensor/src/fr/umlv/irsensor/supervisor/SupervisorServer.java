@@ -1,49 +1,48 @@
 package fr.umlv.irsensor.supervisor;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.List;
 
+import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.packets.DecodePacket;
+import fr.umlv.irsensor.common.packets.ErrorCode;
 import fr.umlv.irsensor.common.packets.OpCode;
 import fr.umlv.irsensor.common.packets.PacketFactory;
-import fr.umlv.irsensor.sensor.CatchArea;
-import fr.umlv.irsensor.sensor.CatchArea.Point;
 
 public class SupervisorServer {
 
-	private static int MAX_THREADS = 2;
 	private static final int BUFFER_SIZE = 512;
-	private static final int serverPort = 31001;
+	
+	private static final int serverPort = SupervisorConfiguration.SERVER_PORT;
 
-	private static final Object lock = new Object();
-	private final ExecutorService executor;
-
-	private final HashMap<Integer, SensorNode> sensors;
-	private int sensorAlreadyConnected;
-
-	private static final int nbrSensor = 2;
-
+	private final List<SupervisorServerListener> listeners = new ArrayList<SupervisorServerListener>();
+	
+	private ServerSocketChannel servChannel;
+	
 	public SupervisorServer() {
-		this.executor = Executors.newFixedThreadPool(MAX_THREADS);
-		this.sensors = new HashMap<Integer, SensorNode>();
-		this.sensorAlreadyConnected = 0;
+		try {
+			this.servChannel = ServerSocketChannel.open();
+			servChannel.socket().bind(new InetSocketAddress(serverPort));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
-	public void launch() throws IOException {
-		final ServerSocketChannel servChannel = ServerSocketChannel.open();
-		servChannel.socket().bind(new InetSocketAddress(serverPort));
+	
+	public void registerAllNodes(final int nbrNodes){
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
+				int nbrOfNodeRegistered = 0;
 				for (;;) {
 					//all the sensors have already been configured
-					if(sensorAlreadyConnected == nbrSensor) break;
+					if(nbrOfNodeRegistered == nbrNodes) break;
 					SocketChannel sensorChannel = null;
 					try {
 						sensorChannel = servChannel.accept();
@@ -58,25 +57,20 @@ public class SupervisorServer {
 							sensorChannel.close();
 							return;
 						}
-
 						readBuffer.clear();
 
 
 						// send REPC dispatcher.startDispatcher();ON packet to the sensor
 						sensorChannel.write(PacketFactory
-								.createRepConPacket(sensorAlreadyConnected));
+								.createRepConPacket(nbrOfNodeRegistered));
 
 
 						// wait for ACK packet
 						sensorChannel.read(readBuffer);
 						readBuffer.flip();
-						
 
-						// store it in the list of sensors
-						final SensorNode node = new SensorNode(sensorChannel);
-						sensors.put(sensorAlreadyConnected, node);
-
-						sensorAlreadyConnected++;
+						fireReqConPacketReceived(nbrOfNodeRegistered, sensorChannel.socket().getInetAddress());
+						nbrOfNodeRegistered++;
 
 
 					} catch (IOException e) {
@@ -90,41 +84,23 @@ public class SupervisorServer {
 						}
 					}
 				}
-				
-				try {
-					// Just an Hack cause of the dispatcher is not established at the moment, waiting for it
-					Thread.sleep(1000); 
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				
-				//set a new configuration
-				try {
-										
-					for(int i=0; i<nbrSensor; i++){
-						SocketChannel socketClient;
-						socketClient = SocketChannel.open();
-						System.out.println("Server is trying to reach a client...");
-						
-						socketClient.connect(new InetSocketAddress("localhost", 31000));
-
-						socketClient.write(PacketFactory.createSetConfPacket(i, new CatchArea(new Point(0,0), new Point(0,0)), 
-								0, 0, 0, 0, new byte[3]));
-						
-						final ByteBuffer buffer = ByteBuffer.allocate(64);
-						socketClient.read(buffer);
-						buffer.flip();
-						System.out.println(new String(buffer.array()));
-						buffer.clear();
-						socketClient.close();
-					}
-				}
-				catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 			}
 		}).start();
+	}
+	
+	public void addSupervisorServerListener(SupervisorServerListener listener){
+		this.listeners.add(listener);
+	}
+	
+	protected void fireReqConPacketReceived(int id, InetAddress ipAddress){
+		for(SupervisorServerListener l : this.listeners){
+			l.ReqConPacketReceived(id, ipAddress);
+		}
+	}
+	
+	protected void fireErrorCodeReceived(ErrorCode code){
+		for(SupervisorServerListener l : this.listeners){
+			l.ErrorCodeReceived(code);
+		}
 	}
 }
