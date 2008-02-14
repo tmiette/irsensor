@@ -3,6 +3,7 @@ package fr.umlv.irsensor.supervisor;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import fr.umlv.irsensor.common.packets.ErrorCode;
 
@@ -38,6 +39,13 @@ public class Supervisor {
 			@Override
 			public void ReqConPacketReceived(int id, InetAddress ipAddress) {
 				addSensorNode(id, new SensorNode(ipAddress));
+			}
+
+			@Override
+			public void registrationTerminated() {
+				for(Entry<Integer, SensorNode> node : sensors.entrySet()){
+					Supervisor.this.client.setConf(node.getKey(), node.getValue().getAddress());
+				}
 			}
 		});
 		this.server.registerAllNodes(this.nbrOfSensors);

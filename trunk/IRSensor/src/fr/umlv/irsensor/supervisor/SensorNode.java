@@ -35,6 +35,9 @@ public class SensorNode {
 		this.state = state;
 	}
 	
+	public InetAddress getAddress(){
+		return this.ipAddress;
+	}
 	/**
 	 * Defines the different states of a sensor
 	 */

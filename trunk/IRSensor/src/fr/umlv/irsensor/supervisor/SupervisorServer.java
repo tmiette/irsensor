@@ -84,6 +84,7 @@ public class SupervisorServer {
 						}
 					}
 				}
+				fireRegistrationTerminated();
 			}
 		}).start();
 	}
@@ -101,6 +102,12 @@ public class SupervisorServer {
 	protected void fireErrorCodeReceived(ErrorCode code){
 		for(SupervisorServerListener l : this.listeners){
 			l.ErrorCodeReceived(code);
+		}
+	}
+	
+	protected void fireRegistrationTerminated(){
+		for(SupervisorServerListener l : this.listeners){
+			l.registrationTerminated();
 		}
 	}
 }

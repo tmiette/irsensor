@@ -19,7 +19,7 @@ import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 public class SupervisorClient implements PacketRegisterable {
 
 	private static final byte[] serverAddress = new byte[] { (byte) 192,
-		(byte) 168, (byte) 1, (byte) 2 };
+		(byte) 168, (byte) 1, (byte) 3 };
 	
 	private static final int SERVER_PORT = SupervisorConfiguration.SERVER_PORT;
 	
@@ -35,7 +35,7 @@ public class SupervisorClient implements PacketRegisterable {
 
 	public void registrySensor() throws IOException, MalformedPacketException {
 		SocketChannel channel = SocketChannel.open();
-		channel.connect(new InetSocketAddress(InetAddress.getByName("localhost"),
+		channel.connect(new InetSocketAddress(InetAddress.getByAddress(serverAddress),
 				SERVER_PORT));
 
 		ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
@@ -55,8 +55,6 @@ public class SupervisorClient implements PacketRegisterable {
 		this.id = DecodePacket.getId(readBuffer);
 		System.out.println("id received "+this.id);
 		channel.write(PacketFactory.createAck(this.id, ErrorCode.OK));
-		
-		channel.close();
 	}
 
 	@Override
@@ -69,5 +67,12 @@ public class SupervisorClient implements PacketRegisterable {
 		//receive a packet from the supervisor
 		DecodeOpCode.decodeByteBuffer(packet);
 		//do something
+		System.out.println("Received configuration");
+		try {
+			channel.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

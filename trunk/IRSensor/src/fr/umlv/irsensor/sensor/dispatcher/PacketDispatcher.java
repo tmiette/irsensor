@@ -48,18 +48,30 @@ public class PacketDispatcher {
 					serverSocket.socket().bind(new InetSocketAddress(socketPort));
 					
 					System.out.println("Dispatcher is listening on port "+socketPort);
-					ByteBuffer buffer = ByteBuffer.allocate(64);
+					final ByteBuffer buffer = ByteBuffer.allocate(64);
 					while(true){
 						final SocketChannel client = serverSocket.accept();
-						client.read(buffer);
-						buffer.flip();
-						System.out.println("receive a packet from the server supervisor");
-						final PacketRegisterable p = packetRegisterables.get(DecodePacket.getId(buffer));
-						if(p != null){
-							final ByteBuffer packet = buffer;
-							p.setPacket(packet, client);
-						}
-						buffer.clear();
+//						new Thread(new Runnable(){
+//							public void run() {
+//								try {
+//									client.read(buffer);
+//								} catch (IOException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+//								buffer.flip();
+//								System.out.println("receive a packet from the server supervisor");
+//
+//								final PacketRegisterable p = packetRegisterables.get(DecodePacket.getId(buffer));
+//								if(p != null){
+//									final ByteBuffer packet = buffer;
+//									p.setPacket(packet, client);
+//								}
+//
+//								buffer.clear();
+//							};
+//						}).start();
+						client.close();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

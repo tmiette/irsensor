@@ -20,8 +20,8 @@ public class Main {
 		
 		//load configuration file
 		Properties properties = new Properties();
-		properties.load(new FileInputStream(new File("../conf/supervisor.conf")));
-		final Supervisor supervisor = new Supervisor((Integer)properties.get("NBR_SENSOR"), new SupervisorClient(),
+		properties.load(new FileInputStream(new File("./conf/supervisor.conf")));
+		final Supervisor supervisor = new Supervisor(Integer.valueOf((String)properties.get("NBR_SENSOR")), new SupervisorClient(),
 		new SupervisorServer());
 		
 	}

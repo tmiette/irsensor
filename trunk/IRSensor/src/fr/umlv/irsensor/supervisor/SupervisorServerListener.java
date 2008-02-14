@@ -9,4 +9,6 @@ public interface SupervisorServerListener {
 	public void ErrorCodeReceived(ErrorCode code);
 	
 	public void ReqConPacketReceived(int id, InetAddress ipAddress);
+	
+	public void registrationTerminated();
 }
