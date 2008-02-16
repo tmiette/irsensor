@@ -31,17 +31,14 @@ public class SupervisorClient {
 			SocketChannel socketClient;
 			socketClient = SocketChannel.open();
 			System.out.println("Server is trying to reach a client...");
-			Inet4Address address = (Inet4Address)InetAddress.getByName(ipAddress.getHostAddress());
-			socketClient.connect(new InetSocketAddress(address, 31000));
+			socketClient.connect(new InetSocketAddress(ipAddress, 31000));
 			
 			socketClient.write(PacketFactory.createSetConfPacket(id, new CatchArea(new Point(0,0), new Point(0,0)), 
 					0, 0, 0, 0, new byte[3]));
 
 			final ByteBuffer buffer = ByteBuffer.allocate(64);
 			socketClient.read(buffer);
-			buffer.flip();
-			System.out.println(new String(buffer.array()));
-			buffer.clear();
+			//wait for ack
 			socketClient.close();
 		}
 		catch (IOException e) {
