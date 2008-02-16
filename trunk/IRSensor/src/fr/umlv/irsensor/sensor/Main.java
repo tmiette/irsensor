@@ -19,7 +19,7 @@ public class Main {
 		
 		//server part
 		final PacketDispatcher dispatcher = new PacketDispatcher(31000);
-		
+		dispatcher.startDispatcher();
 		for(int i=0; i<5; i++){
 			final Sensor sensor = new Sensor();
 			try {
@@ -29,6 +29,6 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-		dispatcher.startDispatcher();
+		
 	}
 }

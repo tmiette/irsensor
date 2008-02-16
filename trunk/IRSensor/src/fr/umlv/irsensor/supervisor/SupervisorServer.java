@@ -1,6 +1,7 @@
 package fr.umlv.irsensor.supervisor;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -69,7 +70,7 @@ public class SupervisorServer {
 						sensorChannel.read(readBuffer);
 						readBuffer.flip();
 
-						fireReqConPacketReceived(nbrOfNodeRegistered, sensorChannel.socket().getInetAddress());
+						fireReqConPacketReceived(nbrOfNodeRegistered, (Inet4Address)sensorChannel.socket().getInetAddress());
 						nbrOfNodeRegistered++;
 
 

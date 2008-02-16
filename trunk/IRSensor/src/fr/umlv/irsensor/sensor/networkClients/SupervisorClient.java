@@ -19,7 +19,7 @@ import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 public class SupervisorClient implements PacketRegisterable {
 
 	private static final byte[] serverAddress = new byte[] { (byte) 192,
-		(byte) 168, (byte) 1, (byte) 3 };
+		(byte) 168, (byte) 2, (byte) 3 };
 	
 	private static final int SERVER_PORT = SupervisorConfiguration.SERVER_PORT;
 	
