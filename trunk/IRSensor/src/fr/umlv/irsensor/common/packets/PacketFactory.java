@@ -54,6 +54,8 @@ public class PacketFactory {
     int index = 0;
     buffer.put(index, OpCode.SETCONF.getCode());
     index += OpCode.getOpCodeByteSize();
+    buffer.putInt(index, id);
+    index += Integer.SIZE / 8;
     buffer.putInt(index, area.getP1().getX());
     index += Integer.SIZE / 8;
     buffer.putInt(index, area.getP1().getY());

@@ -19,8 +19,7 @@ public class Main {
 		
 		//server part
 		final PacketDispatcher dispatcher = new PacketDispatcher(31000);
-		dispatcher.startDispatcher();
-		for(int i=0; i<5; i++){
+		for(int i=0; i<7; i++){
 			final Sensor sensor = new Sensor();
 			try {
 				dispatcher.register(sensor.getSupervisorClient());
@@ -29,6 +28,7 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+		dispatcher.startDispatcher();
 		
 	}
 }

@@ -61,8 +61,9 @@ public class PacketDispatcher {
 								}
 								buffer.flip();
 								System.out.println("receive a packet from the server supervisor");
-
+								System.out.println("ID recu "+DecodePacket.getId(buffer));
 								final PacketRegisterable p = packetRegisterables.get(DecodePacket.getId(buffer));
+								
 								if(p != null){
 									final ByteBuffer packet = buffer;
 									p.setPacket(packet, client);
