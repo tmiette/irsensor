@@ -36,7 +36,8 @@ public class SupervisorServer {
 		}
 	}
 	
-	public void registerAllNodes(final int nbrNodes){
+	public void registerAllNodes(final int[] ids){
+		final int nbrNodes = ids.length;
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -63,7 +64,7 @@ public class SupervisorServer {
 
 						// send REPC dispatcher.startDispatcher();ON packet to the sensor
 						sensorChannel.write(PacketFactory
-								.createRepConPacket(nbrOfNodeRegistered));
+								.createRepConPacket(ids[nbrOfNodeRegistered]));
 
 
 						// wait for ACK packet

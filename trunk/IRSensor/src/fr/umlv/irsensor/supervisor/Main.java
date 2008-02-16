@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
+
 /**
  * Main class for the supervisor server application -- supervisor.jar
  * 
@@ -18,10 +20,15 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		//start the supervisor server logger
 		
-		//load configuration file
-		Properties properties = new Properties();
-		properties.load(new FileInputStream(new File("./conf/supervisor.conf")));
-		final Supervisor supervisor = new Supervisor(Integer.valueOf((String)properties.get("NBR_SENSOR")), new SupervisorClient(),
+		ConfigurationBuilder builder = null;
+		try {
+			builder = ConfigurationBuilder.load(new File("./conf/supervisor.conf"));
+		} catch (ParsingConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		final Supervisor supervisor = new Supervisor(builder.getSensorsNode(), new SupervisorClient(),
 		new SupervisorServer());
 		
 	}

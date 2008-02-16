@@ -1,7 +1,8 @@
 package fr.umlv.irsensor.supervisor;
 
 import java.net.InetAddress;
-import java.nio.channels.SocketChannel;
+
+import fr.umlv.irsensor.sensor.CatchArea;
 
 /**This defines a sensor node
  * It has a state like down, up or pause
@@ -10,7 +11,10 @@ import java.nio.channels.SocketChannel;
  */
 public class SensorNode {
 	
-	private final InetAddress ipAddress;
+	/**
+	 * IP address of the current sensor
+	 */
+	private InetAddress ipAddress;
 	
 	/**
 	 * the state of the sensor. please refer to <code>State</code> enum
@@ -22,8 +26,46 @@ public class SensorNode {
 	 */
 	private boolean isConfigured;
 	
-	public SensorNode(InetAddress ipAddress) {
-		this.ipAddress = ipAddress;
+	/**
+	 * Sensor ID
+	 */
+	private final int id;
+	
+	/**
+	 * Sensor parent ID
+	 */
+	private int idParent;
+	
+	/**
+	 * Sensor's catch area
+	 */
+	private CatchArea cArea;
+	
+	/**
+	 * Autonomy
+	 */
+	private int autonomy;
+	
+	/**
+	 * Clock
+	 */
+	private int clock;
+	
+	/**
+	 * Sensor's payload
+	 */
+	private int payload;
+	
+	/**
+	 * Sensor's capture quality
+	 */
+	private int quality;
+	
+	
+	public SensorNode(int id) {
+		this.id = id;
+		
+		this.isConfigured = false;
 		this.state = State.DOWN;
 	}
 	
@@ -45,5 +87,76 @@ public class SensorNode {
 		PAUSE,
 		DOWN,
 		UP;
+	}
+	public InetAddress getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(InetAddress ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+
+	public boolean isConfigured() {
+		return isConfigured;
+	}
+
+	public void setConfigured(boolean isConfigured) {
+		this.isConfigured = isConfigured;
+	}
+
+	public int getIdParent() {
+		return idParent;
+	}
+
+	public void setIdParent(int idParent) {
+		this.idParent = idParent;
+	}
+
+	public CatchArea getCArea() {
+		return cArea;
+	}
+
+	public void setCArea(CatchArea area) {
+		cArea = area;
+	}
+
+	public int getAutonomy() {
+		return autonomy;
+	}
+
+	public void setAutonomy(int autonomy) {
+		this.autonomy = autonomy;
+	}
+
+	public int getClock() {
+		return clock;
+	}
+
+	public void setClock(int clock) {
+		this.clock = clock;
+	}
+
+	public int getPayload() {
+		return payload;
+	}
+
+	public void setPayload(int payload) {
+		this.payload = payload;
+	}
+
+	public int getQuality() {
+		return quality;
+	}
+
+	public void setQuality(int quality) {
+		this.quality = quality;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public int getId() {
+		return id;
 	}
 }

@@ -26,8 +26,7 @@ public class Supervisor {
 	
 	private final SupervisorClient client;
 	
-	public Supervisor(int nbrOfSensors, SupervisorClient client, SupervisorServer server) {
-		this.nbrOfSensors = nbrOfSensors;
+	public Supervisor(List<SensorNode> sensors, SupervisorClient client, SupervisorServer server) {
 		this.client = client;
 		this.server = server;
 		this.server.addSupervisorServerListener(new SupervisorServerListener(){
@@ -38,17 +37,26 @@ public class Supervisor {
 
 			@Override
 			public void ReqConPacketReceived(int id, InetAddress ipAddress) {
-				addSensorNode(id, new SensorNode(ipAddress));
+				SensorNode sNode = Supervisor.this.sensors.get(id);
+				sNode.setIpAddress(ipAddress);
 			}
 
 			@Override
 			public void registrationTerminated() {
-				for(Entry<Integer, SensorNode> node : sensors.entrySet()){
+				for(Entry<Integer, SensorNode> node : Supervisor.this.sensors.entrySet()){
 					Supervisor.this.client.setConf(node.getKey(), node.getValue().getAddress());
 				}
 			}
 		});
-		this.server.registerAllNodes(this.nbrOfSensors);
+		
+		final int[] ids = new int[sensors.size()];
+		for(int i=0; i<ids.length; i++){
+			final SensorNode sensor = sensors.get(i);
+			this.sensors.put(sensor.getId(), sensor);
+			ids[i] = sensor.getId();
+		}
+		
+		this.server.registerAllNodes(ids);
 	}
 	
 	/**
