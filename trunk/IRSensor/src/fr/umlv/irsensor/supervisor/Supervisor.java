@@ -37,6 +37,7 @@ public class Supervisor {
 
 			@Override
 			public void ReqConPacketReceived(int id, InetAddress ipAddress) {
+				System.out.println(id);
 				SensorNode sNode = Supervisor.this.sensors.get(id);
 				sNode.setIpAddress(ipAddress);
 			}

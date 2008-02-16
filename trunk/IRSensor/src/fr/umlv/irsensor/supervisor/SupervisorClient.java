@@ -1,6 +1,7 @@
 package fr.umlv.irsensor.supervisor;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -30,9 +31,9 @@ public class SupervisorClient {
 			SocketChannel socketClient;
 			socketClient = SocketChannel.open();
 			System.out.println("Server is trying to reach a client...");
-
-			socketClient.connect(new InetSocketAddress(ipAddress, 31000));
-
+			Inet4Address address = (Inet4Address)InetAddress.getByName(ipAddress.getHostAddress());
+			socketClient.connect(new InetSocketAddress(address, 31000));
+			
 			socketClient.write(PacketFactory.createSetConfPacket(id, new CatchArea(new Point(0,0), new Point(0,0)), 
 					0, 0, 0, 0, new byte[3]));
 

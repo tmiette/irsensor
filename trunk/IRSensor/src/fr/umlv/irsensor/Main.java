@@ -22,6 +22,7 @@ public class Main {
 	  //server.launch();
 	  
 	  final PacketDispatcher dispatcher = new PacketDispatcher(31000);
+	  dispatcher.startDispatcher();
 	  for(int i=0; i<2; i++){
 		  final Sensor sensor = new Sensor();
 		  try {
@@ -31,6 +32,6 @@ public class Main {
 		}
 		System.out.println("Sensor "+i+" is registered");
 	  }
-	  dispatcher.startDispatcher();
+	  
   }
 }

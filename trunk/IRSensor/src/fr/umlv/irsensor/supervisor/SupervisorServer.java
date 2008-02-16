@@ -71,7 +71,7 @@ public class SupervisorServer {
 						sensorChannel.read(readBuffer);
 						readBuffer.flip();
 
-						fireReqConPacketReceived(nbrOfNodeRegistered, (Inet4Address)sensorChannel.socket().getInetAddress());
+						fireReqConPacketReceived(ids[nbrOfNodeRegistered], (Inet4Address)sensorChannel.socket().getInetAddress());
 						nbrOfNodeRegistered++;
 
 
