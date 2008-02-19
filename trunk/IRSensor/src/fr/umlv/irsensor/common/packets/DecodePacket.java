@@ -2,8 +2,6 @@ package fr.umlv.irsensor.common.packets;
 
 import java.nio.ByteBuffer;
 
-import fr.umlv.irsensor.sensor.CatchArea;
-
 /**
  * This class contains methods that permit to decode a Supervisor Server
  * Protocol packet.
@@ -62,38 +60,35 @@ public class DecodePacket {
   public static OpCode getOpCode(ByteBuffer packet) {
     if (packet != null) {
       ByteBuffer bb = packet.duplicate();
-     byte[] code = new byte[OpCode.getOpCodeByteSize()];
+      byte[] code = new byte[OpCode.getOpCodeByteSize()];
       // Opcode
       bb.position(0);
       bb.get(code, 0, OpCode.getOpCodeByteSize());
-      for (OpCode opCode : OpCode.values()) {
-    	  
-    	  if (opCode.getCode().equals(code[0])) {
-    		  
-    		  return opCode;
-    	  }
+      for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
+        for (OpCode opCode : OpCode.values()) {
+          if (opCode.getCode() == (code[i])) {
+            return opCode;
+          }
+        }
       }
-      
     }
     return null;
   }
   
-  /**
-   * Returns the area contained in the packet.�
-   * @param packet packet to read.
-   * @return CatchArea contained in the packet.
-   */
-  public static CatchArea getCatchArea(ByteBuffer packet) {
-    
-    CatchArea area = null;
-    if (packet != null) {
-      ByteBuffer bb = packet.duplicate();
-      // Opcode | id | catch area
-      bb.position(OpCode.getOpCodeByteSize() + (Integer.SIZE / 8));
-      area = new CatchArea(bb.getInt(), bb.getInt(), bb.getInt(), bb.getInt());
-    }
-    return area;
-  }
-  
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
