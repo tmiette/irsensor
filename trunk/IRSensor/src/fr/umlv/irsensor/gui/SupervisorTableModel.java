@@ -21,7 +21,7 @@ public class SupervisorTableModel extends AbstractTableModel {
 
   @Override
   public int getColumnCount() {
-    return 9;
+    return 10;
   }
 
   @Override
@@ -34,22 +34,24 @@ public class SupervisorTableModel extends AbstractTableModel {
     SensorNode sensor = this.supervisor.getSensorNodes().get(rowIndex);
     switch (columnIndex) {
     case 0:
-      return sensor.getId();
+      return sensor.isConfigured();
     case 1:
-      return sensor.getAddress();
+      return sensor.getId();
     case 2:
-      return sensor.getState();
+      return sensor.getAddress();
     case 3:
-      return sensor.getCArea();
+      return sensor.getState();
     case 4:
-      return sensor.getAutonomy();
+      return sensor.getCArea();
     case 5:
-      return sensor.getClock();
+      return sensor.getAutonomy();
     case 6:
-      return sensor.getPayload();
+      return sensor.getClock();
     case 7:
-      return sensor.getQuality();
+      return sensor.getPayload();
     case 8:
+      return sensor.getQuality();
+    case 9:
       return sensor.getIdParent();
     default:
       return null;
@@ -60,22 +62,24 @@ public class SupervisorTableModel extends AbstractTableModel {
   public String getColumnName(int column) {
     switch (column) {
     case 0:
-      return "id";
+      return null;
     case 1:
-      return "IP address";
+      return "id";
     case 2:
-      return "state";
+      return "IP address";
     case 3:
-      return "catch area";
+      return "state";
     case 4:
-      return "autonomy";
+      return "catch area";
     case 5:
-      return "clock";
+      return "autonomy";
     case 6:
-      return "payload";
+      return "clock";
     case 7:
-      return "quality";
+      return "payload";
     case 8:
+      return "quality";
+    case 9:
       return "parent";
     default:
       return null;
@@ -86,15 +90,15 @@ public class SupervisorTableModel extends AbstractTableModel {
   public Class<?> getColumnClass(int columnIndex) {
     switch (columnIndex) {
     case 0:
-      return Integer.class;
+      return Boolean.class;
     case 1:
-      return InetAddress.class;
-    case 2:
-      return SensorState.class;
-    case 3:
-      return CatchArea.class;
-    case 4:
       return Integer.class;
+    case 2:
+      return InetAddress.class;
+    case 3:
+      return SensorState.class;
+    case 4:
+      return CatchArea.class;
     case 5:
       return Integer.class;
     case 6:
@@ -102,6 +106,8 @@ public class SupervisorTableModel extends AbstractTableModel {
     case 7:
       return Integer.class;
     case 8:
+      return Integer.class;
+    case 9:
       return Integer.class;
     default:
       return null;
