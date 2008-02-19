@@ -3,6 +3,7 @@ package fr.umlv.irsensor.sensor.dispatcher;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
@@ -62,15 +63,13 @@ public class PacketDispatcher {
 									e.printStackTrace();
 								}
 								buffer.flip();
-								System.out.println("receive a packet from the server supervisor");
-								if(DecodePacket.getOpCode(buffer) == OpCode.SETCONF) System.out.println("set conf");
+								
 								final PacketRegisterable p = packetRegisterables.get(DecodePacket.getId(buffer));
 								
 								if(p != null){
 									final ByteBuffer packet = buffer;
 									p.setPacket(packet, client);
 								}
-
 								buffer.clear();
 							};
 						}).start();

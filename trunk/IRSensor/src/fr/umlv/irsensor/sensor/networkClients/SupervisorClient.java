@@ -67,8 +67,10 @@ public class SupervisorClient implements PacketRegisterable {
 		//receive a packet from the supervisor
 		DecodeOpCode.decodeByteBuffer(packet);
 		//do something
-		System.out.println("Received configuration");
+		System.out.println("Received configuration "+this.id);
+		
 		try {
+			channel.write(PacketFactory.createAck(this.id, ErrorCode.OK));
 			channel.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

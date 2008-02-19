@@ -23,7 +23,7 @@ public class Main {
 	  
 	  final PacketDispatcher dispatcher = new PacketDispatcher(31000);
 	  dispatcher.startDispatcher();
-	  for(int i=0; i<2; i++){
+	  for(int i=0; i<7; i++){
 		  final Sensor sensor = new Sensor();
 		  try {
 			dispatcher.register(sensor.getSupervisorClient());

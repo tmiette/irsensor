@@ -57,7 +57,7 @@ public class PacketFactory {
         PacketFieldLength.CLOCK, PacketFieldLength.AUTONOMY,
         PacketFieldLength.QUALITY, PacketFieldLength.PAYLOAD,
         PacketFieldLength.PARENT_ID);
-    final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
+    final ByteBuffer buffer = ByteBuffer.allocate(4096);
     // packet : header | area | clock | autonomy | quality | payload
     int index = 0;
     buffer.put(index, OpCode.SETCONF.getCode());

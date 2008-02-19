@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.packets.DecodePacket;
+import fr.umlv.irsensor.common.packets.ErrorCode;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 
 /**
@@ -30,22 +31,24 @@ public class SupervisorServerClient {
       socketClient = SocketChannel.open();
       socketClient.connect(new InetSocketAddress(sensor.getAddress(),
           SupervisorConfiguration.SERVER_PORT_LOCAL));
-
+      
+      System.out.println("ID write "+sensor.getId());
       System.out.println(sensor.getId());
       ByteBuffer b = PacketFactory.createSetConfPacket(sensor.getId(), sensor
           .getCArea(), sensor.getClock(), sensor.getAutonomy(), sensor
           .getQuality(), sensor.getPayload(), new byte[3]);
 
-      System.out.println(DecodePacket.getOpCode(b));
-b.clear();
       socketClient.write(b);
 
       final ByteBuffer buffer = ByteBuffer.allocate(64);
       socketClient.read(buffer);
-      // wait for ack
-
-      fireAckConfPacketReceived(sensor);
-
+      buffer.flip();
+      if(DecodePacket.getErrorCode(buffer) == ErrorCode.OK){
+    	  System.out.println("Sensor configured, ui fired");
+    	  fireAckConfPacketReceived(sensor);
+      }else{
+    	  //TODO what can we do here?
+      }
       socketClient.close();
     } catch (IOException e) {
       // TODO Auto-generated catch block
