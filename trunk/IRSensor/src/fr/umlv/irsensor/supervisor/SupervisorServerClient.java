@@ -1,7 +1,6 @@
 package fr.umlv.irsensor.supervisor;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -10,8 +9,6 @@ import java.util.ArrayList;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
-import fr.umlv.irsensor.sensor.CatchArea;
-import fr.umlv.irsensor.sensor.CatchArea.Point;
 
 /**
  * SupervisorClient is a network client which is used to retrieve informations
