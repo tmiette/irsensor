@@ -22,6 +22,7 @@ public class DecodePacket {
     int id = -1;
     if (packet != null) {
       ByteBuffer bb = packet.duplicate();
+      bb.rewind();
       id = bb.getInt(OpCode.getOpCodeByteSize());
     }
     return id;
