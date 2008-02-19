@@ -26,6 +26,8 @@ public class Supervisor {
 
   private final SupervisorServerClient client;
 
+  private final ArrayList<SupervisorListener> listeners = new ArrayList<SupervisorListener>();
+
   public Supervisor(List<SensorNode> sensors, SupervisorServerClient client,
       SupervisorServer server) {
     this.client = client;
@@ -41,6 +43,7 @@ public class Supervisor {
         SensorNode sNode = Supervisor.this.sensors.get(id);
         sNode.setIpAddress(ipAddress);
         sNode.setConnected(true);
+        fireSensorNodeConnected(sNode);
       }
 
       @Override
@@ -103,5 +106,19 @@ public class Supervisor {
 
   public void shutdown() throws IOException {
     this.server.shutdown();
+  }
+
+  public void addSupervisorListener(SupervisorListener listener) {
+    this.listeners.add(listener);
+  }
+
+  public void removeSupervisorListener(SupervisorListener listener) {
+    this.listeners.remove(listener);
+  }
+
+  protected void fireSensorNodeConnected(SensorNode sensor) {
+    for (SupervisorListener listener : this.listeners) {
+      listener.sensorNodeConnected(sensor);
+    }
   }
 }
