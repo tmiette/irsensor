@@ -27,7 +27,7 @@ public class MainFrame {
   private final JTabbedPane mainContainer;
   private JFileChooser fileChooser;
   private Supervisor supervisor;
-
+  
   public MainFrame() {
     final JTabbedPane pane = new JTabbedPane(JTabbedPane.BOTTOM);
     this.mainContainer = pane;

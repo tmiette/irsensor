@@ -8,6 +8,7 @@ import fr.umlv.irsensor.sensor.CatchArea;
 import fr.umlv.irsensor.sensor.SensorState;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
+import fr.umlv.irsensor.supervisor.SupervisorListener;
 
 public class SupervisorTableModel extends AbstractTableModel {
 
@@ -17,6 +18,14 @@ public class SupervisorTableModel extends AbstractTableModel {
 
   public SupervisorTableModel(Supervisor supervisor) {
     this.supervisor = supervisor;
+    this.supervisor.addSupervisorListener(new SupervisorListener() {
+      @Override
+      public void sensorNodeConnected(SensorNode sensor) {
+        for (int i = 0; i < getRowCount(); i++) {
+          fireTableCellUpdated(i, 0);
+        }
+      }
+    });
   }
 
   @Override
@@ -34,7 +43,7 @@ public class SupervisorTableModel extends AbstractTableModel {
     SensorNode sensor = this.supervisor.getSensorNodes().get(rowIndex);
     switch (columnIndex) {
     case 0:
-      return sensor.isConfigured();
+      return sensor.isConnected();
     case 1:
       return sensor.getId();
     case 2:
@@ -111,6 +120,15 @@ public class SupervisorTableModel extends AbstractTableModel {
       return Integer.class;
     default:
       return null;
+    }
+  }
+
+  @Override
+  public boolean isCellEditable(int rowIndex, int columnIndex) {
+    if (columnIndex >= 4 && columnIndex <= 8) {
+      return true;
+    } else {
+      return false;
     }
   }
 
