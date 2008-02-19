@@ -1,5 +1,6 @@
 package fr.umlv.irsensor.supervisor;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,5 +92,9 @@ public class Supervisor {
    */
   public void removeSensorNode(int key) {
     this.sensors.remove(key);
+  }
+
+  public void shutdown() throws IOException {
+    this.server.shutdown();
   }
 }
