@@ -38,6 +38,9 @@ public class SupervisorServerClient {
 			final ByteBuffer buffer = ByteBuffer.allocate(64);
 			socketClient.read(buffer);
 			//wait for ack
+			
+			
+			
 			socketClient.close();
 		}
 		catch (IOException e) {

@@ -1,12 +1,8 @@
 package fr.umlv.irsensor.supervisor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
+import javax.swing.SwingUtilities;
 
-import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
+import fr.umlv.irsensor.gui.MainFrame;
 
 /**
  * Main class for the supervisor server application -- supervisor.jar
@@ -17,19 +13,16 @@ import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
  * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  */
 public class Main {
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		//start the supervisor server logger
-		
-		ConfigurationBuilder builder = null;
-		try {
-			builder = ConfigurationBuilder.load(new File("./conf/supervisor.conf"));
-		} catch (ParsingConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		final Supervisor supervisor = new Supervisor(builder.getSensorsNode(), new SupervisorServerClient(),
-		new SupervisorServer());
-		
-	}
+  public static void main(String[] args) {
+
+    // schedule a job for the event dispatch thread:
+    // creating and showing this application's GUI.
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        new MainFrame().launch();
+      }
+    });
+
+  }
+
 }
