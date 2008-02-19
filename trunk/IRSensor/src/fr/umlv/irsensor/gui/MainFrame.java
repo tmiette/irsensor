@@ -68,6 +68,14 @@ public class MainFrame {
 
       @Override
       public void actionPerformed(ActionEvent e) {
+        if(supervisor != null){
+          try {
+            supervisor.shutdown();
+          } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+          }
+        }
         System.exit(0);
       }
 

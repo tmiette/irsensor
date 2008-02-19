@@ -15,7 +15,6 @@ public class SupervisorTable {
 
   public SupervisorTable(SupervisorTableModel model) {
     this.table = new JTable(model);
-    this.table.getColumnModel().getColumn(0).setWidth(5);
     this.table.setDefaultRenderer(Boolean.class,
         new DefaultTableCellRenderer() {
 
@@ -39,7 +38,6 @@ public class SupervisorTable {
           }
 
         });
-
     this.table.setDefaultRenderer(SensorState.class,
         new DefaultTableCellRenderer() {
 
