@@ -8,6 +8,8 @@ import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 
 import fr.umlv.irsensor.common.packets.DecodePacket;
+import fr.umlv.irsensor.common.packets.ErrorCode;
+import fr.umlv.irsensor.common.packets.OpCode;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 
 /**
@@ -61,7 +63,7 @@ public class PacketDispatcher {
 								}
 								buffer.flip();
 								System.out.println("receive a packet from the server supervisor");
-								System.out.println("ID recu "+DecodePacket.getId(buffer));
+								if(DecodePacket.getOpCode(buffer) == OpCode.SETCONF) System.out.println("set conf");
 								final PacketRegisterable p = packetRegisterables.get(DecodePacket.getId(buffer));
 								
 								if(p != null){

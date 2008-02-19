@@ -6,6 +6,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import fr.umlv.irsensor.common.SupervisorConfiguration;
+import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.sensor.CatchArea;
 import fr.umlv.irsensor.sensor.CatchArea.Point;
@@ -30,11 +32,17 @@ public class SupervisorServerClient {
 			SocketChannel socketClient;
 			socketClient = SocketChannel.open();
 			System.out.println("Server is trying to reach a client...");
-			socketClient.connect(new InetSocketAddress(ipAddress, 31000));
+			socketClient.connect(new InetSocketAddress(ipAddress, SupervisorConfiguration.SERVER_PORT_LOCAL));
 			
-			socketClient.write(PacketFactory.createSetConfPacket(id, new CatchArea(new Point(0,0), new Point(0,0)), 
-					0, 0, 0, 0, new byte[3]));
-
+			System.out.println("Id encapsule "+id);
+			ByteBuffer b = PacketFactory.createSetConfPacket(id, new CatchArea(new Point(0,0), new Point(0,0)), 
+					0, 0, 0, 0, new byte[3]);
+			
+			System.out.println(DecodePacket.getOpCode(b));
+			
+			
+			socketClient.write(b);
+			
 			final ByteBuffer buffer = ByteBuffer.allocate(64);
 			socketClient.read(buffer);
 			//wait for ack

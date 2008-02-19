@@ -50,8 +50,9 @@ public class PacketFactory {
   public static ByteBuffer createSetConfPacket(int id, CatchArea area,
       int clock, int autonomy, int quality, int payload, byte[] root) {
     final ByteBuffer buffer = ByteBuffer.allocate(128);
-    // packet : header | area | clock | autonomy | quality | payload
+    // packet : header | id | area | clock | autonomy | quality | payload
     int index = 0;
+    System.out.println(OpCode.SETCONF.getCode());
     buffer.put(index, OpCode.SETCONF.getCode());
     index += OpCode.getOpCodeByteSize();
     buffer.putInt(index, id);

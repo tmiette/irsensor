@@ -62,17 +62,18 @@ public class DecodePacket {
   public static OpCode getOpCode(ByteBuffer packet) {
     if (packet != null) {
       ByteBuffer bb = packet.duplicate();
-      byte[] code = new byte[OpCode.getOpCodeByteSize()];
+     byte[] code = new byte[OpCode.getOpCodeByteSize()];
       // Opcode
       bb.position(0);
       bb.get(code, 0, OpCode.getOpCodeByteSize());
-      for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
-        for (OpCode opCode : OpCode.values()) {
-          if (opCode.getCode() == (code[i])) {
-            return opCode;
-          }
-        }
+      for (OpCode opCode : OpCode.values()) {
+    	  
+    	  if (opCode.getCode().equals(code[0])) {
+    		  
+    		  return opCode;
+    	  }
       }
+      
     }
     return null;
   }
@@ -96,18 +97,3 @@ public class DecodePacket {
   
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
