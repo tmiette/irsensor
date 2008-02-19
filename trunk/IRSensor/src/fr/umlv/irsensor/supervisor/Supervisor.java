@@ -39,7 +39,7 @@ public class Supervisor {
       }
 
       @Override
-      public void ReqConPacketReceived(int id, InetAddress ipAddress) {
+      public void ackConPacketReceived(int id, InetAddress ipAddress) {
         SensorNode sNode = Supervisor.this.sensors.get(id);
         sNode.setIpAddress(ipAddress);
         sNode.setConnected(true);
@@ -56,11 +56,17 @@ public class Supervisor {
         }
         for (Entry<Integer, SensorNode> node : Supervisor.this.sensors
             .entrySet()) {
-          Supervisor.this.client.setConf(node.getKey(), node.getValue()
-              .getAddress());
+          Supervisor.this.client.setConf(node.getValue());
         }
       }
     });
+    this.client
+        .addSupervisorServerClientListener(new SupervisorServerClientListener() {
+          @Override
+          public void ackConfPacketReceived(SensorNode sensor) {
+            fireSensorNodeConfigured(sensor);
+          }
+        });
 
     final int[] ids = new int[sensors.size()];
     for (int i = 0; i < ids.length; i++) {
@@ -120,6 +126,12 @@ public class Supervisor {
       InetAddress ipAddress) {
     for (SupervisorListener listener : this.listeners) {
       listener.sensorNodeConnected(sensor, ipAddress);
+    }
+  }
+
+  protected void fireSensorNodeConfigured(SensorNode sensor) {
+    for (SupervisorListener listener : this.listeners) {
+      listener.sensorNodeConfigured(sensor);
     }
   }
 }

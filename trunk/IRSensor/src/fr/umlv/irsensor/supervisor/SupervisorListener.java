@@ -6,4 +6,6 @@ public interface SupervisorListener {
 
   public void sensorNodeConnected(SensorNode sensor, InetAddress inetAddress);
 
+  public void sensorNodeConfigured(SensorNode sensor);
+
 }
