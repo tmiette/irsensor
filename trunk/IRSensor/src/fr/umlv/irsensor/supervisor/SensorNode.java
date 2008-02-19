@@ -27,6 +27,8 @@ public class SensorNode {
    */
   private boolean isConfigured;
 
+  private boolean isConnected;
+
   /**
    * Sensor ID
    */
@@ -89,6 +91,14 @@ public class SensorNode {
 
   public boolean isConfigured() {
     return isConfigured;
+  }
+
+  public boolean isConnected() {
+    return isConnected;
+  }
+
+  public void setConnected(boolean isConnected) {
+    this.isConnected = isConnected;
   }
 
   public void setConfigured(boolean isConfigured) {
