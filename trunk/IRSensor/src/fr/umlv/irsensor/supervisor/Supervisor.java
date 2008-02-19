@@ -20,81 +20,87 @@ import fr.umlv.irsensor.common.packets.ErrorCode;
  */
 public class Supervisor {
 
-  private final HashMap<Integer, SensorNode> sensors = new HashMap<Integer, SensorNode>();
+	private final HashMap<Integer, SensorNode> sensors = new HashMap<Integer, SensorNode>();
 
-  private final SupervisorServer server;
+	private final SupervisorServer server;
 
-  private final SupervisorServerClient client;
+	private final SupervisorServerClient client;
 
-  public Supervisor(List<SensorNode> sensors, SupervisorServerClient client,
-      SupervisorServer server) {
-    this.client = client;
-    this.server = server;
-    this.server.addSupervisorServerListener(new SupervisorServerListener() {
-      @Override
-      public void ErrorCodeReceived(ErrorCode code) {
+	public Supervisor(List<SensorNode> sensors, SupervisorServerClient client,
+			SupervisorServer server) {
+		this.client = client;
+		this.server = server;
+		this.server.addSupervisorServerListener(new SupervisorServerListener() {
+			@Override
+			public void ErrorCodeReceived(ErrorCode code) {
 
-      }
+			}
 
-      @Override
-      public void ReqConPacketReceived(int id, InetAddress ipAddress) {
-        SensorNode sNode = Supervisor.this.sensors.get(id);
-        sNode.setIpAddress(ipAddress);
-      }
+			@Override
+			public void ReqConPacketReceived(int id, InetAddress ipAddress) {
+				SensorNode sNode = Supervisor.this.sensors.get(id);
+				sNode.setIpAddress(ipAddress);
+			}
 
-      @Override
-      public void registrationTerminated() {
-        for (Entry<Integer, SensorNode> node : Supervisor.this.sensors
-            .entrySet()) {
-          Supervisor.this.client.setConf(node.getKey(), node.getValue()
-              .getAddress());
-        }
-      }
-    });
+			@Override
+			public void registrationTerminated() {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				for (Entry<Integer, SensorNode> node : Supervisor.this.sensors
+						.entrySet()) {
+					Supervisor.this.client.setConf(node.getKey(), node.getValue()
+							.getAddress());
+				}
+			}
+		});
 
-    final int[] ids = new int[sensors.size()];
-    for (int i = 0; i < ids.length; i++) {
-      final SensorNode sensor = sensors.get(i);
-      this.sensors.put(sensor.getId(), sensor);
-      ids[i] = sensor.getId();
-    }
+		final int[] ids = new int[sensors.size()];
+		for (int i = 0; i < ids.length; i++) {
+			final SensorNode sensor = sensors.get(i);
+			this.sensors.put(sensor.getId(), sensor);
+			ids[i] = sensor.getId();
+		}
 
-    this.server.registerAllNodes(ids);
-  }
+		this.server.registerAllNodes(ids);
+	}
 
-  /**
-   * Retrieves the list of sensor nodes of the supervisor
-   * 
-   * @return List<SensorNode>
-   */
-  public List<SensorNode> getSensorNodes() {
-    ArrayList<SensorNode> l = new ArrayList<SensorNode>();
-    for (Entry<Integer, SensorNode> entry : this.sensors.entrySet()) {
-      l.add(entry.getValue());
-    }
-    return l;
-  }
+	/**
+	 * Retrieves the list of sensor nodes of the supervisor
+	 * 
+	 * @return List<SensorNode>
+	 */
+	public List<SensorNode> getSensorNodes() {
+		ArrayList<SensorNode> l = new ArrayList<SensorNode>();
+		for (Entry<Integer, SensorNode> entry : this.sensors.entrySet()) {
+			l.add(entry.getValue());
+		}
+		return l;
+	}
 
-  /**
-   * Add a new sensor node to the supervisor
-   * 
-   * @param sensorNode
-   */
-  public void addSensorNode(int key, SensorNode sensorNode) {
-    this.sensors.put(key, sensorNode);
-  }
+	/**
+	 * Add a new sensor node to the supervisor
+	 * 
+	 * @param sensorNode
+	 */
+	public void addSensorNode(int key, SensorNode sensorNode) {
+		this.sensors.put(key, sensorNode);
+	}
 
-  /**
-   * Remove the sensor node, corresponding to the given index, from the
-   * supervisor
-   * 
-   * @param sensorNode
-   */
-  public void removeSensorNode(int key) {
-    this.sensors.remove(key);
-  }
+	/**
+	 * Remove the sensor node, corresponding to the given index, from the
+	 * supervisor
+	 * 
+	 * @param sensorNode
+	 */
+	public void removeSensorNode(int key) {
+		this.sensors.remove(key);
+	}
 
-  public void shutdown() throws IOException {
-    this.server.shutdown();
-  }
+	public void shutdown() throws IOException {
+		this.server.shutdown();
+	}
 }
