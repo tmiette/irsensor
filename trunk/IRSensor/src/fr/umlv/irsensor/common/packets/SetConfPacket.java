@@ -98,6 +98,7 @@ public class SetConfPacket
    * 
    * @param bb packet to read.
    * @return SetConfPacket to create.
+   * @throws MalformedPacketException if the {@link ByteBuffer} isn't valid packet.
    */
   public static SetConfPacket getPacket(ByteBuffer bb)
       throws MalformedPacketException {
