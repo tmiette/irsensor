@@ -31,12 +31,13 @@ public class SupervisorServerClient {
       socketClient.connect(new InetSocketAddress(sensor.getAddress(),
           SupervisorConfiguration.SERVER_PORT_LOCAL));
 
+      System.out.println(sensor.getId());
       ByteBuffer b = PacketFactory.createSetConfPacket(sensor.getId(), sensor
           .getCArea(), sensor.getClock(), sensor.getAutonomy(), sensor
           .getQuality(), sensor.getPayload(), new byte[3]);
 
       System.out.println(DecodePacket.getOpCode(b));
-
+b.clear();
       socketClient.write(b);
 
       final ByteBuffer buffer = ByteBuffer.allocate(64);

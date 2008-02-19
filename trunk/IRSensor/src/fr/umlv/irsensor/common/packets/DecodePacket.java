@@ -23,9 +23,11 @@ public class DecodePacket {
     if (packet != null) {
       System.out.println(packet);
       ByteBuffer bb = packet.duplicate();
-      bb.position(0);
-      id = bb.getInt(OpCode.getOpCodeByteSize());
+      bb.clear();
+      bb.position(OpCode.getOpCodeByteSize());
       System.out.println(bb);
+      id = bb.getInt();
+      
     }
     return id;
   }
@@ -39,10 +41,11 @@ public class DecodePacket {
   public static ErrorCode getErrorCode(ByteBuffer packet) {
     if (packet != null) {
       ByteBuffer bb = packet.duplicate();
-      bb.rewind();
+      bb.clear();
       byte[] errorCode = new byte[ErrorCode.getOpCodeByteSize()];
       // Opcode | id | ErrorCode
-      bb.position(OpCode.getOpCodeByteSize() + (Integer.SIZE / 8));
+      System.out.println(packet);
+      bb.position(OpCode.getOpCodeByteSize() + PacketFieldLength.ID.getLength());
       bb.get(errorCode, 0, ErrorCode.getOpCodeByteSize());
       for (int i = 0; i < ErrorCode.getOpCodeByteSize(); i++) {
         for (ErrorCode code : ErrorCode.values()) {

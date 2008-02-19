@@ -1,6 +1,7 @@
 package fr.umlv.irsensor.common.packets;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import fr.umlv.irsensor.sensor.CatchArea;
 import fr.umlv.irsensor.sensor.SensorState;
@@ -81,6 +82,8 @@ public class PacketFactory {
     index += PacketFieldLength.PAYLOAD.getLength();
     buffer.position(index);
     buffer.put(root, 0, root.length);
+    buffer.rewind();
+    
     return buffer;
   }
 

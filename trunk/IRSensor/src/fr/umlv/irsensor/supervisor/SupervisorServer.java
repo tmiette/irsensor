@@ -61,7 +61,6 @@ public class SupervisorServer {
 							sensorChannel.close();
 							continue;
 						}
-						readBuffer.clear();
 
 						// send REPC dispatcher.startDispatcher();ON packet to the sensor
 						sensorChannel.write(PacketFactory
