@@ -2,6 +2,10 @@ package fr.umlv.irsensor.sensor;
 
 import java.io.IOException;
 
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JTree;
+
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.networkClients.DataClient;
 import fr.umlv.irsensor.sensor.networkClients.SensorClient;

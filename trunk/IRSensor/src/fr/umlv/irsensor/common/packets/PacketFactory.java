@@ -49,7 +49,7 @@ public class PacketFactory {
    */
   public static ByteBuffer createSetConfPacket(int id, CatchArea area,
       int clock, int autonomy, int quality, int payload, byte[] root) {
-    final ByteBuffer buffer = ByteBuffer.allocate(64);
+    final ByteBuffer buffer = ByteBuffer.allocate(128);
     // packet : header | area | clock | autonomy | quality | payload
     int index = 0;
     buffer.put(index, OpCode.SETCONF.getCode());

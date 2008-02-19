@@ -24,9 +24,9 @@ public class Supervisor {
 	
 	private final SupervisorServer server;
 	
-	private final SupervisorClient client;
+	private final SupervisorServerClient client;
 	
-	public Supervisor(List<SensorNode> sensors, SupervisorClient client, SupervisorServer server) {
+	public Supervisor(List<SensorNode> sensors, SupervisorServerClient client, SupervisorServer server) {
 		this.client = client;
 		this.server = server;
 		this.server.addSupervisorServerListener(new SupervisorServerListener(){
@@ -37,7 +37,6 @@ public class Supervisor {
 
 			@Override
 			public void ReqConPacketReceived(int id, InetAddress ipAddress) {
-				System.out.println(id);
 				SensorNode sNode = Supervisor.this.sensors.get(id);
 				sNode.setIpAddress(ipAddress);
 			}

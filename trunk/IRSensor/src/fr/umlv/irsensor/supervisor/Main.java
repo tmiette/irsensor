@@ -28,7 +28,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		final Supervisor supervisor = new Supervisor(builder.getSensorsNode(), new SupervisorClient(),
+		final Supervisor supervisor = new Supervisor(builder.getSensorsNode(), new SupervisorServerClient(),
 		new SupervisorServer());
 		
 	}

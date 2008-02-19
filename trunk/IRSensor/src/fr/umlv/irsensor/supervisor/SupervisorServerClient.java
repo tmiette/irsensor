@@ -1,7 +1,6 @@
 package fr.umlv.irsensor.supervisor;
 
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -20,9 +19,9 @@ import fr.umlv.irsensor.sensor.CatchArea.Point;
  * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
  * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  */
-public class SupervisorClient {
+public class SupervisorServerClient {
 	
-	public SupervisorClient() {
+	public SupervisorServerClient() {
 	}
 	
 	public void setConf(int id, InetAddress ipAddress){
