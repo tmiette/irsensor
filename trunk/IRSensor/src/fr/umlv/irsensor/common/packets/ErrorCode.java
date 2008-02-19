@@ -27,7 +27,12 @@ public enum ErrorCode {
   }
 
   public static ErrorCode getErrorCode(byte[] b) {
-    // TODO Auto-generated method stub
+    if (b.length == getOpCodeByteSize()) {
+      for (ErrorCode code : ErrorCode.values()) {
+        if (code.equals(b[0])) { return code; }
+      }
+    }
     return null;
+
   }
 }
