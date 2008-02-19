@@ -5,59 +5,28 @@ import java.nio.ByteBuffer;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.CatchArea;
 
-/**
- * This object represents a SETCONF packet.
- * 
- * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
- * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
- * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
- * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
- */
-public class SetConfPacket
+public class ReqDataPacket
     implements SupervisorPacket {
 
   /*
-   * SETCONF packet : | Header | Id | Catch Area | Clock | Autonomy | Quality |
-   * Payload | Parent address | Optional |
+   * | Header | id | catch area | min quality requested | min date requested |
    */
   private final OpCode opCode = OpCode.SETCONF;
   private final int id;
   private final CatchArea ca;
-  private final int clock;
-  private final int autonomy;
   private final int quality;
-  private final int payload;
-  private final int parentId;
+  private final int clock;
 
-  public SetConfPacket(int id, CatchArea ca, int clock, int autonomy,
-      int quality, int payload, int parentId) {
+  public ReqDataPacket(int id, CatchArea ca, int clock, int quality) {
     super();
     this.id = id;
     this.ca = ca;
     this.clock = clock;
-    this.autonomy = autonomy;
     this.quality = quality;
-    this.payload = payload;
-    this.parentId = parentId;
   }
 
   /**
-   * Returns the autonomy contained in the packet.
-   * 
-   * @param packet packet to read.
-   * @return int representing autonomy.
-   */
-  private static int getAutonomy(ByteBuffer packet) {
-    int auto = -1;
-    packet.position(PacketFields.getLength(PacketFields.OPCODE,
-        PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK));
-
-    auto = packet.getInt();
-    return auto;
-  }
-
-  /**
-   * Returns the area contained in the packet.�
+   * Returns the area contained in the packet.
    * 
    * @param packet packet to read.
    * @return CatchArea contained in the packet.
@@ -67,6 +36,7 @@ public class SetConfPacket
     CatchArea area = null;
     packet.position(PacketFields
         .getLength(PacketFields.OPCODE, PacketFields.ID));
+
     area = new CatchArea(packet.getInt(), packet.getInt(), packet.getInt(),
         packet.getInt());
     return area;
@@ -81,7 +51,7 @@ public class SetConfPacket
   private static int getClock(ByteBuffer packet) {
     int clock = -1;
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
-        PacketFields.ID, PacketFields.CATCH_AREA));
+        PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.QUALITY));
 
     clock = packet.getInt();
     return clock;
@@ -96,7 +66,7 @@ public class SetConfPacket
    * @throws MalformedPacketException if the {@link ByteBuffer} isn't valid
    *           packet.
    */
-  public static SetConfPacket getPacket(ByteBuffer bb)
+  public static ReqDataPacket getPacket(ByteBuffer bb)
       throws MalformedPacketException {
 
     if (bb == null) throw new IllegalArgumentException();
@@ -117,49 +87,10 @@ public class SetConfPacket
 
     int clock = getClock(packet);
 
-    int autonomy = getAutonomy(packet);
-
     int quality = getQuality(packet);
 
-    int payload = getPayload(packet);
-
-    int parentId = getParentID(packet);
-
     // return new SetConfPacket(id);
-    return new SetConfPacket(id, ca, clock, autonomy, quality, payload,
-        parentId);
-  }
-
-  /**
-   * Returns the ParentId value contained in the packet.
-   * 
-   * @param packet packet to read.
-   * @return int representing the ParentId.
-   */
-  private static int getParentID(ByteBuffer packet) {
-    int parentID = -1;
-    packet.position(PacketFields.getLength(PacketFields.OPCODE,
-        PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
-        PacketFields.AUTONOMY, PacketFields.PAYLOAD, PacketFields.QUALITY));
-
-    parentID = packet.getInt();
-    return parentID;
-  }
-
-  /**
-   * Returns the Payload value contained in the packet.
-   * 
-   * @param packet packet to read.
-   * @return int representing payload.
-   */
-  private static int getPayload(ByteBuffer packet) {
-    int payload = -1;
-    packet.position(PacketFields.getLength(PacketFields.OPCODE,
-        PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
-        PacketFields.AUTONOMY, PacketFields.QUALITY));
-
-    payload = packet.getInt();
-    return payload;
+    return new ReqDataPacket(id, ca, clock, quality);
   }
 
   /**
@@ -171,8 +102,7 @@ public class SetConfPacket
   private static int getQuality(ByteBuffer packet) {
     int quality = -1;
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
-        PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
-        PacketFields.AUTONOMY));
+        PacketFields.ID, PacketFields.CATCH_AREA));
 
     quality = packet.getInt();
     return quality;
@@ -193,31 +123,10 @@ public class SetConfPacket
   }
 
   /**
-   * @return the autonomy
-   */
-  public int getAutonomy() {
-    return autonomy;
-  }
-
-  /**
    * @return the quality
    */
   public int getQuality() {
     return quality;
-  }
-
-  /**
-   * @return the payload
-   */
-  public int getPayload() {
-    return payload;
-  }
-
-  /**
-   * @return the parentId
-   */
-  public int getParentId() {
-    return parentId;
   }
 
   @Override
@@ -229,4 +138,5 @@ public class SetConfPacket
   public OpCode getOpCode() {
     return this.opCode;
   }
+
 }

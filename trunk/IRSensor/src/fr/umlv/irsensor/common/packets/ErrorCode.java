@@ -25,4 +25,9 @@ public enum ErrorCode {
   public boolean isSensorSide(ErrorCode code) {
     return !isServerSide(code);
   }
+
+  public static ErrorCode getErrorCode(byte[] b) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
