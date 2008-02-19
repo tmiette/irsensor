@@ -21,10 +21,11 @@ public class DecodePacket {
   public static int getId(ByteBuffer packet) {
     int id = -1;
     if (packet != null) {
+      System.out.println(packet);
       ByteBuffer bb = packet.duplicate();
       bb.clear();
-      bb.position(OpCode.getOpCodeByteSize());
       id = bb.getInt(OpCode.getOpCodeByteSize());
+      System.out.println(bb);
     }
     return id;
   }

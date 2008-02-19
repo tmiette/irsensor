@@ -79,6 +79,7 @@ public class PacketFactory {
     index += PacketFieldLength.QUALITY.getLength();
     buffer.putInt(index, payload);
     index += PacketFieldLength.PAYLOAD.getLength();
+    buffer.position(index);
     buffer.put(root, 0, root.length);
     return buffer;
   }
