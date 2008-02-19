@@ -1,4 +1,5 @@
 package fr.umlv.irsensor.sensor;
+
 public class CatchArea {
 
   private final Point p1;
@@ -22,6 +23,11 @@ public class CatchArea {
     return this.p2;
   }
 
+  @Override
+  public String toString() {
+    return p1.toString() + ", " + p2.toString();
+  }
+
   public static class Point {
 
     private final int x;
@@ -39,6 +45,11 @@ public class CatchArea {
 
     public int getY() {
       return this.y;
+    }
+
+    @Override
+    public String toString() {
+      return "[" + x + ":" + y + "]";
     }
 
   }
