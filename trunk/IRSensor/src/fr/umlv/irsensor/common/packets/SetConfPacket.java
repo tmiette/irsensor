@@ -7,28 +7,26 @@ import fr.umlv.irsensor.sensor.CatchArea;
 
 /**
  * This object represents a SETCONF packet.
+ * 
  * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
  * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
  * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
  * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  */
-public class SetConfPacket implements SupervisorPacket {
-  // Header | Id | Catch Area | Clock | Autonomy | Quality | Payload | Parent
-  // address | Optional |
+public class SetConfPacket
+    implements SupervisorPacket {
+
+  /*
+   * SETCONF packet : | Header | Id | Catch Area | Clock | Autonomy | Quality |
+   * Payload | Parent | address | Optional |
+   */
   private final int id;
-
   private final OpCode opCode = OpCode.SETCONF;
-
   private final CatchArea ca;
-
   private final int clock;
-
   private final int autonomy;
-
   private final int quality;
-
   private final int payload;
-
   private final int parentId;
 
   public SetConfPacket(int id, CatchArea ca, int clock, int autonomy,
@@ -43,6 +41,12 @@ public class SetConfPacket implements SupervisorPacket {
     this.parentId = parentId;
   }
 
+  /**
+   * Returns the autonomy contained in the packet.
+   * 
+   * @param packet packet to read.
+   * @return int representing autonomy.
+   */
   private static int getAutonomy(ByteBuffer packet) {
     int auto = -1;
     packet.position(PacketFields.OPCODE.getLength()
@@ -55,6 +59,7 @@ public class SetConfPacket implements SupervisorPacket {
 
   /**
    * Returns the area contained in the packet.�
+   * 
    * @param packet packet to read.
    * @return CatchArea contained in the packet.
    */
@@ -71,6 +76,12 @@ public class SetConfPacket implements SupervisorPacket {
     return area;
   }
 
+  /**
+   * Returns the clock value contained in the packet.
+   * 
+   * @param packet packet to read.
+   * @return int representing clock.
+   */
   private static int getClock(ByteBuffer packet) {
     int clock = -1;
     ByteBuffer bb = packet.duplicate();
@@ -81,6 +92,13 @@ public class SetConfPacket implements SupervisorPacket {
     return clock;
   }
 
+  /**
+   * Returns SetConfPacket corresponding to packet. This methods parses the
+   * ByteBuffer and create a SetConfPacket object corresponding to it.
+   * 
+   * @param bb packet to read.
+   * @return SetConfPacket to create.
+   */
   public static SetConfPacket getPacket(ByteBuffer bb)
       throws MalformedPacketException {
 
@@ -115,6 +133,12 @@ public class SetConfPacket implements SupervisorPacket {
         parentId);
   }
 
+  /**
+   * Returns the ParentId value contained in the packet.
+   * 
+   * @param packet packet to read.
+   * @return int representing the ParentId.
+   */
   private static int getParentID(ByteBuffer packet) {
     int parentID = -1;
     packet.position(PacketFields.OPCODE.getLength()
@@ -126,6 +150,12 @@ public class SetConfPacket implements SupervisorPacket {
     return parentID;
   }
 
+  /**
+   * Returns the Payload value contained in the packet.
+   * 
+   * @param packet packet to read.
+   * @return int representing payload.
+   */
   private static int getPayload(ByteBuffer packet) {
     int payload = -1;
     packet.position(PacketFields.OPCODE.getLength()
@@ -136,6 +166,12 @@ public class SetConfPacket implements SupervisorPacket {
     return payload;
   }
 
+  /**
+   * Returns the quality value contained in the packet.
+   * 
+   * @param packet packet to read.
+   * @return int representing quality.
+   */
   private static int getQuality(ByteBuffer packet) {
     int quality = -1;
     packet.position(PacketFields.OPCODE.getLength()
