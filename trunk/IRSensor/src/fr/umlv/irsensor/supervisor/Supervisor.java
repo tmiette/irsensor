@@ -43,7 +43,7 @@ public class Supervisor {
         SensorNode sNode = Supervisor.this.sensors.get(id);
         sNode.setIpAddress(ipAddress);
         sNode.setConnected(true);
-        fireSensorNodeConnected(sNode);
+        fireSensorNodeConnected(sNode, ipAddress);
       }
 
       @Override
@@ -116,9 +116,10 @@ public class Supervisor {
     this.listeners.remove(listener);
   }
 
-  protected void fireSensorNodeConnected(SensorNode sensor) {
+  protected void fireSensorNodeConnected(SensorNode sensor,
+      InetAddress ipAddress) {
     for (SupervisorListener listener : this.listeners) {
-      listener.sensorNodeConnected(sensor);
+      listener.sensorNodeConnected(sensor, ipAddress);
     }
   }
 }
