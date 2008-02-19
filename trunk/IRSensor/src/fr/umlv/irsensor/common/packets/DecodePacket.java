@@ -21,11 +21,9 @@ public class DecodePacket {
   public static int getId(ByteBuffer packet) {
     int id = -1;
     if (packet != null) {
-      System.out.println(packet);
       ByteBuffer bb = packet.duplicate();
       bb.clear();
-      bb.position(PacketFieldLength.OPCODE.getLength());
-      System.out.println(bb);
+      bb.position(PacketFields.OPCODE.getLength());
       id = bb.getInt();
       
     }
@@ -44,8 +42,7 @@ public class DecodePacket {
       bb.clear();
       byte[] errorCode = new byte[ErrorCode.getOpCodeByteSize()];
       // Opcode | id | ErrorCode
-      System.out.println(packet);
-      bb.position(PacketFieldLength.OPCODE.getLength() + PacketFieldLength.ID.getLength());
+      bb.position(PacketFields.OPCODE.getLength() + PacketFields.ID.getLength());
       bb.get(errorCode, 0, ErrorCode.getOpCodeByteSize());
       for (int i = 0; i < ErrorCode.getOpCodeByteSize(); i++) {
         for (ErrorCode code : ErrorCode.values()) {
@@ -67,11 +64,11 @@ public class DecodePacket {
     if (packet != null) {
       ByteBuffer bb = packet.duplicate();
       bb.rewind();
-      byte[] code = new byte[PacketFieldLength.OPCODE.getLength()];
+      byte[] code = new byte[PacketFields.OPCODE.getLength()];
       // Opcode
       bb.position(0);
-      bb.get(code, 0, PacketFieldLength.OPCODE.getLength());
-      for (int i = 0; i < PacketFieldLength.OPCODE.getLength(); i++) {
+      bb.get(code, 0, PacketFields.OPCODE.getLength());
+      for (int i = 0; i < PacketFields.OPCODE.getLength(); i++) {
         for (OpCode opCode : OpCode.values()) {
           if (opCode.getCode() == (code[i])) {
             return opCode;

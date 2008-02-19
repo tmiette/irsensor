@@ -15,12 +15,12 @@ public class RepConPacket implements SupervisorPacket {
 		int index = 0;
 		
 		//Tests if it's a valid OpCode
-		final byte[] code = new byte[PacketFieldLength.OPCODE.getLength()];
-		packet.get(code, 0, PacketFieldLength.OPCODE.getLength());
+		final byte[] code = new byte[PacketFields.OPCODE.getLength()];
+		packet.get(code, 0, PacketFields.OPCODE.getLength());
 		if(!OpCode.REQCON.equals(code)) throw new MalformedPacketException();
 		
 		//Tests if the id is valid and sets it
-		index+= PacketFieldLength.OPCODE.getLength();
+		index+= PacketFields.OPCODE.getLength();
 		int id = packet.getInt(index);
 		if(id<0) throw new MalformedPacketException();
 		

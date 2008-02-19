@@ -19,13 +19,13 @@ public class PacketFactory {
    * @return a buffered packet
    */
   public static ByteBuffer createRepConPacket(int id) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     
     buffer.put(index, OpCode.REPCON.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
     return buffer;
   }
@@ -35,7 +35,7 @@ public class PacketFactory {
    * @return a buffered packet
    */
   public static ByteBuffer createReqConPacket() {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REQCON.getCode());
@@ -56,34 +56,34 @@ public class PacketFactory {
    */
   public static ByteBuffer createSetConfPacket(int id, CatchArea area,
       int clock, int autonomy, int quality, int payload, byte[] root) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID, PacketFieldLength.CATCH_AREA,
-        PacketFieldLength.CLOCK, PacketFieldLength.AUTONOMY,
-        PacketFieldLength.QUALITY, PacketFieldLength.PAYLOAD,
-        PacketFieldLength.PARENT_ID);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.CATCH_AREA,
+        PacketFields.CLOCK, PacketFields.AUTONOMY,
+        PacketFields.QUALITY, PacketFields.PAYLOAD,
+        PacketFields.PARENT_ID);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     // packet : header | area | clock | autonomy | quality | payload
     int index = 0;
     buffer.put(index, OpCode.SETCONF.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
-    index += PacketFieldLength.ID.getLength();
+    index += PacketFields.ID.getLength();
     buffer.putInt(index, area.getP1().getX());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, area.getP1().getY());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, area.getP2().getX());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, area.getP2().getY());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, clock);
-    index += PacketFieldLength.CLOCK.getLength();
+    index += PacketFields.CLOCK.getLength();
     buffer.putInt(index, autonomy);
-    index += PacketFieldLength.AUTONOMY.getLength();
+    index += PacketFields.AUTONOMY.getLength();
     buffer.putInt(index, quality);
-    index += PacketFieldLength.QUALITY.getLength();
+    index += PacketFields.QUALITY.getLength();
     buffer.putInt(index, payload);
-    index += PacketFieldLength.PAYLOAD.getLength();
+    index += PacketFields.PAYLOAD.getLength();
     
     buffer.position(index);
     buffer.put(root, 0, root.length);
@@ -99,13 +99,13 @@ public class PacketFactory {
    * @return bytebuffer corresponding to GETCONF packet.
    */
   public static ByteBuffer createGetConf(int id) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     
     buffer.put(index, OpCode.GETCONF.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
     return buffer;
   }
@@ -117,14 +117,14 @@ public class PacketFactory {
    * @return bytebuffer corresponding to SETSTA packet.
    */
   public static ByteBuffer createSetSta(int id, SensorState state) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID, PacketFieldLength.STATE);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.STATE);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.SETSTA.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
-    index += PacketFieldLength.ID.getLength();
+    index += PacketFields.ID.getLength();
     buffer.put(index, state.getState());
     return buffer;
   }
@@ -135,12 +135,12 @@ public class PacketFactory {
    * @return bytebuffer corresponding to GETSTA packet.
    */
   public static ByteBuffer createGetSta(int id) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.GETSTA.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
     return buffer;
   }
@@ -152,14 +152,14 @@ public class PacketFactory {
    * @return bytebuffer corresponding to REPSTA packet.
    */
   public static ByteBuffer createRepSta(int id, SensorState state) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID, PacketFieldLength.STATE);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.STATE);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REPSTA.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
-    index += PacketFieldLength.ID.getLength();
+    index += PacketFields.ID.getLength();
     buffer.put(index, state.getState());
     return buffer;
   }
@@ -175,25 +175,25 @@ public class PacketFactory {
    */
   public static ByteBuffer createReqData(int id, CatchArea area, int quality,
       int date) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID, PacketFieldLength.CATCH_AREA,
-        PacketFieldLength.QUALITY);
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.CATCH_AREA,
+        PacketFields.QUALITY);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REQDATA.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
-    index += PacketFieldLength.ID.getLength();
+    index += PacketFields.ID.getLength();
     buffer.putInt(index, area.getP1().getX());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, area.getP1().getY());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, area.getP2().getX());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, area.getP2().getY());
-    index += PacketFieldLength.CATCH_AREA.getLength() / 4;
+    index += PacketFields.CATCH_AREA.getLength() / 4;
     buffer.putInt(index, quality);
-    index += PacketFieldLength.QUALITY.getLength();
+    index += PacketFields.QUALITY.getLength();
     buffer.putInt(index, date);
     return buffer;
   }
@@ -206,12 +206,12 @@ public class PacketFactory {
    * @return bytebuffer corresponding to REPDATA packet.
    */
   public static ByteBuffer createRepData(int id, byte[] data) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID) + data.length;
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID) + data.length;
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REPDATA.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     
     buffer.position(index);
     buffer.put(data, 0, data.length);
@@ -229,14 +229,14 @@ public class PacketFactory {
    * @return bytebuffer corresponding to ACK packet.
    */
   public static ByteBuffer createAck(int id, ErrorCode code) {
-    int bufSize = PacketFieldLength.getLength(PacketFieldLength.OPCODE,
-        PacketFieldLength.ID) + ErrorCode.getOpCodeByteSize();
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID) + ErrorCode.getOpCodeByteSize();
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.ACK.getCode());
-    index += PacketFieldLength.OPCODE.getLength();
+    index += PacketFields.OPCODE.getLength();
     buffer.putInt(index, id);
-    index += PacketFieldLength.ID.getLength();
+    index += PacketFields.ID.getLength();
     buffer.put(index, code.getCode());
     return buffer;
   }
