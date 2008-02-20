@@ -3,6 +3,7 @@ package fr.umlv.irsensor.sensor;
 import java.io.IOException;
 
 import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
@@ -14,12 +15,9 @@ import fr.umlv.irsensor.sensor.networkServer.SensorServer;
 import fr.umlv.irsensor.sensor.networkServer.SupervisorSensorServer;
 
 public class Sensor {
-
-	private CatchArea area;
-	private int quality;
-	private int clock;
-	private int autonomy;
-	private int payload;
+	
+	private SensorConfiguration conf;
+	
 	private int id;
 	
 	private SensorState state = SensorState.DOWN;
@@ -33,11 +31,27 @@ public class Sensor {
 	
 	public Sensor(PacketDispatcher supervisorServer, PacketDispatcher sensorServer) throws IOException {
 		this.supervisorClient = new SupervisorClient(this);
-	
+		
 		try {
 			this.supervisorClient.registrySensor();
 			System.out.println("id recu "+this.id);
 			this.supervisorServer = new SupervisorSensorServer(this.id);
+			this.supervisorServer.addSupervisorSensorListener(new SupervisorSensorListener(){
+				@Override
+				public void reqDataReceived(CatchArea area, int clock, int quality) {
+					
+				}
+
+				@Override
+				public void confReceived(SensorConfiguration conf) {
+					Sensor.this.conf = conf;
+				}
+
+				@Override
+				public void stateChanged(SensorState state) {
+					Sensor.this.state = state;
+				}
+			});
 			this.sensorServer = new SensorServer(this.id);
 			supervisorServer.register(this.supervisorServer);
 			sensorServer.register(this.sensorServer);
@@ -49,46 +63,6 @@ public class Sensor {
 			e.printStackTrace();
 		}
 	}
-
-	public CatchArea getArea() {
-		return this.area;
-	}
-
-	public void setArea(CatchArea area) {
-		this.area = area;
-	}
-
-	public int getQuality() {
-		return this.quality;
-	}
-
-	public void setQuality(int quality) {
-		this.quality = quality;
-	}
-
-	public int getClock() {
-		return this.clock;
-	}
-
-	public void setClock(int clock) {
-		this.clock = clock;
-	}
-
-	public int getAutonomy() {
-		return this.autonomy;
-	}
-
-	public void setAutonomy(int autonomy) {
-		this.autonomy = autonomy;
-	}
-
-	public int getPayload() {
-		return this.payload;
-	}
-
-	public void setPayload(int payload) {
-		this.payload = payload;
-	}
 	
 	public void setId(int id) {
 		this.id = id;
@@ -96,6 +70,10 @@ public class Sensor {
 
 	public int getId() {
 		return this.id;
+	}
+	
+	public SensorConfiguration getConfiguration(){
+		return this.conf;
 	}
 	
 	public SupervisorClient getSupervisorClient(){
