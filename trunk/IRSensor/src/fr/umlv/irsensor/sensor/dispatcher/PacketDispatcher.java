@@ -7,7 +7,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 
-import fr.umlv.irsensor.common.packets.DecodePacket;
+import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 
 /**

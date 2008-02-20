@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
-import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
  
