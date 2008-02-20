@@ -18,8 +18,12 @@ public enum SensorState {
     return 1;
   }
 
-  public static SensorState getState(byte[] sta) {
-    // TODO Auto-generated method stub
+  public static SensorState getState(byte[] b) {
+    if (b.length == getSensorStateByteSize()) {
+      for (SensorState code : SensorState.values()) {
+        if (code.equals(b[0])) { return code; }
+      }
+    }
     return null;
   }
 
