@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -112,8 +113,10 @@ public class MainFrame {
   }
 
   private void createTabbedPane() {
-    this.mainContainer.addTab("Sensors", new JScrollPane(new SupervisorTable(
-        new SupervisorTableModel(this.supervisor)).getJTable()));
+    final JScrollPane scroll = new JScrollPane(new SupervisorTable(
+        new SupervisorTableModel(this.supervisor)).getJTable());
+    scroll.setBorder(BorderFactory.createTitledBorder("Sensors :"));
+    this.mainContainer.addTab("Sensors", scroll);
     this.mainContainer.addTab("Request", new JScrollPane(new RequestPanel()
         .getMainPanel()));
   }
@@ -124,7 +127,7 @@ public class MainFrame {
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.setJMenuBar(createMenuBar());
     frame.setContentPane(this.mainContainer);
-    frame.addWindowListener(new WindowAdapter(){
+    frame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent e) {
         try {
