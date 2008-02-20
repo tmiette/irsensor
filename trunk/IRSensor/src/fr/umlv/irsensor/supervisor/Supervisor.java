@@ -94,6 +94,10 @@ public class Supervisor {
   }
 
   public void setConf(SensorNode node, SensorConfiguration conf) {
+    SensorNode parent = this.sensors.get(conf.getParentId());
+    if (parent != null) {
+      conf.setParentAddress(parent.getAddress());
+    }
     this.client.setConf(node, conf);
   }
 

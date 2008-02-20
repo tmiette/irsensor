@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
+import com.sun.swing.internal.plaf.basic.resources.basic;
+
 import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.PacketFactory;
@@ -33,9 +35,14 @@ public class SupervisorServerClient {
       socketClient.connect(new InetSocketAddress(node.getAddress(),
           SupervisorConfiguration.SERVER_PORT_LOCAL));
 
+      byte[] parentAddress = new byte[4];
+      if (conf.getParentAddress() != null) {
+        parentAddress = conf.getParentAddress().getAddress();
+      }
+
       ByteBuffer b = PacketFactory.createSetConfPacket(node.getId(), conf
-          .getCArea(), conf.getClock(), conf.getAutonomy(), conf
-          .getQuality(), conf.getPayload(), new byte[3]);
+          .getCArea(), conf.getClock(), conf.getAutonomy(), conf.getQuality(),
+          conf.getPayload(), parentAddress);
 
       socketClient.write(b);
 
@@ -65,7 +72,8 @@ public class SupervisorServerClient {
     this.listeners.remove(listener);
   }
 
-  protected void fireAckConfPacketReceived(SensorNode node, SensorConfiguration conf) {
+  protected void fireAckConfPacketReceived(SensorNode node,
+      SensorConfiguration conf) {
     for (SupervisorServerClientListener listener : this.listeners) {
       listener.ackConfPacketReceived(node, conf);
     }
