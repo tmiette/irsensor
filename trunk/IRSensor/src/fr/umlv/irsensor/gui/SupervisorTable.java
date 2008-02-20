@@ -7,7 +7,7 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import fr.umlv.irsensor.sensor.SensorState;
+import fr.umlv.irsensor.common.SensorState;
 
 public class SupervisorTable {
 

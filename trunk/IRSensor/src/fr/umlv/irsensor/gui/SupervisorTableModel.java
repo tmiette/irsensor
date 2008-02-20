@@ -4,8 +4,8 @@ import java.net.InetAddress;
 
 import javax.swing.table.AbstractTableModel;
 
+import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.sensor.CatchArea;
-import fr.umlv.irsensor.sensor.SensorState;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
 import fr.umlv.irsensor.supervisor.SupervisorListener;
@@ -144,6 +144,12 @@ public class SupervisorTableModel extends AbstractTableModel {
     } else {
       return false;
     }
+  }
+  
+  @Override
+  public void setValueAt(Object value, int rowIndex, int columnIndex) {
+    // TODO Auto-generated method stub
+    super.setValueAt(value, rowIndex, columnIndex);
   }
 
 }

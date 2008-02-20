@@ -27,7 +27,7 @@ public class MainFrame {
   private final JTabbedPane mainContainer;
   private JFileChooser fileChooser;
   private Supervisor supervisor;
-  
+
   public MainFrame() {
     final JTabbedPane pane = new JTabbedPane(JTabbedPane.BOTTOM);
     this.mainContainer = pane;
@@ -58,7 +58,7 @@ public class MainFrame {
           supervisor = new Supervisor(builder.getSensorsNode(),
               new SupervisorServerClient(), new SupervisorServer());
 
-          createPanel();
+          createTabbedPane();
 
         }
       }
@@ -68,7 +68,7 @@ public class MainFrame {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        if(supervisor != null){
+        if (supervisor != null) {
           try {
             supervisor.shutdown();
           } catch (IOException e1) {
@@ -112,10 +112,11 @@ public class MainFrame {
 
   }
 
-  private void createPanel() {
+  private void createTabbedPane() {
     this.mainContainer.addTab("Sensors", new JScrollPane(new SupervisorTable(
         new SupervisorTableModel(this.supervisor)).getJTable()));
-    this.mainContainer.addTab("Request", new JScrollPane());
+    this.mainContainer.addTab("Request", new JScrollPane(new RequestPanel()
+        .getMainPanel()));
   }
 
   public void launch() {
