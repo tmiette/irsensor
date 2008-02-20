@@ -3,7 +3,6 @@ package fr.umlv.irsensor.common.packets;
 import java.nio.ByteBuffer;
 
 import fr.umlv.irsensor.sensor.CatchArea;
-import fr.umlv.irsensor.sensor.SensorState;
 
 /**
  * BufferFactory is in charge of creating the supervisor protocol packets A
@@ -177,7 +176,7 @@ public class PacketFactory {
       int date) {
     int bufSize = PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA,
-        PacketFields.QUALITY, PacketFields.DATE);
+        PacketFields.QUALITY);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REQDATA.getCode());
