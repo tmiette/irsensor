@@ -35,7 +35,7 @@ public class SupervisorServerClient {
 
       ByteBuffer b = PacketFactory.createSetConfPacket(node.getId(), conf
           .getCArea(), conf.getClock(), conf.getAutonomy(), conf
-          .getQuality(), conf.getPayload(), null);
+          .getQuality(), conf.getPayload(), new byte[3]);
 
       socketClient.write(b);
 
