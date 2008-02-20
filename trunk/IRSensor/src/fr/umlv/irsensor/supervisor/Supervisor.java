@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import fr.umlv.irsensor.common.packets.ErrorCode;
+import fr.umlv.irsensor.common.ErrorCode;
 
 /**
  * This class defines a supervisor A Supervisor maintains a list of sensors and

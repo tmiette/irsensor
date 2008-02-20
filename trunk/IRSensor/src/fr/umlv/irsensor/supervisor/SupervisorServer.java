@@ -10,11 +10,11 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.umlv.irsensor.common.DecodePacket;
+import fr.umlv.irsensor.common.ErrorCode;
+import fr.umlv.irsensor.common.OpCode;
+import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
-import fr.umlv.irsensor.common.packets.DecodePacket;
-import fr.umlv.irsensor.common.packets.ErrorCode;
-import fr.umlv.irsensor.common.packets.OpCode;
-import fr.umlv.irsensor.common.packets.PacketFactory;
 
 public class SupervisorServer {
 

@@ -6,10 +6,10 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
+import fr.umlv.irsensor.common.DecodePacket;
+import fr.umlv.irsensor.common.ErrorCode;
+import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
-import fr.umlv.irsensor.common.packets.DecodePacket;
-import fr.umlv.irsensor.common.packets.ErrorCode;
-import fr.umlv.irsensor.common.packets.PacketFactory;
 
 /**
  * SupervisorClient is a network client which is used to retrieve informations
