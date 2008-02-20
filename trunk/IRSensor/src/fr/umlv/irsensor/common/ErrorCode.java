@@ -29,7 +29,7 @@ public enum ErrorCode {
   public static ErrorCode getErrorCode(byte[] b) {
     if (b.length == getOpCodeByteSize()) {
       for (ErrorCode code : ErrorCode.values()) {
-        if (code.equals(b[0])) { return code; }
+        if (code.getCode() == b[0]) { return code; }
       }
     }
     return null;

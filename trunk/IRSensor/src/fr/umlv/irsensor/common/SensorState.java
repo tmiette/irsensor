@@ -21,7 +21,7 @@ public enum SensorState {
   public static SensorState getState(byte[] b) {
     if (b.length == getSensorStateByteSize()) {
       for (SensorState code : SensorState.values()) {
-        if (code.equals(b[0])) { return code; }
+        if (code.getState() == b[0]) { return code; }
       }
     }
     return null;
