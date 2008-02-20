@@ -22,7 +22,6 @@ public class SensorConfiguration {
 
   public SensorConfiguration(SensorState state, CatchArea area, int autonomy,
       int clock, int payload, int quality, int parentId) {
-    super();
     this.autonomy = autonomy;
     this.cArea = area;
     this.clock = clock;
@@ -30,6 +29,12 @@ public class SensorConfiguration {
     this.payload = payload;
     this.quality = quality;
     this.state = state;
+  }
+  
+  public SensorConfiguration(SensorState state, CatchArea area, int autonomy,
+	      int clock, int payload, int quality, InetAddress address) {
+	    this(state, area, autonomy, clock, payload, quality, -1);
+	    this.parentAddress = address;
   }
   
   public void setParentAddress(InetAddress parentAddress) {
