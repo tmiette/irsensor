@@ -15,6 +15,7 @@ public class SupervisorTable {
 
   public SupervisorTable(SupervisorTableModel model) {
     this.table = new JTable(model);
+    this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     this.table.setDefaultRenderer(Boolean.class,
         new DefaultTableCellRenderer() {
 
