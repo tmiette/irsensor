@@ -8,23 +8,39 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.sensor.CatchArea;
 
 
 public class ViewSight {
 	
 	private BufferedImage image;
+	private String fileExtension = null;
 	
 	public ViewSight(String file) {
 		try {
-			this.image = ImageIO.read(new File(file));	
+			final File resource = new File(file);
+			int dot = -1;
+			if ((dot = file.lastIndexOf(".")) != -1){
+				this.fileExtension = file.substring(dot + 1);
+			}
+			this.image = ImageIO.read(resource);	
 		}
 		catch (IOException e){
 			System.err.println("Cannot read image "+file);
 			System.exit(1);
 		}
 	}
+	
+	/**
+	 * Retrieves the file extension that describes the data hold by the data server
+	 * @return the file extension
+	 */
+	public String getFileExtension(){
+		if (fileExtension == null)
+			throw new IllegalStateException("Could not retrieve file extension in filename");
+		return fileExtension;
+	}
+	
 	
 	/**
 	 * Retrieves a sub part of an image. This sub part corresponds the the area given as first parameter.
@@ -50,10 +66,9 @@ public class ViewSight {
 	 * @return the image reconstituted
 	 */
 	public BufferedImage createImageFromImageArea(ImageArea... images){
-		if (images.length == 0) throw new IllegalArgumentException("No images given");
+		if (images.length == 0) throw new IllegalArgumentException("No image given");
 		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = im.createGraphics();
-		
 		for (int i = 0; i < images.length; i++) {
 			Image image = images[i].getImage();
 			CatchArea imageArea = images[i].getArea();

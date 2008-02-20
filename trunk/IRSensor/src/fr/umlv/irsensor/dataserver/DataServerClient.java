@@ -1,7 +1,5 @@
 package fr.umlv.irsensor.dataserver;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -9,16 +7,15 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
-import fr.umlv.irsensor.common.CatchArea;
-import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.RepDataPacket;
+import fr.umlv.irsensor.sensor.CatchArea;
 
 public class DataServerClient {
 
@@ -52,18 +49,9 @@ public class DataServerClient {
 			dataServerRepDataBuffer.flip();
 			try {
 				RepDataPacket packetReceived = RepDataPacket.getPacket(dataServerRepDataBuffer);
-				System.out.println("Data received correctly");
+				System.out.println("Data received correctly "+packetReceived);
 				byte[] im = packetReceived.getDatas();
-				System.out.println("Trying to recover image with lenght "+im.length);
-				BufferedImage bufferedImage = ImageIO.read((new ByteArrayInputStream(im)));
-				if (bufferedImage == null) {
-					System.err.println("Could not recover image from received packet");
-					close();
-					System.exit(1);
-				}
-				ImageArea image = new ImageArea(bufferedImage, catchArea);
-				displayImage(image);
-				System.out.println("Recovering ok");
+				displayImage(im);
 			} catch (MalformedPacketException e) {
 				System.err.println("Malformed packet received from data server "+e.getMessage());
 			}
@@ -73,11 +61,12 @@ public class DataServerClient {
 		}
 	}
 
-	private void displayImage(ImageArea zone){
+	private void displayImage(byte[] zone){
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setSize(600,600);
-		frame.getContentPane().add(new JLabel(new ImageIcon(zone.getImage())));
+		final ImageIcon imageIcon = new ImageIcon(zone);
+		frame.getContentPane().add(new JLabel(imageIcon));
 		frame.setVisible(true);
 	}
 	
