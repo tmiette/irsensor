@@ -23,6 +23,14 @@ public class CatchArea {
     return this.p2;
   }
 
+  public int getAreaWidth(){
+	  return p2.x - p1.x;
+  }
+
+  public int getAreaHeight(){
+	  return p2.y - p1.y;
+  }
+
   @Override
   public String toString() {
     return p1.toString() + ", " + p2.toString();
