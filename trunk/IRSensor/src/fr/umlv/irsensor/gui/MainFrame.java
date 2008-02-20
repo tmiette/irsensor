@@ -130,11 +130,13 @@ public class MainFrame {
     frame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent e) {
-        try {
-          supervisor.shutdown();
-        } catch (IOException e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
+        if (supervisor != null) {
+          try {
+            supervisor.shutdown();
+          } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+          }
         }
       }
     });
