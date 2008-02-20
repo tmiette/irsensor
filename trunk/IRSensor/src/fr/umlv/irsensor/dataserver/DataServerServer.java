@@ -1,5 +1,6 @@
 package fr.umlv.irsensor.dataserver;
 
+import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -8,10 +9,20 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.imageio.ImageIO;
+
+import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.packets.PacketFactory;
+import fr.umlv.irsensor.common.packets.RepDataPacket;
+import fr.umlv.irsensor.common.packets.ReqDataPacket;
+
 
 public class DataServerServer {
 	
-	
+	/**
+	 * Image data
+	 */
+	private final ViewSight completeCapturedZone = new ViewSight("src/images/ig2k.gif");
 	
 	/**
 	 * Max client that can handle the data server
@@ -52,8 +63,10 @@ public class DataServerServer {
 			try {
 				SocketChannel clientChannel = channel.accept();
 				executer.submit(handleClient(clientChannel));
+				System.out.println("Client accepted");
 			} catch (IOException e) {
 				System.err.println("accept()");
+				close();
 			}
 		}
 	}
@@ -64,21 +77,37 @@ public class DataServerServer {
 	 * @return the runnable
 	 */
 	private Runnable handleClient(final SocketChannel clientChannel){
-		final ByteBuffer dst = ByteBuffer.allocate(8196);
+		final ByteBuffer dst = ByteBuffer.allocate(300000);
 		return new Runnable(){
 			@Override
 			public void run() {
 				try {
 					clientChannel.read(dst);
-					// Parse request and retrieve catch area
-					// Create image area
-					// Send back to client the new image 
 					dst.flip();
-					
+					// Parse request and retrieve catch area
+					ReqDataPacket packet = ReqDataPacket.getPacket(dst);
+					// Create image area
+					ImageArea subImage = completeCapturedZone.getImageArea(packet.getCatchArea());
+					// Prepare response
+					byte[] imBytes = ((DataBufferByte)subImage.getImage().getRaster().getDataBuffer()).getData();
+					System.out.println("Image bytes len "+imBytes.length);
+					ByteBuffer sendBuffer = PacketFactory.createRepData(packet.getId(), imBytes);
+					clientChannel.write(sendBuffer);
 					dst.clear();
+				}
+				catch (MalformedPacketException e){
+					System.err.println("Malformed packet "+e.getMessage());
+					try {
+						System.out.println("Client connection closed");
+						clientChannel.close();
+					} catch (IOException e1) {
+						System.err.println("close()");
+						close();
+					}
 				}
 				catch (IOException e){
 					System.err.println("read()");
+					close();
 				}
 			}
 		};
