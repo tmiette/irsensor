@@ -19,17 +19,16 @@ public class SensorNode {
 
   private SensorConfiguration configuration;
 
-  private boolean isConfigured;
-
   private boolean isConnected;
 
   public SensorNode(int id) {
     this.id = id;
-    this.isConfigured = false;
+    this.isConnected = false;
   }
 
   public void setConfiguration(SensorConfiguration configuration) {
     this.configuration = configuration;
+    this.isConnected = true;
   }
 
   public InetAddress getAddress() {
@@ -97,20 +96,11 @@ public class SensorNode {
   }
 
   public boolean isConfigured() {
-    return isConfigured;
+    return this.configuration != null;
   }
 
   public boolean isConnected() {
     return isConnected;
-  }
-
-
-  public void setConfigured(boolean isConfigured) {
-    this.isConfigured = isConfigured;
-  }
-
-  public void setConnected(boolean isConnected) {
-    this.isConnected = isConnected;
   }
 
   public void setIpAddress(InetAddress ipAddress) {

@@ -45,7 +45,6 @@ public class Supervisor {
       public void ackConPacketReceived(int id, InetAddress ipAddress) {
         final SensorNode sNode = new SensorNode(id);
         sNode.setIpAddress(ipAddress);
-        sNode.setConnected(true);
         Supervisor.this.sensors.put(id, sNode);
         fireSensorNodeConnected(sNode, ipAddress);
       }
@@ -71,7 +70,7 @@ public class Supervisor {
           @Override
           public void ackConfPacketReceived(SensorNode node,
               SensorConfiguration conf) {
-            node.setConfigured(true);
+            node.setConfiguration(conf);
             fireSensorNodeConfigured(node);
           }
         });
