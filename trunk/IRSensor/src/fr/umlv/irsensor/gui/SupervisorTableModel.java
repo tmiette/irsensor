@@ -71,7 +71,7 @@ public class SupervisorTableModel extends AbstractTableModel {
     case 9:
       return sensor.getQuality();
     case 10:
-      return sensor.getIdParent();
+      return sensor.getParentId();
     default:
       return null;
     }
