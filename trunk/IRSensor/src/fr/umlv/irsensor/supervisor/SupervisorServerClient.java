@@ -35,7 +35,7 @@ public class SupervisorServerClient {
           SupervisorConfiguration.SERVER_PORT_LOCAL));
 
       ByteBuffer b = PacketFactory.createSetSta(node.getId(), state);
-
+      b.flip();
       socketClient.write(b);
 
       final ByteBuffer buffer = ByteBuffer.allocate(64);
