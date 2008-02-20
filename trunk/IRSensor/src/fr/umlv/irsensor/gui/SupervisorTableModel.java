@@ -1,6 +1,8 @@
 package fr.umlv.irsensor.gui;
 
 import java.net.InetAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -14,6 +16,8 @@ import fr.umlv.irsensor.supervisor.SupervisorListener;
 public class SupervisorTableModel extends AbstractTableModel {
 
   private static final long serialVersionUID = -6940960745068220341L;
+
+  private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
   private final Supervisor supervisor;
 
@@ -158,21 +162,25 @@ public class SupervisorTableModel extends AbstractTableModel {
   }
 
   @Override
-  public void setValueAt(Object value, int rowIndex, int columnIndex) {
-    int id = (Integer) getValueAt(rowIndex, 2);
-    if (columnIndex == 4) {
-      SensorState state = (SensorState) getValueAt(rowIndex, 4);
-      supervisor.setState(id, state);
-    } else {
-      CatchArea area = (CatchArea) getValueAt(rowIndex, 5);
-      int autonomy = (Integer) getValueAt(rowIndex, 6);
-      int clock = (Integer) getValueAt(rowIndex, 7);
-      int payload = (Integer) getValueAt(rowIndex, 8);
-      int quality = (Integer) getValueAt(rowIndex, 9);
-      int parent = (Integer) getValueAt(rowIndex, 10);
-      supervisor.setConf(id, new SensorConfiguration(area, autonomy, clock,
-          payload, quality, parent));
-    }
+  public void setValueAt(Object value, final int rowIndex, final int columnIndex) {
+    executor.submit(new Runnable() {
+      @Override
+      public void run() {
+        int id = (Integer) getValueAt(rowIndex, 2);
+        if (columnIndex == 4) {
+          SensorState state = (SensorState) getValueAt(rowIndex, 4);
+          supervisor.setState(id, state);
+        } else {
+          CatchArea area = (CatchArea) getValueAt(rowIndex, 5);
+          int autonomy = (Integer) getValueAt(rowIndex, 6);
+          int clock = (Integer) getValueAt(rowIndex, 7);
+          int payload = (Integer) getValueAt(rowIndex, 8);
+          int quality = (Integer) getValueAt(rowIndex, 9);
+          int parent = (Integer) getValueAt(rowIndex, 10);
+          supervisor.setConf(id, new SensorConfiguration(area, autonomy, clock,
+              payload, quality, parent));
+        }
+      }
+    });
   }
-
 }
