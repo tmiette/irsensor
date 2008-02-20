@@ -12,6 +12,7 @@ import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
 import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.packets.ReqDataPacket;
 import fr.umlv.irsensor.common.packets.SetConfPacket;
 import fr.umlv.irsensor.sensor.SupervisorSensorListener;
 import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
@@ -21,6 +22,8 @@ public class SupervisorSensorServer implements PacketRegisterable{
 	private final int id; 
 	
 	private final List<SupervisorSensorListener> listener = new ArrayList<SupervisorSensorListener>();
+	
+	private boolean isWaitingForAnswer;
 	
 	public SupervisorSensorServer(int id) {
 		this.id = id;
@@ -48,6 +51,17 @@ public class SupervisorSensorServer implements PacketRegisterable{
 			}
 			fireConfReceived(setConfPacket.getCatchArea(), setConfPacket.getClock(), setConfPacket.getAutonomy(), 
 					setConfPacket.getQuality(), setConfPacket.getPayload(), setConfPacket.getParentId());
+		}	
+		else if(DecodeOpCode.decodeByteBuffer(packet) == OpCode.REQDATA){
+			ReqDataPacket reqDataPacket = null;
+			try {
+				reqDataPacket = ReqDataPacket.getPacket(packet);
+			} catch (MalformedPacketException e) {
+				System.out.println(e.getMessage());
+				return;
+			}
+			fireReqDataReceived(reqDataPacket.getCatchArea(), reqDataPacket.getClock(), reqDataPacket.getQuality());
+			this.isWaitingForAnswer = true;
 		}
 		
 		try {
@@ -61,6 +75,12 @@ public class SupervisorSensorServer implements PacketRegisterable{
 	protected void fireConfReceived(CatchArea area, int clock, int autonomy, int quality, int payload, int id){
 		for(SupervisorSensorListener l: this.listener){
 			l.confReceived(area, clock, autonomy, quality, payload, id);
+		}
+	}
+	
+	protected void fireReqDataReceived(CatchArea area, int clock, int quality){
+		for(SupervisorSensorListener l: this.listener){
+			l.reqDataReceived(area, clock, quality);
 		}
 	}
 	
