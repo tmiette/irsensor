@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import fr.umlv.irsensor.common.ErrorCode;
+import fr.umlv.irsensor.common.SensorConfiguration;
+import fr.umlv.irsensor.util.Pair;
 
 /**
  * This class defines a supervisor A Supervisor maintains a list of sensors and
@@ -22,13 +24,15 @@ public class Supervisor {
 
   private final HashMap<Integer, SensorNode> sensors = new HashMap<Integer, SensorNode>();
 
+  private final List<Pair<Integer, SensorConfiguration>> sensorConfs;
+
   private final SupervisorServer server;
 
   private final SupervisorServerClient client;
 
   private final ArrayList<SupervisorListener> listeners = new ArrayList<SupervisorListener>();
 
-  public Supervisor(List<SensorNode> sensors) {
+  public Supervisor(List<Pair<Integer, SensorConfiguration>> sensors) {
     this.client = new SupervisorServerClient();
     this.server = new SupervisorServer();
     this.server.addSupervisorServerListener(new SupervisorServerListener() {
@@ -39,7 +43,7 @@ public class Supervisor {
 
       @Override
       public void ackConPacketReceived(int id, InetAddress ipAddress) {
-        SensorNode sNode = Supervisor.this.sensors.get(id);
+        final SensorNode sNode = new SensorNode(id);
         sNode.setIpAddress(ipAddress);
         sNode.setConnected(true);
         fireSensorNodeConnected(sNode, ipAddress);
@@ -53,40 +57,37 @@ public class Supervisor {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
-        for (Entry<Integer, SensorNode> node : Supervisor.this.sensors
-            .entrySet()) {
-          setConf(node.getValue());
+
+        for (Pair<Integer, SensorConfiguration> pair : sensorConfs) {
+          setConf(Supervisor.this.sensors.get(pair.getFirstElement()), pair
+              .getSecondElement());
         }
+
       }
     });
     this.client
         .addSupervisorServerClientListener(new SupervisorServerClientListener() {
           @Override
-          public void ackConfPacketReceived(SensorNode sensor) {
-            sensor.setConfigured(true);
-            fireSensorNodeConfigured(sensor);
+          public void ackConfPacketReceived(SensorNode node,
+              SensorConfiguration conf) {
+            node.setConfigured(true);
+            fireSensorNodeConfigured(node);
           }
         });
 
+    this.sensorConfs = sensors;
+
     final int[] ids = new int[sensors.size()];
-    for (int i = 0; i < ids.length; i++) {
-      final SensorNode sensor = sensors.get(i);
-      this.sensors.put(sensor.getId(), sensor);
-      ids[i] = sensor.getId();
+    int i = 0;
+    for (Pair<Integer, SensorConfiguration> pair : sensors) {
+      ids[i++] = pair.getFirstElement();
     }
 
     this.server.registerAllNodes(ids);
   }
 
-  public void setConf(int id) {
-    SensorNode sensor = this.sensors.get(id);
-    if (sensor != null) {
-      this.setConf(sensor);
-    }
-  }
-
-  public void setConf(SensorNode sensor) {
-    this.client.setConf(sensor);
+  public void setConf(SensorNode node, SensorConfiguration conf) {
+    this.client.setConf(node, conf);
   }
 
   /**

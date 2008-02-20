@@ -3,6 +3,7 @@ package fr.umlv.irsensor.supervisor;
 import java.net.InetAddress;
 
 import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SensorState;
 
 /**
@@ -12,63 +13,23 @@ import fr.umlv.irsensor.common.SensorState;
  */
 public class SensorNode {
 
-  /**
-   * Autonomy
-   */
-  private int autonomy;
-
-  /**
-   * Sensor's catch area
-   */
-  private CatchArea cArea;
-
-  /**
-   * Clock
-   */
-  private int clock;
-
-  /**
-   * Sensor ID
-   */
   private final int id;
 
-  /**
-   * Sensor parent ID
-   */
-  private int idParent;
-
-  /**
-   * IP address of the current sensor
-   */
   private InetAddress ipAddress;
 
-  /**
-   * a flag to know if a sensor is configured or not
-   */
+  private SensorConfiguration configuration;
+
   private boolean isConfigured;
 
   private boolean isConnected;
 
-  /**
-   * Sensor's payload
-   */
-  private int payload;
-
-  /**
-   * Sensor's capture quality
-   */
-  private int quality;
-
-  /**
-   * the state of the sensor. please refer to <code>State</code> enum
-   */
-  private SensorState state;
-
   public SensorNode(int id) {
     this.id = id;
-
     this.isConfigured = false;
-    this.state = SensorState.DOWN;
+  }
+
+  public void setConfiguration(SensorConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   public InetAddress getAddress() {
@@ -76,35 +37,63 @@ public class SensorNode {
   }
 
   public int getAutonomy() {
-    return autonomy;
+    if (this.configuration == null) {
+      return -1;
+    }
+    return this.configuration.getAutonomy();
   }
 
   public CatchArea getCArea() {
-    return cArea;
+    if (this.configuration == null) {
+      return null;
+    }
+    return this.configuration.getCArea();
   }
 
   public int getClock() {
-    return clock;
+    if (this.configuration == null) {
+      return -1;
+    }
+    return this.configuration.getClock();
   }
 
   public int getId() {
     return id;
   }
 
-  public int getIdParent() {
-    return idParent;
+  public int getParentId() {
+    if (this.configuration == null) {
+      return -1;
+    }
+    return this.configuration.getParentId();
+  }
+
+  public InetAddress getParentAddress() {
+    if (this.configuration == null) {
+      return null;
+    }
+    return this.configuration.getParentAddress();
   }
 
   public int getPayload() {
-    return payload;
+    if (this.configuration == null) {
+      return -1;
+    }
+    return this.configuration.getPayload();
   }
 
   public int getQuality() {
-    return quality;
+    if (this.configuration == null) {
+      return -1;
+    }
+    return this.configuration.getQuality();
   }
 
   public SensorState getState() {
-    return state;
+    if (this.configuration == null) {
+      return null;
+    }
+    return this.configuration.getState();
   }
 
   public boolean isConfigured() {
@@ -115,17 +104,6 @@ public class SensorNode {
     return isConnected;
   }
 
-  public void setAutonomy(int autonomy) {
-    this.autonomy = autonomy;
-  }
-
-  public void setCArea(CatchArea area) {
-    cArea = area;
-  }
-
-  public void setClock(int clock) {
-    this.clock = clock;
-  }
 
   public void setConfigured(boolean isConfigured) {
     this.isConfigured = isConfigured;
@@ -135,29 +113,7 @@ public class SensorNode {
     this.isConnected = isConnected;
   }
 
-  public void setIdParent(int idParent) {
-    this.idParent = idParent;
-  }
-
   public void setIpAddress(InetAddress ipAddress) {
     this.ipAddress = ipAddress;
-  }
-
-  public void setPayload(int payload) {
-    this.payload = payload;
-  }
-
-  public void setQuality(int quality) {
-    this.quality = quality;
-  }
-
-  /**
-   * Change the current state of a sensor
-   * 
-   * @param state
-   *            <code>State</code>
-   */
-  public void setState(SensorState state) {
-    this.state = state;
   }
 }

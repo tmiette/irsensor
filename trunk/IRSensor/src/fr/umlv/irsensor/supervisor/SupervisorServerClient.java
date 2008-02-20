@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.PacketFactory;
+import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 
 /**
@@ -24,28 +25,28 @@ public class SupervisorServerClient {
 
   private final ArrayList<SupervisorServerClientListener> listeners = new ArrayList<SupervisorServerClientListener>();
 
-  public void setConf(SensorNode sensor) {
+  public void setConf(SensorNode node, SensorConfiguration conf) {
     // set a new configuration
     try {
       SocketChannel socketClient;
       socketClient = SocketChannel.open();
-      socketClient.connect(new InetSocketAddress(sensor.getAddress(),
+      socketClient.connect(new InetSocketAddress(node.getAddress(),
           SupervisorConfiguration.SERVER_PORT_LOCAL));
- 
-      ByteBuffer b = PacketFactory.createSetConfPacket(sensor.getId(), sensor
-          .getCArea(), sensor.getClock(), sensor.getAutonomy(), sensor
-          .getQuality(), sensor.getPayload(), new byte[3]);
+
+      ByteBuffer b = PacketFactory.createSetConfPacket(node.getId(), conf
+          .getCArea(), conf.getClock(), conf.getAutonomy(), conf
+          .getQuality(), conf.getPayload(), null);
 
       socketClient.write(b);
 
       final ByteBuffer buffer = ByteBuffer.allocate(64);
       socketClient.read(buffer);
       buffer.flip();
-      if(DecodePacket.getErrorCode(buffer) == ErrorCode.OK){
-    	  System.out.println("Sensor configured, ui fired");
-    	  fireAckConfPacketReceived(sensor);
-      }else{
-    	  //TODO what can we do here?
+      if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
+        System.out.println("Sensor configured, ui fired");
+        fireAckConfPacketReceived(node, conf);
+      } else {
+        // TODO what can we do here?
       }
       socketClient.close();
     } catch (IOException e) {
@@ -64,9 +65,9 @@ public class SupervisorServerClient {
     this.listeners.remove(listener);
   }
 
-  protected void fireAckConfPacketReceived(SensorNode sensor) {
+  protected void fireAckConfPacketReceived(SensorNode node, SensorConfiguration conf) {
     for (SupervisorServerClientListener listener : this.listeners) {
-      listener.ackConfPacketReceived(sensor);
+      listener.ackConfPacketReceived(node, conf);
     }
   }
 
