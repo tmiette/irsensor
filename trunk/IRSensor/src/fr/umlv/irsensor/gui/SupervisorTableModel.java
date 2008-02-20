@@ -21,10 +21,7 @@ public class SupervisorTableModel extends AbstractTableModel {
     this.supervisor.addSupervisorListener(new SupervisorListener() {
       @Override
       public void sensorNodeConnected(SensorNode sensor, InetAddress inetAddress) {
-        for (int i = 0; i < getRowCount(); i++) {
-          fireTableCellUpdated(i, 0);
-          fireTableCellUpdated(i, 3);
-        }
+        fireTableRowsInserted(getRowCount(), getRowCount());
       }
 
       @Override
