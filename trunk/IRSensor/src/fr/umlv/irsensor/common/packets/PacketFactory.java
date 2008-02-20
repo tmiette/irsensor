@@ -177,7 +177,7 @@ public class PacketFactory {
       int date) {
     int bufSize = PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA,
-        PacketFields.QUALITY);
+        PacketFields.QUALITY, PacketFields.DATE);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REQDATA.getCode());
