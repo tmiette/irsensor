@@ -44,6 +44,7 @@ public class SupervisorTableModel extends AbstractTableModel {
 
       @Override
       public void sensorNodeStateChanged(SensorNode sensor) {
+        System.out.println("State Changed " + sensor.getState());
         for (int i = 0; i < getRowCount(); i++) {
           fireTableCellUpdated(i, 4);
         }
