@@ -86,6 +86,13 @@ public class Supervisor {
     this.server.registerAllNodes(ids);
   }
 
+  public void setConf(int id, SensorConfiguration conf) {
+    SensorNode node = this.sensors.get(id);
+    if (node != null) {
+      this.setConf(node, conf);
+    }
+  }
+
   public void setConf(SensorNode node, SensorConfiguration conf) {
     this.client.setConf(node, conf);
   }
