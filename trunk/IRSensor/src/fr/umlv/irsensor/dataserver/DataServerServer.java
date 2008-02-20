@@ -9,11 +9,8 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.imageio.ImageIO;
-
+import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
-import fr.umlv.irsensor.common.packets.PacketFactory;
-import fr.umlv.irsensor.common.packets.RepDataPacket;
 import fr.umlv.irsensor.common.packets.ReqDataPacket;
 
 
