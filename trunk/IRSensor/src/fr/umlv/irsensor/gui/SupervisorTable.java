@@ -41,6 +41,7 @@ public class SupervisorTable {
           }
 
         });
+    
     this.table.setDefaultRenderer(SensorState.class,
         new DefaultTableCellRenderer() {
 
@@ -75,7 +76,6 @@ public class SupervisorTable {
         });
 
     final JComboBox combo = new JComboBox(SensorState.values());
-
     this.table.getColumnModel().getColumn(4).setCellEditor(
         new DefaultCellEditor(combo));
   }

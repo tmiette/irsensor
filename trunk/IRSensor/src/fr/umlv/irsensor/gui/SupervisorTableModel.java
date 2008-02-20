@@ -144,7 +144,7 @@ public class SupervisorTableModel extends AbstractTableModel {
 
   @Override
   public boolean isCellEditable(int rowIndex, int columnIndex) {
-    if (columnIndex >= 5 && columnIndex <= 9) {
+    if (columnIndex >= 4 && columnIndex <= 9) {
       return true;
     } else {
       return false;
@@ -153,12 +153,16 @@ public class SupervisorTableModel extends AbstractTableModel {
 
   @Override
   public void setValueAt(Object value, int rowIndex, int columnIndex) {
-    int id = (Integer)getValueAt(rowIndex, 2);
-    supervisor.setConf(id, createConfiguration(rowIndex));
+    int id = (Integer) getValueAt(rowIndex, 2);
+    SensorState state = (SensorState) getValueAt(rowIndex, 4);
+    CatchArea area = (CatchArea) getValueAt(rowIndex, 5);
+    int autonomy = (Integer) getValueAt(rowIndex, 6);
+    int clock = (Integer) getValueAt(rowIndex, 7);
+    int payload = (Integer) getValueAt(rowIndex, 8);
+    int quality = (Integer) getValueAt(rowIndex, 9);
+    int parent = (Integer) getValueAt(rowIndex, 10);
+    supervisor.setConf(id, new SensorConfiguration(state, area, autonomy,
+        clock, payload, quality, parent));
   }
 
-  private SensorConfiguration createConfiguration(int rowIndex){
-    return null;
-  }
-  
 }
