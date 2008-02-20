@@ -11,44 +11,41 @@ public class SensorConfiguration {
   private int clock;
 
   private int parentId;
-  
+
   private InetAddress parentAddress;
 
   private int payload;
 
   private int quality;
 
-  private SensorState state;
-
-  public SensorConfiguration(SensorState state, CatchArea area, int autonomy,
-      int clock, int payload, int quality, int parentId) {
+  public SensorConfiguration(CatchArea area, int autonomy, int clock,
+      int payload, int quality, int parentId) {
     this.autonomy = autonomy;
     this.cArea = area;
     this.clock = clock;
     this.parentId = parentId;
     this.payload = payload;
     this.quality = quality;
-    this.state = state;
   }
-  
-  public SensorConfiguration(SensorState state, CatchArea area, int autonomy,
-	      int clock, int payload, int quality, InetAddress address) {
-	    this(state, area, autonomy, clock, payload, quality, -1);
-	    this.parentAddress = address;
+
+  public SensorConfiguration(CatchArea area, int autonomy, int clock,
+      int payload, int quality, InetAddress address) {
+    this(area, autonomy, clock, payload, quality, -1);
+    this.parentAddress = address;
   }
-  
+
   public void setParentAddress(InetAddress parentAddress) {
     this.parentAddress = parentAddress;
   }
-  
+
   public void setParentId(int parentId) {
     this.parentId = parentId;
   }
-  
+
   public InetAddress getParentAddress() {
     return parentAddress;
   }
-  
+
   public int getParentId() {
     return parentId;
   }
@@ -91,14 +88,6 @@ public class SensorConfiguration {
 
   public void setQuality(int quality) {
     this.quality = quality;
-  }
-
-  public SensorState getState() {
-    return state;
-  }
-
-  public void setState(SensorState state) {
-    this.state = state;
   }
 
 }
