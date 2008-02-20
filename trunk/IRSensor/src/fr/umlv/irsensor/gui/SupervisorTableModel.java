@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import javax.swing.table.AbstractTableModel;
 
 import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
@@ -152,10 +153,12 @@ public class SupervisorTableModel extends AbstractTableModel {
 
   @Override
   public void setValueAt(Object value, int rowIndex, int columnIndex) {
-   
-  
-  
-  
+    int id = (Integer)getValueAt(rowIndex, 2);
+    supervisor.setConf(id, createConfiguration(rowIndex));
   }
 
+  private SensorConfiguration createConfiguration(int rowIndex){
+    return null;
+  }
+  
 }

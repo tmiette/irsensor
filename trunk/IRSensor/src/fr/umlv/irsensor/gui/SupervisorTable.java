@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -71,6 +73,11 @@ public class SupervisorTable {
           }
 
         });
+
+    final JComboBox combo = new JComboBox(SensorState.values());
+
+    this.table.getColumnModel().getColumn(4).setCellEditor(
+        new DefaultCellEditor(combo));
   }
 
   public JTable getJTable() {
