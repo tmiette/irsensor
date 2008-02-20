@@ -29,10 +29,10 @@ public class SetConfPacket
   private final int autonomy;
   private final int quality;
   private final int payload;
-  private final int parentId;
+  private final byte[] parent;
 
   public SetConfPacket(int id, CatchArea ca, int clock, int autonomy,
-      int quality, int payload, int parentId) {
+      int quality, int payload, byte[] parentId) {
     super();
     this.id = id;
     this.ca = ca;
@@ -40,7 +40,7 @@ public class SetConfPacket
     this.autonomy = autonomy;
     this.quality = quality;
     this.payload = payload;
-    this.parentId = parentId;
+    this.parent = parentId;
   }
 
   /**
@@ -125,27 +125,27 @@ public class SetConfPacket
 
     int payload = getPayload(packet);
 
-    int parentId = getParentID(packet);
+    byte[] parent = getParent(packet);
 
     // return new SetConfPacket(id);
     return new SetConfPacket(id, ca, clock, autonomy, quality, payload,
-        parentId);
+        parent);
   }
 
   /**
-   * Returns the ParentId value contained in the packet.
+   * Returns the Parent address of a sensor contained in the packet.
    * 
    * @param packet packet to read.
-   * @return int representing the ParentId.
+   * @return byte[] representing the ParentId.
    */
-  private static int getParentID(ByteBuffer packet) {
-    int parentID = -1;
+  private static byte[] getParent(ByteBuffer packet) {
+    byte[] parent = new byte[4];
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
         PacketFields.AUTONOMY, PacketFields.PAYLOAD, PacketFields.QUALITY));
 
-    parentID = packet.getInt();
-    return parentID;
+    packet.get(parent);
+    return parent;
   }
 
   /**
@@ -218,8 +218,8 @@ public class SetConfPacket
   /**
    * @return the parentId
    */
-  public int getParentId() {
-    return parentId;
+  public byte[] getParent() {
+    return parent;
   }
 
   @Override
