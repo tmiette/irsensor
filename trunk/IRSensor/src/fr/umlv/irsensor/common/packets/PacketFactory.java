@@ -2,6 +2,7 @@ package fr.umlv.irsensor.common.packets;
 
 import java.nio.ByteBuffer;
 
+import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.sensor.CatchArea;
 
 /**
