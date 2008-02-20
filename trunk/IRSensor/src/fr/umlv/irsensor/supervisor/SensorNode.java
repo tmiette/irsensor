@@ -23,12 +23,11 @@ public class SensorNode {
 
   public SensorNode(int id) {
     this.id = id;
-    this.isConnected = false;
+    this.isConnected = true;
   }
 
   public void setConfiguration(SensorConfiguration configuration) {
     this.configuration = configuration;
-    this.isConnected = true;
   }
 
   public InetAddress getAddress() {
