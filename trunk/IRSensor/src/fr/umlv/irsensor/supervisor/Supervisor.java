@@ -28,10 +28,9 @@ public class Supervisor {
 
   private final ArrayList<SupervisorListener> listeners = new ArrayList<SupervisorListener>();
 
-  public Supervisor(List<SensorNode> sensors, SupervisorServerClient client,
-      SupervisorServer server) {
-    this.client = client;
-    this.server = server;
+  public Supervisor(List<SensorNode> sensors) {
+    this.client = new SupervisorServerClient();
+    this.server = new SupervisorServer();
     this.server.addSupervisorServerListener(new SupervisorServerListener() {
       @Override
       public void ErrorCodeReceived(ErrorCode code) {
