@@ -39,6 +39,7 @@ public class RepDataPacket
       //No data found
     }
     final byte[] datas = new byte[packet.capacity()];
+    packet.position(PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID));
     for (int i = packet.position(); i < packet.limit(); i++) {
       datas[i] = packet.get();
     }
