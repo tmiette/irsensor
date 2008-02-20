@@ -18,9 +18,10 @@ public class RepDataPacket
     this.datas = datas;
   }
 
-  public static RepDataPacket getPacket(ByteBuffer packet)
+  public static RepDataPacket getPacket(ByteBuffer bb)
       throws MalformedPacketException {
-    if (packet == null) throw new IllegalArgumentException();
+    if (bb == null) throw new IllegalArgumentException();
+    ByteBuffer packet = bb.duplicate();
     int index = 0;
 
     // Tests if it's a valid OpCode
