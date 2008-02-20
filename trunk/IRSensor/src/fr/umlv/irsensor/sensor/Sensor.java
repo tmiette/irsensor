@@ -5,9 +5,13 @@ import java.io.IOException;
 import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
+import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 import fr.umlv.irsensor.sensor.networkClients.DataClient;
 import fr.umlv.irsensor.sensor.networkClients.SensorClient;
 import fr.umlv.irsensor.sensor.networkClients.SupervisorClient;
+import fr.umlv.irsensor.sensor.networkServer.SensorServer;
+import fr.umlv.irsensor.sensor.networkServer.SupervisorSensorServer;
 
 public class Sensor {
 
@@ -16,6 +20,7 @@ public class Sensor {
 	private int clock;
 	private int autonomy;
 	private int payload;
+	private int id;
 	
 	private SensorState state = SensorState.DOWN;
 	
@@ -23,12 +28,24 @@ public class Sensor {
 	private final DataClient dataClient = new DataClient();
 	private final SensorClient sensorClient = new SensorClient();
 	
-	public Sensor() throws IOException {
+	private SupervisorSensorServer supervisorServer;
+	private SensorServer sensorServer;
+	
+	public Sensor(PacketDispatcher supervisorServer, PacketDispatcher sensorServer) throws IOException {
 		this.supervisorClient = new SupervisorClient(this);
+	
 		try {
 			this.supervisorClient.registrySensor();
+			System.out.println("id recu "+this.id);
+			this.supervisorServer = new SupervisorSensorServer(this.id);
+			this.sensorServer = new SensorServer(this.id);
+			supervisorServer.register(this.supervisorServer);
+			sensorServer.register(this.sensorServer);
+			
 			this.state = SensorState.UP;
 		} catch (MalformedPacketException e) {
+			e.printStackTrace();
+		} catch (IdAlreadyUsedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -72,13 +89,16 @@ public class Sensor {
 	public void setPayload(int payload) {
 		this.payload = payload;
 	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public int getId() {
-		return this.supervisorClient.getId();
+		return this.id;
 	}
 	
 	public SupervisorClient getSupervisorClient(){
 		return this.supervisorClient;
 	}
-
 }

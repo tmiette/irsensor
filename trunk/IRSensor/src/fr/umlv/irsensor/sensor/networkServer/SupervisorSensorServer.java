@@ -6,13 +6,13 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.DecodeOpCode;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
 import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.packets.SetConfPacket;
-import fr.umlv.irsensor.sensor.CatchArea;
 import fr.umlv.irsensor.sensor.SupervisorSensorListener;
 import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 
