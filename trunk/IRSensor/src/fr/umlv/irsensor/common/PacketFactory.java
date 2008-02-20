@@ -2,8 +2,6 @@ package fr.umlv.irsensor.common;
 
 import java.nio.ByteBuffer;
 
-import fr.umlv.irsensor.sensor.CatchArea;
-
 /**
  * BufferFactory is in charge of creating the supervisor protocol packets A
  * packet is represented by a <code>ByteBuffer</code>
