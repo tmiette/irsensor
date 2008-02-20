@@ -22,6 +22,7 @@ public class SupervisorTableModel extends AbstractTableModel {
       @Override
       public void sensorNodeConnected(SensorNode sensor, InetAddress inetAddress) {
         fireTableRowsInserted(getRowCount(), getRowCount());
+        fireTableCellUpdated(getRowCount(), 0);
       }
 
       @Override
