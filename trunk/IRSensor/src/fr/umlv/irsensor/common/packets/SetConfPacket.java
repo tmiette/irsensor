@@ -1,5 +1,7 @@
 package fr.umlv.irsensor.common.packets;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import fr.umlv.irsensor.common.CatchArea;
@@ -29,10 +31,10 @@ public class SetConfPacket
   private final int autonomy;
   private final int quality;
   private final int payload;
-  private final byte[] parent;
+  private final InetAddress parent;
 
   public SetConfPacket(int id, CatchArea ca, int clock, int autonomy,
-      int quality, int payload, byte[] parentId) {
+      int quality, int payload, InetAddress parent) {
     super();
     this.id = id;
     this.ca = ca;
@@ -40,7 +42,7 @@ public class SetConfPacket
     this.autonomy = autonomy;
     this.quality = quality;
     this.payload = payload;
-    this.parent = parentId;
+    this.parent = parent;
   }
 
   /**
@@ -125,7 +127,7 @@ public class SetConfPacket
 
     int payload = getPayload(packet);
 
-    byte[] parent = getParent(packet);
+    InetAddress parent = getParent(packet);
 
     // return new SetConfPacket(id);
     return new SetConfPacket(id, ca, clock, autonomy, quality, payload,
@@ -136,16 +138,23 @@ public class SetConfPacket
    * Returns the Parent address of a sensor contained in the packet.
    * 
    * @param packet packet to read.
-   * @return byte[] representing the ParentId.
+   * @return InetAddress parent address.
+   * @throws MalformedPacketException 
    */
-  private static byte[] getParent(ByteBuffer packet) {
+  private static InetAddress getParent(ByteBuffer packet) throws MalformedPacketException {
     byte[] parent = new byte[4];
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
         PacketFields.AUTONOMY, PacketFields.PAYLOAD, PacketFields.QUALITY));
 
     packet.get(parent);
-    return parent;
+    InetAddress adr = null;
+    try {
+      adr = InetAddress.getByAddress(parent);
+    } catch (UnknownHostException e) {
+      throw new MalformedPacketException();
+    }
+    return adr;
   }
 
   /**
@@ -218,7 +227,7 @@ public class SetConfPacket
   /**
    * @return the parentId
    */
-  public byte[] getParent() {
+  public InetAddress getParent() {
     return parent;
   }
 
