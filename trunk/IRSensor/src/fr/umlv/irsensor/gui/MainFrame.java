@@ -3,6 +3,8 @@ package fr.umlv.irsensor.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,8 +20,6 @@ import javax.swing.JTabbedPane;
 
 import fr.umlv.irsensor.supervisor.ConfigurationBuilder;
 import fr.umlv.irsensor.supervisor.Supervisor;
-import fr.umlv.irsensor.supervisor.SupervisorServer;
-import fr.umlv.irsensor.supervisor.SupervisorServerClient;
 import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
 
 public class MainFrame {
@@ -124,6 +124,17 @@ public class MainFrame {
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.setJMenuBar(createMenuBar());
     frame.setContentPane(this.mainContainer);
+    frame.addWindowListener(new WindowAdapter(){
+      @Override
+      public void windowClosed(WindowEvent e) {
+        try {
+          supervisor.shutdown();
+        } catch (IOException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
+      }
+    });
     frame.setVisible(true);
   }
 
