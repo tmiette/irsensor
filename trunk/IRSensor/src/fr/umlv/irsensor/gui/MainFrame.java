@@ -55,8 +55,7 @@ public class MainFrame {
             System.err.println(e2.getMessage());
           }
 
-          supervisor = new Supervisor(builder.getSensorsNode(),
-              new SupervisorServerClient(), new SupervisorServer());
+          supervisor = new Supervisor(builder.getSensorsNode());
 
           createTabbedPane();
 
