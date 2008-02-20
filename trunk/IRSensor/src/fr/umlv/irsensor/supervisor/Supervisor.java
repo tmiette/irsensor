@@ -64,6 +64,7 @@ public class Supervisor {
         .addSupervisorServerClientListener(new SupervisorServerClientListener() {
           @Override
           public void ackConfPacketReceived(SensorNode sensor) {
+        	sensor.setConfigured(true);
             fireSensorNodeConfigured(sensor);
           }
         });

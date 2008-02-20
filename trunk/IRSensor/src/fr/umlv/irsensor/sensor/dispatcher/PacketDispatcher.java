@@ -3,14 +3,11 @@ package fr.umlv.irsensor.sensor.dispatcher;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 
 import fr.umlv.irsensor.common.packets.DecodePacket;
-import fr.umlv.irsensor.common.packets.ErrorCode;
-import fr.umlv.irsensor.common.packets.OpCode;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 
 /**
@@ -42,7 +39,7 @@ public class PacketDispatcher {
 	
 	public void startDispatcher(){
 		//this.isRunning = true;
-		Thread toto  = new Thread(new Runnable(){
+		Thread dispatcherThread  = new Thread(new Runnable(){
 			@Override
 			public void run() {
 				try {
@@ -79,8 +76,8 @@ public class PacketDispatcher {
 				}
 			}
 		});
-		toto.setName("dispatcher");
-		toto.start();
+		dispatcherThread.setName("packet dispatcher");
+		dispatcherThread.start();
 	}
 	
 	/**

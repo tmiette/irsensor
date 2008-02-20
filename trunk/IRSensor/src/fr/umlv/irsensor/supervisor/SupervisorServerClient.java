@@ -31,9 +31,7 @@ public class SupervisorServerClient {
       socketClient = SocketChannel.open();
       socketClient.connect(new InetSocketAddress(sensor.getAddress(),
           SupervisorConfiguration.SERVER_PORT_LOCAL));
-      
-      System.out.println("ID write "+sensor.getId());
-      System.out.println(sensor.getId());
+ 
       ByteBuffer b = PacketFactory.createSetConfPacket(sensor.getId(), sensor
           .getCArea(), sensor.getClock(), sensor.getAutonomy(), sensor
           .getQuality(), sensor.getPayload(), new byte[3]);
