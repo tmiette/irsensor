@@ -2,7 +2,7 @@ package fr.umlv.irsensor.dataserver;
 
 import java.awt.image.BufferedImage;
 
-import fr.umlv.irsensor.sensor.CatchArea;
+import fr.umlv.irsensor.common.CatchArea;
 
 public class ImageArea {
 	

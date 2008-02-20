@@ -15,10 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
+import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.packets.RepDataPacket;
-import fr.umlv.irsensor.sensor.CatchArea;
 
 public class DataServerClient {
 

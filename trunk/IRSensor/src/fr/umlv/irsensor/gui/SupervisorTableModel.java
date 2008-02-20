@@ -4,8 +4,8 @@ import java.net.InetAddress;
 
 import javax.swing.table.AbstractTableModel;
 
+import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorState;
-import fr.umlv.irsensor.sensor.CatchArea;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
 import fr.umlv.irsensor.supervisor.SupervisorListener;

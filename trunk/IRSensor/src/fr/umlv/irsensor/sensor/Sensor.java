@@ -2,6 +2,7 @@ package fr.umlv.irsensor.sensor;
 
 import java.io.IOException;
 
+import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.networkClients.DataClient;

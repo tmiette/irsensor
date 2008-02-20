@@ -4,12 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import fr.umlv.irsensor.sensor.CatchArea;
+import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
 
 public class ConfigurationBuilder {
