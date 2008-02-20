@@ -19,19 +19,15 @@ public class Main {
 	public static void main(String[] args) throws IOException, MalformedPacketException {
 		
 		//server part
-		final PacketDispatcher dispatcher = new PacketDispatcher(SupervisorConfiguration.SERVER_PORT_LOCAL);
+		final PacketDispatcher supervisorDispatcher = new PacketDispatcher(SupervisorConfiguration.SERVER_PORT_LOCAL);
+		
+		final PacketDispatcher sensorDispatcher = new PacketDispatcher(31001);
 		
 		for(int i=0; i<7; i++){
-			final Sensor sensor = new Sensor();
-			try {
-				dispatcher.register(sensor.getSupervisorClient());
-			} catch (IdAlreadyUsedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			final Sensor sensor = new Sensor(supervisorDispatcher, sensorDispatcher);
 		}
 		
-		dispatcher.startDispatcher();
-		
+		supervisorDispatcher.startDispatcher();
+		sensorDispatcher.startDispatcher();
 	}
 }

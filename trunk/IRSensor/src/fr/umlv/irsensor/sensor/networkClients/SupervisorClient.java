@@ -16,7 +16,7 @@ import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.Sensor;
 import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 
-public class SupervisorClient implements PacketRegisterable {
+public class SupervisorClient{
 
 	private static final byte[] serverAddress = new byte[] { (byte) 127,
 		(byte) 0, (byte) 0, (byte) 1 };
@@ -24,8 +24,6 @@ public class SupervisorClient implements PacketRegisterable {
 	private static final int SERVER_PORT = SupervisorConfiguration.SERVER_PORT;
 	
 	private static final int BUFFER_SIZE = 512;
-	
-	private int id;
 	
 	private final Sensor sensor;
 	
@@ -50,31 +48,8 @@ public class SupervisorClient implements PacketRegisterable {
 		readBuffer.flip();
 
 		if(DecodePacket.getOpCode(readBuffer) != OpCode.REPCON) throw new MalformedPacketException();
-
-		//extract the id from the REPCON packet
-		this.id = DecodePacket.getId(readBuffer);
-		System.out.println("id received "+this.id);
-		channel.write(PacketFactory.createAck(this.id, ErrorCode.OK));
-	}
-
-	@Override
-	public int getId() {
-		return this.id;
-	}
-
-	@Override
-	public void setPacket(ByteBuffer packet, SocketChannel channel) {
-		//receive a packet from the supervisor
-		DecodeOpCode.decodeByteBuffer(packet);
-		//do something
-		System.out.println("Received configuration "+this.id);
-		
-		try {
-			channel.write(PacketFactory.createAck(this.id, ErrorCode.OK));
-			channel.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int id = DecodePacket.getId(readBuffer);
+		this.sensor.setId(id);
+		channel.write(PacketFactory.createAck(id, ErrorCode.OK));
 	}
 }
