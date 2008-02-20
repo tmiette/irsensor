@@ -29,13 +29,19 @@ public class SupervisorTableModel extends AbstractTableModel {
       public void sensorNodeConfigured(SensorNode sensor) {
         for (int i = 0; i < getRowCount(); i++) {
           fireTableCellUpdated(i, 1);
-          fireTableCellUpdated(i, 4);
           fireTableCellUpdated(i, 5);
           fireTableCellUpdated(i, 6);
           fireTableCellUpdated(i, 7);
           fireTableCellUpdated(i, 8);
           fireTableCellUpdated(i, 9);
           fireTableCellUpdated(i, 10);
+        }
+      }
+
+      @Override
+      public void sensorNodeStateChanged(SensorNode sensor) {
+        for (int i = 0; i < getRowCount(); i++) {
+          fireTableCellUpdated(i, 4);
         }
       }
     });
@@ -154,15 +160,19 @@ public class SupervisorTableModel extends AbstractTableModel {
   @Override
   public void setValueAt(Object value, int rowIndex, int columnIndex) {
     int id = (Integer) getValueAt(rowIndex, 2);
-    SensorState state = (SensorState) getValueAt(rowIndex, 4);
-    CatchArea area = (CatchArea) getValueAt(rowIndex, 5);
-    int autonomy = (Integer) getValueAt(rowIndex, 6);
-    int clock = (Integer) getValueAt(rowIndex, 7);
-    int payload = (Integer) getValueAt(rowIndex, 8);
-    int quality = (Integer) getValueAt(rowIndex, 9);
-    int parent = (Integer) getValueAt(rowIndex, 10);
-    supervisor.setConf(id, new SensorConfiguration(state, area, autonomy,
-        clock, payload, quality, parent));
+    if (columnIndex == 4) {
+      SensorState state = (SensorState) getValueAt(rowIndex, 4);
+      supervisor.setState(id, state);
+    } else {
+      CatchArea area = (CatchArea) getValueAt(rowIndex, 5);
+      int autonomy = (Integer) getValueAt(rowIndex, 6);
+      int clock = (Integer) getValueAt(rowIndex, 7);
+      int payload = (Integer) getValueAt(rowIndex, 8);
+      int quality = (Integer) getValueAt(rowIndex, 9);
+      int parent = (Integer) getValueAt(rowIndex, 10);
+      supervisor.setConf(id, new SensorConfiguration(area, autonomy, clock,
+          payload, quality, parent));
+    }
   }
 
 }
