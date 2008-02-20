@@ -77,7 +77,7 @@ public class Supervisor {
 
           @Override
           public void sensorStateChanged(SensorNode node, SensorState state) {
-            node.setState(state);
+        	  node.setState(state);
             fireSensorStateChanged(node);
           }
         });

@@ -81,6 +81,7 @@ public class SupervisorSensorServer implements PacketRegisterable{
 			}
 			fireSetStateChanged(setStatPacket.getState());
 			this.isWaitingForAnswer = false;
+			
 		}
 		if(!this.isWaitingForAnswer){
 			try {

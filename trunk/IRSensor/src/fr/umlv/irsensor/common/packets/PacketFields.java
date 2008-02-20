@@ -1,5 +1,7 @@
 package fr.umlv.irsensor.common.packets;
 
+import fr.umlv.irsensor.common.OpCode;
+
 public enum PacketFields {
 
   CATCH_AREA(16), CLOCK(4), AUTONOMY(4), QUALITY(4), PAYLOAD(4), PARENT_ID(4), ID(

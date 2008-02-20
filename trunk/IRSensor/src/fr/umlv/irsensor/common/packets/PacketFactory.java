@@ -2,8 +2,10 @@ package fr.umlv.irsensor.common.packets;
 
 import java.nio.ByteBuffer;
 
-import fr.umlv.irsensor.sensor.CatchArea;
-import fr.umlv.irsensor.sensor.SensorState;
+import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.ErrorCode;
+import fr.umlv.irsensor.common.OpCode;
+import fr.umlv.irsensor.common.SensorState;
 
 /**
  * BufferFactory is in charge of creating the supervisor protocol packets A

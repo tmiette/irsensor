@@ -163,13 +163,13 @@ public class SupervisorTableModel extends AbstractTableModel {
   }
 
   @Override
-  public void setValueAt(Object value, final int rowIndex, final int columnIndex) {
+  public void setValueAt(final Object value, final int rowIndex, final int columnIndex) {
     executor.submit(new Runnable() {
       @Override
       public void run() {
         int id = (Integer) getValueAt(rowIndex, 2);
         if (columnIndex == 4) {
-          SensorState state = (SensorState) getValueAt(rowIndex, 4);
+          SensorState state = (SensorState) value;
           supervisor.setState(id, state);
         } else {
           CatchArea area = (CatchArea) getValueAt(rowIndex, 5);

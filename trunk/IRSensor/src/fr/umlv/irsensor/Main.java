@@ -18,20 +18,20 @@ public class Main {
 	  IRSensorLogger.postMessage(Level.FINE, "Application is started");
 	  
 	  
-	  final SupervisorServer server = new SupervisorServer();
-	  //server.launch();
-	  
-	  final PacketDispatcher dispatcher = new PacketDispatcher(31000);
-	  dispatcher.startDispatcher();
-	  for(int i=0; i<7; i++){
-		  final Sensor sensor = new Sensor();
-		  try {
-			dispatcher.register(sensor.getSupervisorClient());
-		} catch (IdAlreadyUsedException e) {
-			System.out.println(e.getMessage());
-		}
-		System.out.println("Sensor "+i+" is registered");
-	  }
+//	  final SupervisorServer server = new SupervisorServer();
+//	  //server.launch();
+//	  
+//	  final PacketDispatcher dispatcher = new PacketDispatcher(31000);
+//	  dispatcher.startDispatcher();
+//	  for(int i=0; i<7; i++){
+//		  final Sensor sensor = new Sensor();
+//		  try {
+//			dispatcher.register(sensor.getSupervisorClient());
+//		} catch (IdAlreadyUsedException e) {
+//			System.out.println(e.getMessage());
+//		}
+//		System.out.println("Sensor "+i+" is registered");
+//	  }
 	  
   }
 }
