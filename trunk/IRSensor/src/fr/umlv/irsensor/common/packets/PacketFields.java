@@ -3,7 +3,7 @@ package fr.umlv.irsensor.common.packets;
 public enum PacketFields {
 
   CATCH_AREA(16), CLOCK(4), AUTONOMY(4), QUALITY(4), PAYLOAD(4), PARENT_ID(4), ID(
-      4), OPCODE(OpCode.getOpCodeByteSize()), STATE(2), ERROR_CODE(1);
+      4), OPCODE(OpCode.getOpCodeByteSize()), STATE(2), ERROR_CODE(1), DATE(4);
 
   private int length;
 
