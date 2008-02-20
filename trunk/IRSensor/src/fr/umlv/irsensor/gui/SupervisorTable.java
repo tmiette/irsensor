@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorState;
 
 public class SupervisorTable {
@@ -41,7 +42,7 @@ public class SupervisorTable {
           }
 
         });
-    
+
     this.table.setDefaultRenderer(SensorState.class,
         new DefaultTableCellRenderer() {
 
@@ -75,9 +76,14 @@ public class SupervisorTable {
 
         });
 
-    final JComboBox combo = new JComboBox(SensorState.values());
+    final JComboBox stateCombo = new JComboBox(SensorState.values());
     this.table.getColumnModel().getColumn(4).setCellEditor(
-        new DefaultCellEditor(combo));
+        new DefaultCellEditor(stateCombo));
+    final JComboBox areaCombo = new JComboBox(new CatchArea[] { new CatchArea(
+        0, 0, 0, 0) });
+    this.table.getColumnModel().getColumn(5).setCellEditor(
+        new DefaultCellEditor(areaCombo));
+
   }
 
   public JTable getJTable() {
