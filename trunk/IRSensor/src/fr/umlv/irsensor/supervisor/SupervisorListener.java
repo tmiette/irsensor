@@ -8,4 +8,6 @@ public interface SupervisorListener {
 
   public void sensorNodeConfigured(SensorNode sensor);
 
+  public void sensorNodeStateChanged(SensorNode sensor);
+
 }

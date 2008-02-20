@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.SensorConfiguration;
+import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.util.Pair;
 
 /**
@@ -68,10 +69,16 @@ public class Supervisor {
     this.client
         .addSupervisorServerClientListener(new SupervisorServerClientListener() {
           @Override
-          public void ackConfPacketReceived(SensorNode node,
+          public void sensorConfigurationChanged(SensorNode node,
               SensorConfiguration conf) {
             node.setConfiguration(conf);
             fireSensorNodeConfigured(node);
+          }
+
+          @Override
+          public void sensorStateChanged(SensorNode node, SensorState state) {
+            node.setState(state);
+            fireSensorStateChanged(node);
           }
         });
 
@@ -84,6 +91,13 @@ public class Supervisor {
     }
 
     this.server.registerAllNodes(ids);
+  }
+
+  public void setState(int id, SensorState state) {
+    SensorNode node = this.sensors.get(id);
+    if (node != null) {
+      this.client.setState(node, state);
+    }
   }
 
   public void setConf(int id, SensorConfiguration conf) {
@@ -155,6 +169,12 @@ public class Supervisor {
   protected void fireSensorNodeConfigured(SensorNode sensor) {
     for (SupervisorListener listener : this.listeners) {
       listener.sensorNodeConfigured(sensor);
+    }
+  }
+
+  protected void fireSensorStateChanged(SensorNode sensor) {
+    for (SupervisorListener listener : this.listeners) {
+      listener.sensorNodeStateChanged(sensor);
     }
   }
 }

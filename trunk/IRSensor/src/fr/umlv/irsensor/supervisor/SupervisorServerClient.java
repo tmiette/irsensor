@@ -12,6 +12,7 @@ import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.SensorConfiguration;
+import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 
 /**
@@ -26,6 +27,34 @@ import fr.umlv.irsensor.common.SupervisorConfiguration;
 public class SupervisorServerClient {
 
   private final ArrayList<SupervisorServerClientListener> listeners = new ArrayList<SupervisorServerClientListener>();
+
+  public void setState(SensorNode node, SensorState state) {
+    // set a new configuration
+    try {
+      SocketChannel socketClient;
+      socketClient = SocketChannel.open();
+      socketClient.connect(new InetSocketAddress(node.getAddress(),
+          SupervisorConfiguration.SERVER_PORT_LOCAL));
+
+      ByteBuffer b = PacketFactory.createSetSta(node.getId(), state);
+
+      socketClient.write(b);
+
+      final ByteBuffer buffer = ByteBuffer.allocate(64);
+      socketClient.read(buffer);
+      buffer.flip();
+      if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
+        System.out.println("Sensor state changed, ui fired");
+        fireSensorStateChanged(node, state);
+      } else {
+        // TODO what can we do here?
+      }
+      socketClient.close();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
 
   public void setConf(SensorNode node, SensorConfiguration conf) {
     // set a new configuration
@@ -51,7 +80,7 @@ public class SupervisorServerClient {
       buffer.flip();
       if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
         System.out.println("Sensor configured, ui fired");
-        fireAckConfPacketReceived(node, conf);
+        fireSensorConfigurationChanged(node, conf);
       } else {
         // TODO what can we do here?
       }
@@ -72,10 +101,16 @@ public class SupervisorServerClient {
     this.listeners.remove(listener);
   }
 
-  protected void fireAckConfPacketReceived(SensorNode node,
+  protected void fireSensorConfigurationChanged(SensorNode node,
       SensorConfiguration conf) {
     for (SupervisorServerClientListener listener : this.listeners) {
-      listener.ackConfPacketReceived(node, conf);
+      listener.sensorConfigurationChanged(node, conf);
+    }
+  }
+
+  protected void fireSensorStateChanged(SensorNode node, SensorState state) {
+    for (SupervisorServerClientListener listener : this.listeners) {
+      listener.sensorStateChanged(node, state);
     }
   }
 

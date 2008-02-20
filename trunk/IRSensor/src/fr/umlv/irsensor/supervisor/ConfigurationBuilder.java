@@ -10,7 +10,6 @@ import java.util.Properties;
 
 import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
 import fr.umlv.irsensor.util.Pair;
 
@@ -51,8 +50,8 @@ public class ConfigurationBuilder {
       final int payload = Integer.valueOf(parameters[5]);
       final int root = Integer.valueOf(parameters[6]);
 
-      final SensorConfiguration conf = new SensorConfiguration(
-          SensorState.DOWN, area, autonomy, clock, payload, quality, root);
+      final SensorConfiguration conf = new SensorConfiguration(area, autonomy,
+          clock, payload, quality, root);
 
       confs.add(new Pair<Integer, SensorConfiguration>(id, conf));
     }

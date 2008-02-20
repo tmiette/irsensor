@@ -19,10 +19,13 @@ public class SensorNode {
 
   private SensorConfiguration configuration;
 
+  private SensorState state;
+
   private boolean isConnected;
 
   public SensorNode(int id) {
     this.id = id;
+    this.state = SensorState.DOWN;
     this.isConnected = true;
   }
 
@@ -88,10 +91,11 @@ public class SensorNode {
   }
 
   public SensorState getState() {
-    if (this.configuration == null) {
-      return null;
-    }
-    return this.configuration.getState();
+    return this.state;
+  }
+
+  public void setState(SensorState state) {
+    this.state = state;
   }
 
   public boolean isConfigured() {
