@@ -35,11 +35,11 @@ public class SetStatPacket
     if (id < 0) throw new MalformedPacketException();
 
     // Tests if the state is valid and sets it
-    index += PacketFields.STATE.getLength();
     final byte[] sta = new byte[PacketFields.STATE.getLength()];
+    packet.position(PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID));
     packet.get(sta, 0, PacketFields.STATE.getLength());
     SensorState state = SensorState.getState(sta);
-    if (state == null) { throw new MalformedPacketException(); }
+    if (state == null) { throw new MalformedPacketException("SETSTA packet : STATE field unreadable"); }
 
     return new SetStatPacket(id, state);
   }
