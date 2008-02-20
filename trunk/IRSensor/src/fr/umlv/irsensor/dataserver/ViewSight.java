@@ -1,6 +1,8 @@
 package fr.umlv.irsensor.dataserver;
 
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -26,7 +28,15 @@ public class ViewSight {
 		}
 	}
 	
+	/**
+	 * Retrieves a sub part of an image. This sub part corresponds the the area given as first parameter.
+	 * @param area the area of the image to copy
+	 * @return the sub image
+	 */
 	public ImageArea getImageArea(CatchArea area){
+		if (area.getP1().getX() + area.getAreaWidth() > image.getWidth() ||
+			area.getP1().getY() + area.getAreaHeight() > image.getHeight()
+		) throw new IllegalArgumentException("Cannot retrieve a sub part of an image if it is larger that the main image file");
 		CatchArea.Point origin = area.getP1();
 		CatchArea.Point dst = area.getP2();
 		int viewWidth = dst.getX() - origin.getX();
@@ -36,10 +46,16 @@ public class ViewSight {
 	}
 	
 	
+	/**
+	 * Creates an image using different areas
+	 * @param images a list of images associated to the area representing a part of the main image
+	 * @return the image reconstituted
+	 */
 	public BufferedImage createImageFromImageArea(ImageArea... images){
 		if (images.length == 0) throw new IllegalArgumentException("No images given");
-		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = im.createGraphics();
+		
 		for (int i = 0; i < images.length; i++) {
 			Image image = images[i].getImage();
 			CatchArea imageArea = images[i].getArea();
