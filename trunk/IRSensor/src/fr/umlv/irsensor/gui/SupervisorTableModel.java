@@ -31,6 +31,13 @@ public class SupervisorTableModel extends AbstractTableModel {
       public void sensorNodeConfigured(SensorNode sensor) {
         for (int i = 0; i < getRowCount(); i++) {
           fireTableCellUpdated(i, 1);
+          fireTableCellUpdated(i, 4);
+          fireTableCellUpdated(i, 5);
+          fireTableCellUpdated(i, 6);
+          fireTableCellUpdated(i, 7);
+          fireTableCellUpdated(i, 8);
+          fireTableCellUpdated(i, 9);
+          fireTableCellUpdated(i, 10);
         }
       }
     });
@@ -145,7 +152,7 @@ public class SupervisorTableModel extends AbstractTableModel {
       return false;
     }
   }
-  
+
   @Override
   public void setValueAt(Object value, int rowIndex, int columnIndex) {
     // TODO Auto-generated method stub
