@@ -36,6 +36,7 @@ public class RepStaPacket
 
     // Tests if the state is valid and sets it
     final byte[] sta = new byte[PacketFields.STATE.getLength()];
+    packet.position(PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID));
     packet.get(sta, 0, PacketFields.STATE.getLength());
     SensorState state = SensorState.getState(sta);
     if (state == null) { throw new MalformedPacketException(); }
