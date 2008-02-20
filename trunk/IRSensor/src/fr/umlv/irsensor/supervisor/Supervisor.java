@@ -46,6 +46,7 @@ public class Supervisor {
         final SensorNode sNode = new SensorNode(id);
         sNode.setIpAddress(ipAddress);
         sNode.setConnected(true);
+        Supervisor.this.sensors.put(id, sNode);
         fireSensorNodeConnected(sNode, ipAddress);
       }
 
