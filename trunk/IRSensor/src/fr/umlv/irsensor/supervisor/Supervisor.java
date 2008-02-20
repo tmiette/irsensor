@@ -55,7 +55,7 @@ public class Supervisor {
         }
         for (Entry<Integer, SensorNode> node : Supervisor.this.sensors
             .entrySet()) {
-          Supervisor.this.client.setConf(node.getValue());
+          setConf(node.getValue());
         }
       }
     });
@@ -63,7 +63,7 @@ public class Supervisor {
         .addSupervisorServerClientListener(new SupervisorServerClientListener() {
           @Override
           public void ackConfPacketReceived(SensorNode sensor) {
-        	sensor.setConfigured(true);
+            sensor.setConfigured(true);
             fireSensorNodeConfigured(sensor);
           }
         });
@@ -76,6 +76,17 @@ public class Supervisor {
     }
 
     this.server.registerAllNodes(ids);
+  }
+
+  public void setConf(int id) {
+    SensorNode sensor = this.sensors.get(id);
+    if (sensor != null) {
+      this.setConf(sensor);
+    }
+  }
+
+  public void setConf(SensorNode sensor) {
+    this.client.setConf(sensor);
   }
 
   /**
