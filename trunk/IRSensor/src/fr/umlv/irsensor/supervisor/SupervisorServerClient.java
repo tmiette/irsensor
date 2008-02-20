@@ -6,8 +6,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
-import com.sun.swing.internal.plaf.basic.resources.basic;
-
 import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.PacketFactory;
