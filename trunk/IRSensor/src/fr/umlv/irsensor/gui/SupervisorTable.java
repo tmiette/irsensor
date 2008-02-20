@@ -51,18 +51,20 @@ public class SupervisorTable {
                 hasFocus, row, column);
 
             setFont(new Font(null, Font.BOLD, 12));
-            switch ((SensorState) value) {
-            case DOWN:
-              setForeground(Color.RED);
-              break;
-            case PAUSE:
-              setForeground(Color.YELLOW);
-              break;
-            case UP:
-              setForeground(Color.GREEN);
-              break;
-            default:
-              break;
+            if ((SensorState) value != null) {
+              switch ((SensorState) value) {
+              case DOWN:
+                setForeground(Color.RED);
+                break;
+              case PAUSE:
+                setForeground(Color.YELLOW);
+                break;
+              case UP:
+                setForeground(Color.GREEN);
+                break;
+              default:
+                break;
+              }
             }
             return this;
           }
