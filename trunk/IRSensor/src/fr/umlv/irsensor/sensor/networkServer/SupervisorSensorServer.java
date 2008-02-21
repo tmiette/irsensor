@@ -10,10 +10,10 @@ import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.DecodeOpCode;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.supervisor.ReqDataPacket;
 import fr.umlv.irsensor.common.packets.supervisor.SetConfPacket;
 import fr.umlv.irsensor.common.packets.supervisor.SetStatPacket;
@@ -98,7 +98,7 @@ public class SupervisorSensorServer implements PacketRegisterable{
 	public void answerReqData(byte[] datas){
 		if(this.channel != null){
 			try {
-				channel.write(PacketFactory.createRepData(id, datas));
+				channel.write(PacketFactory.createRepData(id, mimetype, len, data));
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 				return;

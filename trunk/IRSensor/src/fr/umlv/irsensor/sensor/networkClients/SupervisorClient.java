@@ -6,15 +6,13 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import fr.umlv.irsensor.common.DecodeOpCode;
 import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.sensor.Sensor;
-import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 
 public class SupervisorClient{
 
