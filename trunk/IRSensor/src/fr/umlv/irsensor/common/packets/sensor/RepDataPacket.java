@@ -87,4 +87,9 @@ public class RepDataPacket
     return "Packet : ID = " + id + " MimeType : " + mimetype + " Data len : "
         + dataLen;
   }
+  
+  @Override
+  public int getId() {
+   return this.id;
+  }
 }

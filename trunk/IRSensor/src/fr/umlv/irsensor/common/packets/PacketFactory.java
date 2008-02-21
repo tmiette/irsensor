@@ -248,4 +248,32 @@ public class PacketFactory {
 		buffer.put(index, code.getCode());
 		return buffer;
 	}
+	
+  public static ByteBuffer createRepHello(int sourceId, int destId) {
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.ID);
+    final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
+    int index = 0;
+    buffer.put(index, OpCode.REPHELLO.getCode());
+    index += PacketFields.OPCODE.getLength();
+    buffer.putInt(index, destId);
+    index += PacketFields.ID.getLength();
+    buffer.putInt(index, sourceId);
+    return buffer;
+  }
+  
+  public static ByteBuffer createReqHello(int sourceId, int destId, ErrorCode code) {
+    int bufSize = PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.ID);
+    final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
+    int index = 0;
+    buffer.put(index, OpCode.REQHELLO.getCode());
+    index += PacketFields.OPCODE.getLength();
+    buffer.putInt(index, destId);
+    index += PacketFields.ID.getLength();
+    buffer.putInt(index, sourceId);
+    index += PacketFields.ID.getLength();
+    buffer.put(index, code.getCode());
+    return buffer;
+  }
 }

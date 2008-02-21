@@ -38,7 +38,7 @@ public class AckPacket
 
     // Tests if the ErrorCode is valid and sets it
     final byte[] b = new byte[PacketFields.ERROR_CODE.getLength()];
-    packet.get(b, 0, PacketFields.OPCODE.getLength());
+    packet.get(b, 0, PacketFields.ERROR_CODE.getLength());
     ErrorCode errorCode = ErrorCode.getErrorCode(b);
     if (errorCode == null) { throw new MalformedPacketException(); }
 

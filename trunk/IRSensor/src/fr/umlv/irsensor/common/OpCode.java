@@ -1,43 +1,48 @@
 package fr.umlv.irsensor.common;
 
-
 public enum OpCode {
 
-  REQCON("00000000"){
-	 
-  },
-  REPCON("00000001"){
-	  
-  },
-  SETCONF("00000010"){
+  REQCON("00000000") {
 
   },
-  GETCONF("00000011"){
+  REPCON("00000001") {
 
   },
-  REPCONF("00000100"){
+  SETCONF("00000010") {
 
   },
-  SETSTA("00000101"){
+  GETCONF("00000011") {
 
   },
-  GETSTA("00000110"){
+  REPCONF("00000100") {
 
   },
-  REPSTA("00000111"){
-	  
+  SETSTA("00000101") {
+
   },
-  ACK("00001000"){
-	  
+  GETSTA("00000110") {
+
   },
-  REQDATA("00001001"){
-	  
+  REPSTA("00000111") {
+
   },
-  REPDATA("00001010"){
-  
+  ACK("00001000") {
+
   },
-  REPHELLO("00001011"){
-    
+  REQDATA("00001001") {
+
+  },
+  REPDATA("00001010") {
+
+  },
+  REPHELLO("00001011") {
+
+  },
+  REQHELLO("00001100") {
+
+  },
+  INFOSPACKET("00001101") {
+
   };
 
   private final Byte code;
@@ -49,18 +54,18 @@ public enum OpCode {
   public Byte getCode() {
     return this.code;
   }
-  
-  public static int getOpCodeByteSize(){
-	  return 1;
+
+  public static int getOpCodeByteSize() {
+    return 1;
   }
-  
-  public boolean equals(byte[] opcode){
-	  boolean flag = false;
-	  for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
-		  if (this.code == (opcode[i])) flag = true;
-		  else flag = false;
-	  }
-	  
-	  return flag;
+
+  public boolean equals(byte[] opcode) {
+    boolean flag = false;
+    for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {
+      if (this.code == (opcode[i])) flag = true;
+      else flag = false;
+    }
+
+    return flag;
   }
 }

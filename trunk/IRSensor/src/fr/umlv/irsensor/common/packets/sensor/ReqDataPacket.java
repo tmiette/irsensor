@@ -142,4 +142,9 @@ public class ReqDataPacket
         + clock + " Area " + ca;
   }
 
+  @Override
+  public int getId() {
+    return this.id;
+  }
+
 }
