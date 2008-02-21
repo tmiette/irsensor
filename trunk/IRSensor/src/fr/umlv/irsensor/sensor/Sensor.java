@@ -49,6 +49,7 @@ public class Sensor {
               if (conf == null || state.equals(SensorState.PAUSE)
                   || state.equals(SensorState.PAUSE)) {
                 Sensor.this.conf = conf;
+                System.out.println("New conf received.");
               }
             }
 
@@ -57,8 +58,10 @@ public class Sensor {
               Sensor.this.state = state;
               switch (state) {
               case DOWN:
+                // TODO shutdown sensorClient et sensorServer
                 break;
               case PAUSE:
+                // TODO shutdown sensorClient et sensorServer
                 break;
               case UP:
                 Sensor.this.sensorServer = new SensorServer(id);
