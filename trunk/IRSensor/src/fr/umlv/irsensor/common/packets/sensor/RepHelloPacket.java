@@ -6,8 +6,7 @@ import fr.umlv.irsensor.common.OpCode;
 import fr.umlv.irsensor.common.PacketFields;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 
-public class RepHelloPacket
-    implements SensorPacket {
+public class RepHelloPacket implements SensorPacket {
   // | Opcode | idD | idS |
   private final OpCode opCode;
   private final int destId;
