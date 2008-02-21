@@ -219,7 +219,7 @@ public class PacketFactory {
       byte[] data) {
     int bufSize = PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID,
         PacketFields.MIMETYPE, PacketFields.LENGHT)
-        + len;
+        + data.length;
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REPDATA.getCode());
