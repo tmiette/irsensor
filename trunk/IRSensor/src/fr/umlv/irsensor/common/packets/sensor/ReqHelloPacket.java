@@ -40,7 +40,7 @@ public class ReqHelloPacket
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());
-    if (!OpCode.REPHELLO.equals(code))
+    if (!OpCode.REQHELLO.equals(code))
       throw new MalformedPacketException("Illegal opcode");
 
     // Tests if the id is valid and sets it
