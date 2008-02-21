@@ -3,20 +3,21 @@ package fr.umlv.irsensor.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorState;
 
 public class SupervisorTable {
 
   private final JTable table;
 
-  public SupervisorTable(SupervisorTableModel model) {
+  public SupervisorTable(final SupervisorTableModel model) {
     this.table = new JTable(model);
     this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     this.table.setDefaultRenderer(Boolean.class,
@@ -79,10 +80,19 @@ public class SupervisorTable {
     final JComboBox stateCombo = new JComboBox(SensorState.values());
     this.table.getColumnModel().getColumn(4).setCellEditor(
         new DefaultCellEditor(stateCombo));
-    final JComboBox areaCombo = new JComboBox(new CatchArea[] { new CatchArea(
-        0, 0, 0, 0) });
-    this.table.getColumnModel().getColumn(5).setCellEditor(
-        new DefaultCellEditor(areaCombo));
+
+    this.table.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() >= 2) {
+          int row = table.rowAtPoint(e.getPoint());
+          int column = table.columnAtPoint(e.getPoint());
+          if (row != -1 && column != -1) {
+            model.doDoubleClick(row, column);
+          }
+        }
+      }
+    });
 
   }
 
