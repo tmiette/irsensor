@@ -1,5 +1,7 @@
 package fr.umlv.irsensor.dataserver;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -86,10 +88,10 @@ public class DataServerServer {
 					ReqDataPacket packet = ReqDataPacket.getPacket(dst);
 					System.out.println("Received REQDATA from client : "+packet);
 					// Create image area
-					ImageArea subImage = completeCapturedZone.getImageArea(packet.getCatchArea());
+					BufferedImage subImage = completeCapturedZone.getSubImage(packet.getCatchArea());
 					// Prepare response
 				    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				    ImageIO.write(subImage.getImage(), completeCapturedZone.getFileExtension(), bos);
+				    ImageIO.write(subImage, completeCapturedZone.getFileExtension(), bos);
 					ByteBuffer sendBuffer = PacketFactory.createRepData(packet.getId(), 12, bos.toByteArray().length, bos.toByteArray());
 					clientChannel.write(sendBuffer);
 					dst.clear();

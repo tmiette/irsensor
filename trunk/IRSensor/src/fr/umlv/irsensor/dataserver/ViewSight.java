@@ -49,7 +49,7 @@ public class ViewSight {
 	 * @param area the area of the image to copy
 	 * @return the sub image
 	 */
-	public ImageArea getImageArea(CatchArea area){
+	public BufferedImage getSubImage(CatchArea area){
 		if (area.getP1().getX() + area.getAreaWidth() > image.getWidth() ||
 			area.getP1().getY() + area.getAreaHeight() > image.getHeight()
 		) throw new IllegalArgumentException("Cannot retrieve a sub part of an image if it is larger that the main image file");
@@ -60,8 +60,9 @@ public class ViewSight {
 					im.setRGB(k, j, image.getRGB(k, j));
 			}
 		}
-		return new ImageArea(im, area);
+		return im;
 	}
+	
 	
 	
 	/**
