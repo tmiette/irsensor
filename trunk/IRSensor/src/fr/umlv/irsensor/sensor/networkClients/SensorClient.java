@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.umlv.irsensor.common.DecodePacket;
+import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.SupervisorConfiguration;
+import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.sensor.SensorClientListener;
 
 public class SensorClient {
@@ -22,10 +23,9 @@ public class SensorClient {
     try {
       socketClient = SocketChannel.open();
       socketClient.connect(new InetSocketAddress(ipAddressD,
-          SupervisorConfiguration.SERVER_PORT_LOCAL));
+          IRSensorConfiguration.SENSOR_SERVER_PORT));
 
-      ByteBuffer b = null;
-
+      ByteBuffer b = PacketFactory.createRepHello(idD, idS);
       socketClient.write(b);
 
       final ByteBuffer buffer = ByteBuffer.allocate(64);

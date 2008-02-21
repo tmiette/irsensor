@@ -2,6 +2,7 @@ package fr.umlv.irsensor.sensor;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
@@ -14,6 +15,7 @@ import fr.umlv.irsensor.sensor.networkClients.SensorClient;
 import fr.umlv.irsensor.sensor.networkClients.SupervisorClient;
 import fr.umlv.irsensor.sensor.networkServer.SensorServer;
 import fr.umlv.irsensor.sensor.networkServer.SupervisorSensorServer;
+import fr.umlv.irsensor.util.Pair;
 
 public class Sensor {
 
@@ -28,6 +30,8 @@ public class Sensor {
   private SensorClient sensorClient;
   private SupervisorSensorServer supervisorServer;
   private SensorServer sensorServer;
+
+  private final ArrayList<Pair<Integer, InetAddress>> children;
 
   public Sensor(final PacketDispatcher supervisorServer,
       final PacketDispatcher sensorServer) throws IOException {
@@ -85,6 +89,8 @@ public class Sensor {
     } catch (IdAlreadyUsedException e) {
       e.printStackTrace();
     }
+
+    this.children = new ArrayList<Pair<Integer, InetAddress>>();
   }
 
   public void setId(int id) {
@@ -108,8 +114,7 @@ public class Sensor {
     this.sensorServer.addSensorServerListener(new SensorServerListener() {
       @Override
       public void helloRequestReceived(int id, InetAddress address) {
-        // TODO Auto-generated method stub
-
+        children.add(new Pair<Integer, InetAddress>(id, address));
       }
 
       @Override
@@ -130,8 +135,7 @@ public class Sensor {
     this.sensorClient.addSensorClientListener(new SensorClientListener() {
       @Override
       public void helloReplyReceived() {
-        // TODO Auto-generated method stub
-
+        // do nothing, my father is correctly connected
       }
 
       @Override
