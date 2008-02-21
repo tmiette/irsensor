@@ -68,7 +68,8 @@ public class Sensor {
                   break;
                 case UP:
                   startSensorServer(sensorServer, id);
-                  startSensorClient(id, conf.getParentAddress());
+                  startSensorClient(conf.getParentId(), id, conf
+                      .getParentAddress());
                   startDataClient();
                   break;
                 default:
@@ -124,7 +125,7 @@ public class Sensor {
     }
   }
 
-  private void startSensorClient(int id, InetAddress address) {
+  private void startSensorClient(int idD, int idS, InetAddress address) {
     this.sensorClient = new SensorClient();
     this.sensorClient.addSensorClientListener(new SensorClientListener() {
       @Override
@@ -139,7 +140,7 @@ public class Sensor {
 
       }
     });
-    this.sensorClient
+    this.sensorClient.sendHelloRequest(idD, idS, address);
   }
 
   private void stopSensorServer() {
