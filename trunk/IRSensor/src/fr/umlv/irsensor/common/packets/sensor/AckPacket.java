@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.common.packets.supervisor;
+package fr.umlv.irsensor.common.packets.sensor;
 
 import java.nio.ByteBuffer;
 
@@ -6,6 +6,7 @@ import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
 import fr.umlv.irsensor.common.PacketFields;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.packets.supervisor.SupervisorPacket;
 
 public class AckPacket
     implements SupervisorPacket {
