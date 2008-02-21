@@ -31,15 +31,15 @@ public class DataClient {
   public DataClient(final int id, final CatchArea catchArea, final int quality,
       final int clock, final String serverAddr) {
 
+    try {
+      DataClient.this.serverAddr = new InetSocketAddress(InetAddress
+          .getByName(serverAddr), IRSensorConfiguration.DATA_SERVER_PORT);
+    } catch (UnknownHostException uhe) {
+      throw new AssertionError(uhe.getMessage());
+    }
+
     new Timer(clock, new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        try {
-          DataClient.this.serverAddr = new InetSocketAddress(InetAddress
-              .getByName(serverAddr), IRSensorConfiguration.DATA_SERVER_PORT);
-        } catch (UnknownHostException uhe) {
-          throw new AssertionError(uhe.getMessage());
-        }
-
         retrieveData(id, catchArea, quality, clock);
       }
     }).start();

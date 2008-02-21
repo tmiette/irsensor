@@ -3,6 +3,7 @@ package fr.umlv.irsensor.sensor;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -70,7 +71,7 @@ public class Sensor {
               if (children.size() > 0) {
                 sendReqData(area, clock, quality);
               } else {
-                sendRepData();
+                sendRepData(clock);
               }
             }
 
@@ -149,15 +150,22 @@ public class Sensor {
         if (children.size() > 0) {
           sendReqData(area, clock, quality);
         } else {
-          sendRepData();
+          /* Leaf code */
+          sendRepData(clock);
         }
       }
 
       @Override
       public void repDataReceived(byte[] data, int mimeType) {
         nbrOfRepData++;
+        //TODO Store data
+        
         if (nbrOfRepData == children.size()) {
-          sendRepData();
+          //TODO Get data stored
+          //TODO Get my dataClient
+          //TODO Join all data
+          //TODO Send it
+//          sendRepData(); TODO clock missed
         }
       }
     });
@@ -194,10 +202,11 @@ public class Sensor {
     this.dataClient.addSensorDataListener(new SensorDataListener() {
       @Override
       public void dataReceived(Date date, byte[] data) {
-        // TODO Auto-generated method stub
+        /* Check if place is left in fifo */
         if (capturedData.size() >= MAX_DATA_STORABLE) {
           capturedData.removeLast();
         }
+        /* Add captured data to fifo */
         capturedData.addFirst(new Pair<Date, byte[]>(date, data));
       }
     });
@@ -222,16 +231,26 @@ public class Sensor {
     }
   }
 
-  private void sendRepData() {
+  private void sendRepData(int date) {
     nbrOfRepData = 0;
     System.out.println("Send rep data " + this.id);
     if (this.conf.getParentId() == -1) {
+      /* Sink code */
       // this.supervisorClient.sendRepData(this.conf.getParentAddress(),
       // this.id);
       System.out.println("reponse finale");
     } else {
+      byte[] data = null;
+      for (Pair<Date, byte[]> CapData : this.capturedData) {
+        //FIXME
+        if (CapData.getFirstElement().getMinutes() == date) {
+          data = CapData.getSecondElement();
+        }
+      }
+      //TODO why send len in a repdata packet ?
+      //TODO mimetype
       this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
-          .getParentId());
+          .getParentId(), 0, data.length, data);
     }
   }
 
