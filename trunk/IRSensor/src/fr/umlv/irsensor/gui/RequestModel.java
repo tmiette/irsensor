@@ -19,7 +19,7 @@ public class RequestModel {
 		this.supervisor = supervisor;
 		this.supervisor.addSupervisorListener(new SupervisorListener() {
 			@Override
-			public void answerDataReceived(Object data) {
+			public void answerDataReceived(byte[] data) {
 				fireAnswerReceived(data);
 			}
 			@Override
@@ -47,7 +47,7 @@ public class RequestModel {
 		this.listeners.add(listener);
 	}
 	
-	protected void fireAnswerReceived(Object data){
+	protected void fireAnswerReceived(byte[] data){
 		for(RequestListener l: this.listeners){
 			l.answerReceived(data);
 		}

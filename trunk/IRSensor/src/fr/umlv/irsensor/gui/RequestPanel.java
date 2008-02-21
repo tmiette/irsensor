@@ -56,6 +56,15 @@ public class RequestPanel {
 				}
 			}
 		});
+		
+		this.model.addRequestListener(new RequestListener(){
+
+			@Override
+			public void answerReceived(byte[] data) {
+				
+			}
+			
+		});
 
 
 		final JPanel requestPanel = new JPanel(null);

@@ -14,9 +14,9 @@ import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
-import fr.umlv.irsensor.common.packets.ReqDataPacket;
-import fr.umlv.irsensor.common.packets.SetConfPacket;
-import fr.umlv.irsensor.common.packets.SetStatPacket;
+import fr.umlv.irsensor.common.packets.supervisor.ReqDataPacket;
+import fr.umlv.irsensor.common.packets.supervisor.SetConfPacket;
+import fr.umlv.irsensor.common.packets.supervisor.SetStatPacket;
 import fr.umlv.irsensor.sensor.SupervisorSensorListener;
 import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 

@@ -10,6 +10,6 @@ public interface SupervisorListener {
 
   public void sensorNodeStateChanged(SensorNode sensor);
   
-  public void answerDataReceived(Object data);
+  public void answerDataReceived(byte[] data);
 
 }

@@ -198,7 +198,7 @@ public class Supervisor {
 		}
 	}
 
-	protected void fireAnswerDataReceived(Object data) {
+	protected void fireAnswerDataReceived(byte[] data) {
 		for (SupervisorListener listener : this.listeners) {
 			listener.answerDataReceived(data);
 		}

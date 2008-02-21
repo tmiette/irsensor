@@ -15,7 +15,7 @@ import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
-import fr.umlv.irsensor.common.packets.RepDataPacket;
+import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
 
 /**
  * SupervisorClient is a network client which is used to retrieve informations

@@ -52,7 +52,7 @@ public class SupervisorTableModel extends AbstractTableModel {
       }
 
       @Override
-      public void answerDataReceived(Object data) {
+      public void answerDataReceived(byte[] data) {
       }
     });
   }

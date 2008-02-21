@@ -6,11 +6,12 @@ import java.nio.channels.SocketChannel;
 import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 
 public class SensorServer implements PacketRegisterable {
-private final int id; 
+	private final int id; 
 	
 	public SensorServer(int id) {
 		this.id = id;
 	}
+	
 	
 	@Override
 	public int getId() {
