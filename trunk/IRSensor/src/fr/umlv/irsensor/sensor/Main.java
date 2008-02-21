@@ -2,7 +2,7 @@ package fr.umlv.irsensor.sensor;
 
 import java.io.IOException;
 
-import fr.umlv.irsensor.common.SupervisorConfiguration;
+import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
@@ -18,8 +18,12 @@ import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 public class Main {
 	public static void main(String[] args) throws IOException, MalformedPacketException {
 		
+		if(args.length < 2){
+			
+		}
+		
 		//server part
-		final PacketDispatcher supervisorDispatcher = new PacketDispatcher(SupervisorConfiguration.SERVER_PORT_LOCAL);
+		final PacketDispatcher supervisorDispatcher = new PacketDispatcher(IRSensorConfiguration.SERVER_PORT_LOCAL);
 		
 		final PacketDispatcher sensorDispatcher = new PacketDispatcher(31001);
 		

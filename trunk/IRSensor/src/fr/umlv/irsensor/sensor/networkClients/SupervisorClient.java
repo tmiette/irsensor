@@ -9,7 +9,7 @@ import java.nio.channels.SocketChannel;
 import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.SupervisorConfiguration;
+import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.sensor.Sensor;
@@ -19,7 +19,7 @@ public class SupervisorClient{
 	private static final byte[] serverAddress = new byte[] { (byte) 127,
 		(byte) 0, (byte) 0, (byte) 1 };
 	
-	private static final int SERVER_PORT = SupervisorConfiguration.SERVER_PORT;
+	private static final int SERVER_PORT = IRSensorConfiguration.SERVER_PORT;
 	
 	private static final int BUFFER_SIZE = 512;
 	

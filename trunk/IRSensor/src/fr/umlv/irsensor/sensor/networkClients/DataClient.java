@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.data.RepDataPacket;
@@ -21,9 +22,9 @@ public class DataClient {
 	private ByteBuffer dataServerRepDataBuffer = ByteBuffer.allocate(300000);
 	private final List<SensorDataListener> listeners =  new ArrayList<SensorDataListener>();
 	
-	public DataClient(String serverAddr, int dstPort) {
+	public DataClient(String serverAddr) {
 		try {
-			this.serverAddr = new InetSocketAddress(InetAddress.getByName(serverAddr), dstPort);	
+			this.serverAddr = new InetSocketAddress(InetAddress.getByName(serverAddr), IRSensorConfiguration.DATA_SERVER_PORT);	
 		} catch (UnknownHostException e) {
 			throw new AssertionError(e.getMessage());
 		}
