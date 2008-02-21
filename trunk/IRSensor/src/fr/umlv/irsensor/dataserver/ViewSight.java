@@ -1,16 +1,13 @@
 package fr.umlv.irsensor.dataserver;
 
 
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fr.umlv.irsensor.common.CatchArea;
-import fr.umlv.irsensor.common.CatchArea.Point;
+import fr.umlv.irsensor.common.fields.CatchArea;
 
 
 public class ViewSight {

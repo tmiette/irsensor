@@ -1,6 +1,5 @@
 package fr.umlv.irsensor.dataserver;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,40 +12,41 @@ import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 
+import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.data.ReqDataPacket;
 
 
 public class DataServerServer {
-	
+
 	/**
 	 * Image data
 	 */
 	private final ViewSight completeCapturedZone = new ViewSight("./src/images/code_sm.png");
-	
+
 	/**
 	 * Max client that can handle the data server
 	 */
 	private static final int MAX_CLIENT = 5;
-	
+
 	/**
 	 * Server socket address
 	 */
 	private final InetSocketAddress socketAddress;
-	
+
 	/**
 	 * Server socket
 	 */
 	private ServerSocketChannel channel;
-	
+
 	/**
 	 * Executor to handle multiple clients
 	 */
 	private final ExecutorService executer = Executors.newFixedThreadPool(MAX_CLIENT);
-	
-	public DataServerServer(int port) {
-		socketAddress = new InetSocketAddress(port);
+
+	public DataServerServer() {
+		socketAddress = new InetSocketAddress(IRSensorConfiguration.DATA_SERVER_PORT);
 		try {
 			channel = ServerSocketChannel.open();
 			channel.socket().bind(socketAddress);
@@ -54,7 +54,7 @@ public class DataServerServer {
 			System.err.println("DatagramChannel.open()");
 		}	
 	}
-	
+
 	/**
 	 * Starts the data server
 	 */
@@ -70,7 +70,7 @@ public class DataServerServer {
 			}
 		}
 	}
-	
+
 	/**
 	 * Creates a runnable used to handle client request
 	 * @param clientChannel the client(); channel
@@ -90,8 +90,8 @@ public class DataServerServer {
 					// Create image area
 					BufferedImage subImage = completeCapturedZone.getSubImage(packet.getCatchArea());
 					// Prepare response
-				    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				    ImageIO.write(subImage, completeCapturedZone.getFileExtension(), bos);
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					ImageIO.write(subImage, completeCapturedZone.getFileExtension(), bos);
 					ByteBuffer sendBuffer = PacketFactory.createRepData(packet.getId(), 12, bos.toByteArray().length, bos.toByteArray());
 					clientChannel.write(sendBuffer);
 					dst.clear();
@@ -125,6 +125,6 @@ public class DataServerServer {
 			System.err.println("close()");
 		}
 	}
-	
-	
+
+
 }
