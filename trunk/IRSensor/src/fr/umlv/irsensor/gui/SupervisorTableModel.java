@@ -7,9 +7,9 @@ import java.util.concurrent.Executors;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
-import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.SensorState;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
 import fr.umlv.irsensor.supervisor.SupervisorListener;

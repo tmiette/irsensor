@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.SequentialGroup;
 
-import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.fields.CatchArea;
 
 public class RequestPanel {
 

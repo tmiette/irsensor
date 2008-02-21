@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import fr.umlv.irsensor.common.SensorState;
+import fr.umlv.irsensor.common.fields.SensorState;
 
 public class SupervisorTable {
 

@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
 import fr.umlv.irsensor.supervisor.SupervisorListener;
