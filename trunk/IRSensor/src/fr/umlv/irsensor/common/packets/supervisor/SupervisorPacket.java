@@ -1,6 +1,6 @@
 package fr.umlv.irsensor.common.packets.supervisor;
 
-import fr.umlv.irsensor.common.OpCode;
+import fr.umlv.irsensor.common.fields.OpCode;
 
 
 public interface SupervisorPacket {

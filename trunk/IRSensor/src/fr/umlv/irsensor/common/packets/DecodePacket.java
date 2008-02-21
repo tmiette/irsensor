@@ -1,6 +1,10 @@
-package fr.umlv.irsensor.common;
+package fr.umlv.irsensor.common.packets;
 
 import java.nio.ByteBuffer;
+
+import fr.umlv.irsensor.common.fields.ErrorCode;
+import fr.umlv.irsensor.common.fields.OpCode;
+import fr.umlv.irsensor.common.fields.PacketFields;
 
 /**
  * This class contains methods that permit to decode a Supervisor Server

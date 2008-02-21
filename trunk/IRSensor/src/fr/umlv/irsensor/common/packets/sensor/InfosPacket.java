@@ -2,10 +2,10 @@ package fr.umlv.irsensor.common.packets.sensor;
 
 import java.nio.ByteBuffer;
 
-import fr.umlv.irsensor.common.CatchArea;
-import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.PacketFields;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.OpCode;
+import fr.umlv.irsensor.common.fields.PacketFields;
 
 public class InfosPacket
     implements SensorPacket {

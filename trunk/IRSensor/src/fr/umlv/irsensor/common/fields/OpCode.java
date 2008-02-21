@@ -1,4 +1,6 @@
-package fr.umlv.irsensor.common;
+package fr.umlv.irsensor.common.fields;
+
+import java.nio.ByteBuffer;
 
 public enum OpCode {
 
@@ -57,6 +59,14 @@ public enum OpCode {
 
   public static int getOpCodeByteSize() {
     return 1;
+  }
+
+  public static OpCode getOpcode(ByteBuffer bb) {
+    byte opcod = bb.get(0);
+    for (OpCode opcode : OpCode.values()) {
+      if (opcode.getCode().equals(opcod)) { return opcode; }
+    }
+    return null;
   }
 
   public boolean equals(byte[] opcode) {

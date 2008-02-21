@@ -2,6 +2,8 @@ package fr.umlv.irsensor.common;
 
 import java.net.InetAddress;
 
+import fr.umlv.irsensor.common.fields.CatchArea;
+
 public class SensorConfiguration {
 
   private int autonomy;

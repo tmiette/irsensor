@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.common;
+package fr.umlv.irsensor.common.fields;
 
 public enum PacketFields {
 

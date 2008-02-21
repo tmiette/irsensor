@@ -2,10 +2,10 @@ package fr.umlv.irsensor.common.packets.supervisor;
 
 import java.nio.ByteBuffer;
 
-import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.PacketFields;
-import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.fields.OpCode;
+import fr.umlv.irsensor.common.fields.PacketFields;
+import fr.umlv.irsensor.common.fields.SensorState;
 
 public class RepStaPacket
     implements SupervisorPacket {

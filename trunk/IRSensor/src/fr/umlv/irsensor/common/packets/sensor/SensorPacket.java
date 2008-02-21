@@ -1,6 +1,6 @@
 package fr.umlv.irsensor.common.packets.sensor;
 
-import fr.umlv.irsensor.common.OpCode;
+import fr.umlv.irsensor.common.fields.OpCode;
 
 public interface SensorPacket {
 
