@@ -21,5 +21,4 @@ public class ImageArea {
 	public BufferedImage getImage() {
 		return image;
 	}
-	
 }

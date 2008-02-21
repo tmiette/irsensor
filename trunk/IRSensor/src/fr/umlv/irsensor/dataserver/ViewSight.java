@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.CatchArea.Point;
 
 
 public class ViewSight {
@@ -44,7 +45,7 @@ public class ViewSight {
 	
 	
 	/**
-	 * Retrieves a sub part of an image. This sub part corresponds the the area given as first parameter.
+	 * Retrieves a sub part of an image. 
 	 * @param area the area of the image to copy
 	 * @return the sub image
 	 */
@@ -52,32 +53,38 @@ public class ViewSight {
 		if (area.getP1().getX() + area.getAreaWidth() > image.getWidth() ||
 			area.getP1().getY() + area.getAreaHeight() > image.getHeight()
 		) throw new IllegalArgumentException("Cannot retrieve a sub part of an image if it is larger that the main image file");
-		CatchArea.Point origin = area.getP1();
-		CatchArea.Point dst = area.getP2();
-		int viewWidth = dst.getX() - origin.getX();
-		int viewHeight = dst.getY() - origin.getY();
-		BufferedImage im = image.getSubimage(origin.getX(), origin.getY(), viewWidth, viewHeight);
+		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		for (int j = 0; j < image.getHeight(null); j++) {
+			for (int k = 0; k < image.getWidth(null); k++) {
+				if (k >= area.getP1().getX() && k <= area.getP2().getX() && j >= area.getP1().getY() && j <= area.getP2().getY())
+					im.setRGB(k, j, image.getRGB(k, j));
+			}
+		}
 		return new ImageArea(im, area);
 	}
 	
 	
 	/**
-	 * Creates an image using different areas
-	 * @param images a list of images associated to the area representing a part of the main image
-	 * @return the image reconstituted
+	 * Reconstitutes the main image from sub image parts extracted from the main image.
+	 * @param images a list of buffered images representing a sub part of the main image
+	 * @return the new reconstituted image
 	 */
-	public BufferedImage createImageFromImageArea(ImageArea... images){
+	public BufferedImage createImageFromSubParts(BufferedImage... images){
 		if (images.length == 0) throw new IllegalArgumentException("No image given");
 		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D g = im.createGraphics();
 		for (int i = 0; i < images.length; i++) {
-			Image image = images[i].getImage();
-			CatchArea imageArea = images[i].getArea();
-			g.drawImage(image, imageArea.getP1().getX(), imageArea.getP1().getY(), imageArea.getAreaWidth(), imageArea.getAreaHeight(), null);
+			BufferedImage image = images[i];
+			for (int j = 0; j < image.getHeight(null); j++) {
+				for (int k = 0; k < image.getWidth(null); k++) {
+					int rgb = image.getRGB(k, j);
+					if (rgb != 0)
+						im.setRGB(k, j, rgb);
+				}
+			}
 		}
-		g.dispose();
 		return im;
 	}
+
 	
 }
 

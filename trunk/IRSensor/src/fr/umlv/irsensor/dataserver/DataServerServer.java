@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.packets.PacketFactory;
-import fr.umlv.irsensor.common.packets.ReqDataPacket;
+import fr.umlv.irsensor.common.packets.data.ReqDataPacket;
 
 
 public class DataServerServer {

@@ -15,7 +15,7 @@ import javax.swing.WindowConstants;
 import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.packets.PacketFactory;
-import fr.umlv.irsensor.common.packets.RepDataPacket;
+import fr.umlv.irsensor.common.packets.data.RepDataPacket;
 
 public class DataServerClient {
 
@@ -51,6 +51,7 @@ public class DataServerClient {
 				RepDataPacket packetReceived = RepDataPacket.getPacket(dataServerRepDataBuffer);
 				System.out.println("Data received correctly "+packetReceived);
 				byte[] im = packetReceived.getDatas();
+				
 				displayImage(im);
 			} catch (MalformedPacketException e) {
 				System.err.println("Malformed packet received from data server "+e.getMessage());
