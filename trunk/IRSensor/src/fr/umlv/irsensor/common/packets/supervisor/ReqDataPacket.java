@@ -13,7 +13,7 @@ public class ReqDataPacket
   /*
    * | Header | id | catch area | min quality requested | min date requested |
    */
-  private final OpCode opCode = OpCode.SETCONF;
+  private final OpCode opCode = OpCode.REQDATA;
   private final int id;
   private final CatchArea ca;
   private final int quality;
