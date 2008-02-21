@@ -65,11 +65,6 @@ public class RepDataPacket
     return new RepDataPacket(id, mimetype, datalen, datas);
   }
 
-  @Override
-  public int getId() {
-    return this.id;
-  }
-
   public int getDataLenght() {
     return this.dataLen;
   }

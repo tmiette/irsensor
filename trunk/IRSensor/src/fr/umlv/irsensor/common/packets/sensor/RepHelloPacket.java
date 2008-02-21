@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import fr.umlv.irsensor.common.OpCode;
 import fr.umlv.irsensor.common.PacketFields;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
-import fr.umlv.irsensor.common.packets.supervisor.GetConfPacket;
 
 public class RepHelloPacket
     implements SensorPacket {
@@ -14,7 +13,7 @@ public class RepHelloPacket
   private final int sourceId;
   private final int destId;
 
-  public static GetConfPacket getPacket(ByteBuffer packet)
+  public static RepHelloPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();
     int index = 0;
@@ -22,33 +21,50 @@ public class RepHelloPacket
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());
-    if (!OpCode.GETCONF.equals(code)) throw new MalformedPacketException("Illegal opcode");
+    if (!OpCode.REPHELLO.equals(code))
+      throw new MalformedPacketException("Illegal opcode");
 
     // Tests if the id is valid and sets it
     index += PacketFields.OPCODE.getLength();
     int sourceId = packet.getInt(index);
     if (sourceId < 0) throw new MalformedPacketException("Illegal sourceId");
-    
- // Tests if the id is valid and sets it
-    index += PacketFields.ID.getLength();
-    int sourceId = packet.getInt(index);
-    if (sourceId < 0) throw new MalformedPacketException("Illegal ");
-    
-    int destId
 
-    return new GetConfPacket(sourceId, );
+    // Tests if the id is valid and sets it
+    index += PacketFields.ID.getLength();
+    int sId = packet.getInt(index);
+    if (sId < 0) throw new MalformedPacketException("Illegal source id");
+
+    index += PacketFields.ID.getLength();
+    int dId = packet.getInt(index);
+    if (dId < 0) throw new MalformedPacketException("Illegal detination id");
+
+    return new RepHelloPacket(OpCode.REPHELLO, sId, dId);
   }
 
-  @Override
-  public int getId() {
-    // TODO Auto-generated method stub
-    return 0;
+  public RepHelloPacket(OpCode opCode, int sourceId, int destId) {
+    super();
+    this.opCode = opCode;
+    this.sourceId = sourceId;
+    this.destId = destId;
+  }
+
+  /**
+   * @return the sourceId
+   */
+  public int getSourceId() {
+    return sourceId;
+  }
+
+  /**
+   * @return the destId
+   */
+  public int getDestId() {
+    return destId;
   }
 
   @Override
   public OpCode getOpCode() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.opCode;
   }
 
 }

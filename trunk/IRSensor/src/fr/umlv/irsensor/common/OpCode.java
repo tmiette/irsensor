@@ -35,6 +35,9 @@ public enum OpCode {
   },
   REPDATA("00001010"){
   
+  },
+  REPHELLO("00001011"){
+    
   };
 
   private final Byte code;

@@ -132,11 +132,6 @@ public class ReqDataPacket
   }
 
   @Override
-  public int getId() {
-    return this.id;
-  }
-
-  @Override
   public OpCode getOpCode() {
     return this.opCode;
   }
