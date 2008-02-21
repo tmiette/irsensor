@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import fr.umlv.irsensor.common.CatchArea;
-import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.ErrorCode;
+import fr.umlv.irsensor.common.fields.SensorState;
 import fr.umlv.irsensor.util.Pair;
 
 /**

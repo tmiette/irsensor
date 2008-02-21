@@ -2,7 +2,7 @@ package fr.umlv.irsensor.supervisor;
 
 import java.net.InetAddress;
 
-import fr.umlv.irsensor.common.ErrorCode;
+import fr.umlv.irsensor.common.fields.ErrorCode;
 
 public interface SupervisorServerListener {
 	

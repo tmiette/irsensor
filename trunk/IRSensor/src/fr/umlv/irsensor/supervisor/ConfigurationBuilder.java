@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
+import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
 import fr.umlv.irsensor.util.Pair;
 

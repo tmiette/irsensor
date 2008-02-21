@@ -10,17 +10,17 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.umlv.irsensor.common.DecodePacket;
-import fr.umlv.irsensor.common.ErrorCode;
-import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.SupervisorConfiguration;
+import fr.umlv.irsensor.common.IRSensorConfiguration;
+import fr.umlv.irsensor.common.fields.ErrorCode;
+import fr.umlv.irsensor.common.fields.OpCode;
+import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 
 public class SupervisorServer {
 
 	private static final int BUFFER_SIZE = 512;
 
-	private static final int serverPort = SupervisorConfiguration.SERVER_PORT;
+	private static final int serverPort = IRSensorConfiguration.SUPERVISOR_SERVER_PORT;
 
 	private final List<SupervisorServerListener> listeners = new ArrayList<SupervisorServerListener>();
 

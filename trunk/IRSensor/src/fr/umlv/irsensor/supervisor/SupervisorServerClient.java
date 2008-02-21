@@ -6,14 +6,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
-import fr.umlv.irsensor.common.CatchArea;
-import fr.umlv.irsensor.common.DecodePacket;
-import fr.umlv.irsensor.common.ErrorCode;
-import fr.umlv.irsensor.common.OpCode;
+import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
-import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.ErrorCode;
+import fr.umlv.irsensor.common.fields.OpCode;
+import fr.umlv.irsensor.common.fields.SensorState;
+import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
 
@@ -36,7 +36,7 @@ public class SupervisorServerClient {
 			SocketChannel socketClient;
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
-					SupervisorConfiguration.SERVER_PORT_LOCAL));
+					IRSensorConfiguration.SERVER_PORT_LOCAL));
 
 			ByteBuffer b = PacketFactory.createSetSta(node.getId(), state);
 			socketClient.write(b);
@@ -63,7 +63,7 @@ public class SupervisorServerClient {
 		try {
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
-					SupervisorConfiguration.SERVER_PORT_LOCAL));
+					IRSensorConfiguration.SERVER_PORT_LOCAL));
 
 			byte[] parentAddress = new byte[4];
 			if (conf.getParentAddress() != null) {
@@ -105,7 +105,7 @@ public class SupervisorServerClient {
 		try {
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
-					SupervisorConfiguration.SERVER_PORT_LOCAL));
+					IRSensorConfiguration.SERVER_PORT_LOCAL));
 
 			ByteBuffer b = PacketFactory.createReqData(node.getId(), cArea, quality, clock);
 

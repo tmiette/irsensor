@@ -1,7 +1,7 @@
 package fr.umlv.irsensor.supervisor;
 
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
+import fr.umlv.irsensor.common.fields.SensorState;
 
 public interface SupervisorServerClientListener {
 

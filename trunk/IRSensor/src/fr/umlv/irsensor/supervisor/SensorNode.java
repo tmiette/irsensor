@@ -2,9 +2,9 @@ package fr.umlv.irsensor.supervisor;
 
 import java.net.InetAddress;
 
-import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.SensorState;
 
 /**
  * This defines a sensor node It has a state like down, up or pause It could be
