@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.common.packets;
+package fr.umlv.irsensor.common.packets.data;
 
 import java.nio.ByteBuffer;
 
@@ -8,7 +8,7 @@ import fr.umlv.irsensor.common.PacketFields;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 
 public class ReqDataPacket
-    implements SupervisorPacket {
+    implements DataPacket {
 
   /*
    * | Header | id | catch area | min quality requested | min date requested |

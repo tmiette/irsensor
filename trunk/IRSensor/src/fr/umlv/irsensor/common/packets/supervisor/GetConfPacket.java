@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.common.packets;
+package fr.umlv.irsensor.common.packets.supervisor;
 
 import java.nio.ByteBuffer;
 
@@ -6,14 +6,14 @@ import fr.umlv.irsensor.common.OpCode;
 import fr.umlv.irsensor.common.PacketFields;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 
-public class GetStaPacket
+public class GetConfPacket
     implements SupervisorPacket {
 
   private final int id;
 
-  private final OpCode opCode = OpCode.GETSTA;
+  private final OpCode opCode = OpCode.GETCONF;
 
-  public static GetStaPacket getPacket(ByteBuffer packet)
+  public static GetConfPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();
     int index = 0;
@@ -21,17 +21,17 @@ public class GetStaPacket
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());
-    if (!OpCode.GETSTA.equals(code)) throw new MalformedPacketException();
+    if (!OpCode.GETCONF.equals(code)) throw new MalformedPacketException();
 
     // Tests if the id is valid and sets it
     index += PacketFields.OPCODE.getLength();
     int id = packet.getInt(index);
     if (id < 0) throw new MalformedPacketException();
 
-    return new GetStaPacket(id);
+    return new GetConfPacket(id);
   }
 
-  private GetStaPacket(int id) {
+  private GetConfPacket(int id) {
     this.id = id;
   }
 

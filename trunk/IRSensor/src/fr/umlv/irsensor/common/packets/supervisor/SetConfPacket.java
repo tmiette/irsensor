@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.common.packets;
+package fr.umlv.irsensor.common.packets.supervisor;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
