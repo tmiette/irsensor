@@ -57,6 +57,7 @@ public class SupervisorSensorServer implements PacketRegisterable {
           .getCatchArea(), setConfPacket.getAutonomy(), setConfPacket
           .getClock(), setConfPacket.getPayload(), setConfPacket.getQuality(),
           setConfPacket.getParent());
+      conf.setParentId(setConfPacket.getParentId());
       fireConfReceived(conf);
       this.isWaitingForAnswer = false;
     } else if (OpCode.getOpcode(packet) == OpCode.REQDATA) {
