@@ -161,7 +161,7 @@ public class SupervisorServerClient {
 	 */
 	private void close(SocketChannel channel){
 		try {
-			channel.close();
+			if(channel.isConnected())channel.close();
 		} catch (IOException e) {
 			System.err.println("An error has occured during closing channel");
 		}

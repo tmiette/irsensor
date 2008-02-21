@@ -17,6 +17,14 @@ import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.supervisor.listeners.SupervisorServerListener;
 
+/**
+ * Define the server part of the <code>Supervisor</code>	 
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class SupervisorServer {
 
 	private static final int BUFFER_SIZE = 512;
@@ -32,11 +40,16 @@ public class SupervisorServer {
 			this.servChannel = ServerSocketChannel.open();
 			servChannel.socket().bind(new InetSocketAddress(serverPort));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("IO Error : "+e.getMessage());
+			System.exit(1); //the application cannot continue
 		}
 	}
-
+	
+	/**
+	 * Wait for the registration of each <code>SensorNode</code>
+	 * 
+	 * @param ids
+	 */
 	public void registerAllNodes(final int[] ids) {
 		final int nbrNodes = ids.length;
 		new Thread(new Runnable() {
@@ -81,33 +94,46 @@ public class SupervisorServer {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} finally {
-						try {
-							if (sensorChannel.isConnected())
-								sensorChannel.close();
-						} catch (IOException e) {
-							// TODO launch runtime exception
-						}
+						close(sensorChannel);
 					}
 				}
 				fireRegistrationTerminated();
 				try {
 					shutdown();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.err.println("IO erro : "+e.getMessage());
 				}
 			}
 		}).start();
 	}
 
-	public void addSupervisorServerListener(SupervisorServerListener listener) {
-		this.listeners.add(listener);
-	}
-
+	
+	/**
+	 * Shutdown the server socket
+	 * 
+	 * @throws IOException
+	 */
 	public void shutdown() throws IOException {
 		this.servChannel.close();
 	}
-
+	
+	/**
+	 * Close the given channel
+	 * 
+	 * @param channel
+	 */
+	private void close(SocketChannel channel){
+		try {
+			if(channel.isConnected())channel.close();
+		} catch (IOException e) {
+			System.err.println("An error has occured during closing channel");
+		}
+	}
+	
+	public void addSupervisorServerListener(SupervisorServerListener listener) {
+		this.listeners.add(listener);
+	}
+	
 	protected void fireReqConPacketReceived(int id, InetAddress ipAddress) {
 		for (SupervisorServerListener l : this.listeners) {
 			l.ackConPacketReceived(id, ipAddress);
