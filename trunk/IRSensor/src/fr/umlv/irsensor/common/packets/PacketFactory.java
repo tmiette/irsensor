@@ -49,7 +49,7 @@ public class PacketFactory {
 
   /**
    * Returns a new SETCONF packet. | Opcode | Id | Catch Area | Clock | Autonomy |
-   * Quality | Payload | ParentID | Optional |
+   * Quality | Payload | Parent address | ParentID | Optional |
    * 
    * @param id sensor id
    * @param area an area a sensor can capture
@@ -58,6 +58,7 @@ public class PacketFactory {
    * @param quality quality's sensor
    * @param payload payload's sensor
    * @param root root address IP of the sensor
+   * @param rootId root's Id of the sensor
    * @return a bytebuffer corresponding to a SETCONF packet
    */
   public static ByteBuffer createSetConfPacket(int id, CatchArea area,
