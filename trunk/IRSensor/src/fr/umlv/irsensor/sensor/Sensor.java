@@ -115,11 +115,13 @@ public class Sensor {
     return this.supervisorClient;
   }
 
-  private void startSensorServer(PacketDispatcher dispatcher, int id) {
+  private void startSensorServer(PacketDispatcher dispatcher, final int id) {
     this.sensorServer = new SensorServer(id);
     this.sensorServer.addSensorServerListener(new SensorServerListener() {
       @Override
       public void helloRequestReceived(int id, InetAddress address) {
+        System.out.println("Hello request receveid to " + Sensor.this.id
+            + " from " + id + ". Add it to my children list.");
         children.add(new Pair<Integer, InetAddress>(id, address));
       }
 
@@ -142,6 +144,7 @@ public class Sensor {
       @Override
       public void helloReplyReceived() {
         // do nothing, my father is correctly connected
+        System.out.println("Hello reply receveid to " + Sensor.this.id);
       }
 
       @Override
