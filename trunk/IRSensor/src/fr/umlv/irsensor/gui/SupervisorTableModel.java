@@ -174,11 +174,7 @@ public class SupervisorTableModel extends AbstractTableModel {
 				if (columnIndex == 4) {
 					SensorState state = (SensorState) value;
 					supervisor.setState(id, state);
-				} else if(columnIndex == 5){
-					//catch area
-				}
-				else{
-
+				}else{
 					CatchArea area = (CatchArea) getValueAt(rowIndex, 5);
 					int autonomy = (Integer) getValueAt(rowIndex, 6);
 					int clock = (Integer) getValueAt(rowIndex, 7);
@@ -186,6 +182,8 @@ public class SupervisorTableModel extends AbstractTableModel {
 					int quality = (Integer) getValueAt(rowIndex, 9);
 					int parent = (Integer) getValueAt(rowIndex, 10);
 					switch(columnIndex){
+					case 5:
+						area = (CatchArea) value;
 					case 6:
 						autonomy = (Integer)value;
 						break;
