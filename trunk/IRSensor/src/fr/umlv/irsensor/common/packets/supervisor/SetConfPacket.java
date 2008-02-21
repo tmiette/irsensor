@@ -155,6 +155,9 @@ public class SetConfPacket
     InetAddress adr = null;
     try {
       adr = InetAddress.getByAddress(parent);
+      if (adr.isAnyLocalAddress()) {
+        adr = null;
+      }
     } catch (UnknownHostException e) {
       throw new MalformedPacketException();
     }
