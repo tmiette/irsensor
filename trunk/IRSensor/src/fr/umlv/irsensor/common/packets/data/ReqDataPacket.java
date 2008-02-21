@@ -78,7 +78,7 @@ public class ReqDataPacket
     // Tests if it's a valid OpCode
     final byte[] code = new byte[OpCode.getOpCodeByteSize()];
     packet.get(code, 0, OpCode.getOpCodeByteSize());
-    if (!OpCode.SETCONF.equals(code)) throw new MalformedPacketException();
+    if (!OpCode.REQDATA.equals(code)) throw new MalformedPacketException();
 
     // Tests if the id is valid and sets it
     index += PacketFields.OPCODE.getLength();
@@ -86,7 +86,7 @@ public class ReqDataPacket
     if (id < 0) throw new MalformedPacketException();
 
     CatchArea ca = getCatchArea(packet);
-
+    
     int clock = getClock(packet);
 
     int quality = getQuality(packet);
