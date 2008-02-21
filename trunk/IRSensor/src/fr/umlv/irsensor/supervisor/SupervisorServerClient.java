@@ -10,11 +10,11 @@ import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
-import fr.umlv.irsensor.common.PacketFactory;
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.SupervisorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
 
 /**
@@ -72,7 +72,7 @@ public class SupervisorServerClient {
 
 			ByteBuffer b = PacketFactory.createSetConfPacket(node.getId(), conf
 					.getCArea(), conf.getClock(), conf.getAutonomy(), conf.getQuality(),
-					conf.getPayload(), parentAddress);
+					conf.getPayload(), parentAddress, conf.getParentId());
 
 			socketClient.write(b);
 
