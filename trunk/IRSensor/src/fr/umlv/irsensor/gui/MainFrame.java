@@ -116,8 +116,9 @@ public class MainFrame {
     final JScrollPane scroll = new JScrollPane(new SupervisorTable(
         new SupervisorTableModel(this.supervisor)).getJTable());
     scroll.setBorder(BorderFactory.createTitledBorder("Sensors :"));
+    RequestModel model = new RequestModel(this.supervisor);
     this.mainContainer.addTab("Sensors", scroll);
-    this.mainContainer.addTab("Request", new JScrollPane(new RequestPanel()
+    this.mainContainer.addTab("Request", new JScrollPane(new RequestPanel(model)
         .getMainPanel()));
   }
 

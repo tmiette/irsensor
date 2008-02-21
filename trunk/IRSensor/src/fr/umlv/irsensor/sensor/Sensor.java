@@ -44,6 +44,8 @@ public class Sensor {
 
 				@Override
 				public void confReceived(SensorConfiguration conf) {
+					System.out.println("received a new Conf "+Sensor.this.id);
+					System.out.println("Autonomy "+conf.getAutonomy());
 					Sensor.this.conf = conf;
 				}
 

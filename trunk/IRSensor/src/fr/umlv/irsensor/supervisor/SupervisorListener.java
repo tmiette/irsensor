@@ -9,5 +9,7 @@ public interface SupervisorListener {
   public void sensorNodeConfigured(SensorNode sensor);
 
   public void sensorNodeStateChanged(SensorNode sensor);
+  
+  public void answerDataReceived(Object data);
 
 }
