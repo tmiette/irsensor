@@ -16,8 +16,6 @@ public class ReqHelloPacket
   private final int sourceId;
   private final ErrorCode errorCode;
 
-  
-
   /**
    * @return the errorCode
    */
@@ -63,7 +61,7 @@ public class ReqHelloPacket
     if (errorCode == null) { throw new MalformedPacketException(
         "Illegal errorCode"); }
 
-    return new ReqHelloPacket(OpCode.REQHELLO, sId, dId, errorCode);
+    return new ReqHelloPacket(OpCode.REQHELLO, dId, sId, errorCode);
   }
 
   /**
