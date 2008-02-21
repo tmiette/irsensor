@@ -125,7 +125,7 @@ public class Sensor {
   }
 
   private void startSensorClient(int id, InetAddress address) {
-    this.sensorClient = new SensorClient(id, conf.getParentAddress());
+    this.sensorClient = new SensorClient();
     this.sensorClient.addSensorClientListener(new SensorClientListener() {
       @Override
       public void helloReplyReceived() {
@@ -139,6 +139,7 @@ public class Sensor {
 
       }
     });
+    this.sensorClient
   }
 
   private void stopSensorServer() {
@@ -151,6 +152,13 @@ public class Sensor {
 
   private void startDataClient() {
     this.dataClient = new DataClient();
+    this.dataClient.addSensorDataListener(new SensorDataListener() {
+      @Override
+      public void dataReceived(byte[] data) {
+        // TODO Auto-generated method stub
+
+      }
+    });
   }
 
   private void stopDataClient() {
