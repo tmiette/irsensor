@@ -80,7 +80,7 @@ public class SupervisorServer {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} finally {
-					try {
+						try {
 							if (sensorChannel.isConnected())
 								sensorChannel.close();
 						} catch (IOException e) {

@@ -8,7 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import fr.umlv.irsensor.sensor.CatchArea;
+
+import fr.umlv.irsensor.common.CatchArea;
 
 
 public class ViewSight {
