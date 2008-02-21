@@ -32,9 +32,10 @@ public class SetConfPacket
   private final int quality;
   private final int payload;
   private final InetAddress parent;
+  private final int parentId;
 
   public SetConfPacket(int id, CatchArea ca, int clock, int autonomy,
-      int quality, int payload, InetAddress parent) {
+      int quality, int payload, InetAddress parent, int parentId) {
     super();
     this.id = id;
     this.ca = ca;
@@ -43,6 +44,7 @@ public class SetConfPacket
     this.quality = quality;
     this.payload = payload;
     this.parent = parent;
+    this.parentId = parentId;
   }
 
   /**
@@ -128,10 +130,12 @@ public class SetConfPacket
     int payload = getPayload(packet);
 
     InetAddress parent = getParent(packet);
+    
+    int parentId = getParentId(packet);
 
     // return new SetConfPacket(id);
     return new SetConfPacket(id, ca, clock, autonomy, quality, payload,
-        parent);
+        parent, parentId);
   }
 
   /**
@@ -142,7 +146,7 @@ public class SetConfPacket
    * @throws MalformedPacketException 
    */
   private static InetAddress getParent(ByteBuffer packet) throws MalformedPacketException {
-    byte[] parent = new byte[4];
+    byte[] parent = new byte[PacketFields.IP.getLength()];
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
         PacketFields.AUTONOMY, PacketFields.PAYLOAD, PacketFields.QUALITY));
@@ -155,6 +159,14 @@ public class SetConfPacket
       throw new MalformedPacketException();
     }
     return adr;
+  }
+
+  private static int getParentId(ByteBuffer packet) {
+    packet.position(PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
+        PacketFields.AUTONOMY, PacketFields.PAYLOAD, PacketFields.QUALITY, PacketFields.IP));
+    
+    return packet.getInt();
   }
 
   /**
@@ -190,6 +202,13 @@ public class SetConfPacket
   }
 
   /**
+   * @return the autonomy
+   */
+  public int getAutonomy() {
+    return autonomy;
+  }
+
+  /**
    * @return the catchArea
    */
   public CatchArea getCatchArea() {
@@ -203,18 +222,28 @@ public class SetConfPacket
     return clock;
   }
 
-  /**
-   * @return the autonomy
-   */
-  public int getAutonomy() {
-    return autonomy;
+  @Override
+  public int getId() {
+    return this.id;
+  }
+
+  @Override
+  public OpCode getOpCode() {
+    return this.opCode;
   }
 
   /**
-   * @return the quality
+   * @return the parentId
    */
-  public int getQuality() {
-    return quality;
+  public InetAddress getParent() {
+    return parent;
+  }
+
+  /**
+   * @return the parentId
+   */
+  public int getParentId() {
+    return parentId;
   }
 
   /**
@@ -225,19 +254,11 @@ public class SetConfPacket
   }
 
   /**
-   * @return the parentId
+   * @return the quality
    */
-  public InetAddress getParent() {
-    return parent;
+  public int getQuality() {
+    return quality;
   }
-
-  @Override
-  public int getId() {
-    return this.id;
-  }
-
-  @Override
-  public OpCode getOpCode() {
-    return this.opCode;
-  }
+  
+ 
 }

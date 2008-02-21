@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.ErrorCode;
 import fr.umlv.irsensor.common.OpCode;
+import fr.umlv.irsensor.common.PacketFields;
 import fr.umlv.irsensor.common.SensorState;
 
 /**
