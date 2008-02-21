@@ -98,7 +98,7 @@ public class SupervisorSensorServer implements PacketRegisterable {
   public void answerReqData(byte[] datas) {
     if (this.channel != null) {
       try {
-        channel.write(PacketFactory.createRepData(id, mimetype, len, data));
+        channel.write(PacketFactory.createRepData(id, 0, datas.length, datas));
       } catch (IOException e) {
         System.out.println(e.getMessage());
         return;

@@ -45,7 +45,7 @@ public class SensorServer implements PacketRegisterable {
 
   @Override
   public void setPacket(ByteBuffer packet, SocketChannel channel) {
-    if (DecodeOpCode.decodeByteBuffer(packet) == OpCode.REQHELLO) {
+    if (OpCode.getOpcode(packet) == OpCode.REQHELLO) {
       ReqHelloPacket reqHelloPacket = null;
       try {
         reqHelloPacket = ReqHelloPacket.getPacket(packet);
