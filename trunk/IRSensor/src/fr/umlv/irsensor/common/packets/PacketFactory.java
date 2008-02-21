@@ -273,7 +273,7 @@ public class PacketFactory {
   public static ByteBuffer createReqHello(int sourceId, int destId,
       ErrorCode code) {
     int bufSize = PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID,
-        PacketFields.ID);
+        PacketFields.ID, PacketFields.ERROR_CODE);
     final ByteBuffer buffer = ByteBuffer.allocate(bufSize);
     int index = 0;
     buffer.put(index, OpCode.REQHELLO.getCode());
