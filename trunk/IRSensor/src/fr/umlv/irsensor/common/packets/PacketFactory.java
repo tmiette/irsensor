@@ -58,7 +58,7 @@ public class PacketFactory {
 	 * @return a bytebuffer corresponding to a SETCONF packet
 	 */
 	public static ByteBuffer createSetConfPacket(int id, CatchArea area,
-			int clock, int autonomy, int quality, int payload, byte[] root) {
+			int clock, int autonomy, int quality, int payload, byte[] root, int rootId) {
 		int bufSize = PacketFields.getLength(PacketFields.OPCODE,
 				PacketFields.ID, PacketFields.CATCH_AREA,
 				PacketFields.CLOCK, PacketFields.AUTONOMY,
@@ -87,9 +87,11 @@ public class PacketFactory {
 		index += PacketFields.QUALITY.getLength();
 		buffer.putInt(index, payload);
 		index += PacketFields.PAYLOAD.getLength();
-
 		buffer.position(index);
 		buffer.put(root, 0, root.length);
+		index += root.length;
+		buffer.position(index);
+		buffer.putInt(index, rootId);
 		buffer.rewind();
 
 		return buffer;
