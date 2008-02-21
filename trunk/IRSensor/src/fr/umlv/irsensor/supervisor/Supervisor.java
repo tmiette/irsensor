@@ -11,6 +11,11 @@ import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.ErrorCode;
 import fr.umlv.irsensor.common.fields.SensorState;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorListener;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorServerClientListener;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorServerListener;
+import fr.umlv.irsensor.supervisor.network.SupervisorServer;
+import fr.umlv.irsensor.supervisor.network.SupervisorServerClient;
 import fr.umlv.irsensor.util.Pair;
 
 /**

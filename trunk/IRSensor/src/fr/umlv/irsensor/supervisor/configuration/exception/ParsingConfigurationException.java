@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.supervisor.exception;
+package fr.umlv.irsensor.supervisor.configuration.exception;
 
 public class ParsingConfigurationException extends Exception {
 

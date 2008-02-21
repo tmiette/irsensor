@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.supervisor;
+package fr.umlv.irsensor.supervisor.network;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,6 +16,8 @@ import fr.umlv.irsensor.common.fields.SensorState;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
+import fr.umlv.irsensor.supervisor.SensorNode;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorServerClientListener;
 
 /**
  * SupervisorClient is a network client which is used to retrieve informations
@@ -29,11 +31,20 @@ import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
 public class SupervisorServerClient {
 
 	private final ArrayList<SupervisorServerClientListener> listeners = new ArrayList<SupervisorServerClientListener>();
-
+	
+	public SupervisorServerClient() {
+	}
+	
+	/**
+	 * Switch the node state with the given one
+	 * 
+	 * @param node
+	 * @param state
+	 */
 	public void setState(SensorNode node, SensorState state) {
 		// set a new configuration
+		SocketChannel socketClient = null;
 		try {
-			SocketChannel socketClient;
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
 					IRSensorConfiguration.SERVER_PORT_LOCAL));
@@ -44,19 +55,27 @@ public class SupervisorServerClient {
 			final ByteBuffer buffer = ByteBuffer.allocate(64);
 			socketClient.read(buffer);
 			buffer.flip();
+			
 			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-				System.out.println("Sensor state changed, ui fired");
 				fireSensorStateChanged(node, state);
-			} else {
-				// TODO what can we do here?
 			}
-			socketClient.close();
+			else {
+				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("IO error "+e.getMessage());
+		}
+		finally{
+			close(socketClient);
 		}
 	}
 
+	/**
+	 * Set a new configuration to the given <code>SensorNode</code>
+	 * 
+	 * @param node
+	 * @param conf
+	 */
 	public void setConf(SensorNode node, SensorConfiguration conf) {
 		// set a new configuration
 		SocketChannel socketClient = null;
@@ -80,25 +99,27 @@ public class SupervisorServerClient {
 			socketClient.read(buffer);
 			buffer.flip();
 			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-				System.out.println("Sensor configured, ui fired");
 				fireSensorConfigurationChanged(node, conf);
 			} else {
-				// TODO what can we do here?
+				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("IO error "+e.getMessage());
 		}
 		finally{
-			try {
-				socketClient.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			close(socketClient);
 		}
 	}
-
+	
+	/**
+	 * Send a request to the sink SensorNode and wait for an answer
+	 * Then it notifies the <code>Supervisor</code> when the answer has been received 
+	 * 
+	 * @param node
+	 * @param cArea
+	 * @param clock
+	 * @param quality
+	 */
 	public void dataRequest(SensorNode node, CatchArea cArea, int clock, int quality){
 		// request
 		SocketChannel socketClient = null;
@@ -107,9 +128,8 @@ public class SupervisorServerClient {
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
 					IRSensorConfiguration.SERVER_PORT_LOCAL));
 
-			ByteBuffer b = PacketFactory.createReqData(node.getId(), cArea, quality, clock);
-
-			socketClient.write(b);
+			socketClient.write(PacketFactory.createReqData(node.getId(), cArea, quality, clock));
+			
 			//wait for the answer
 			final ByteBuffer buffer = ByteBuffer.allocate(64);
 			socketClient.read(buffer);
@@ -121,38 +141,41 @@ public class SupervisorServerClient {
 					RepDataPacket packet = RepDataPacket.getPacket(buffer);
 					fireAnswerDataReceived(packet.getDatas());
 				} catch (MalformedPacketException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.err.println("Invalid packet for Supervisor Server "+e.getMessage());
 				}
 			} else {
-				// TODO what can we do here?
+				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("IO error "+e.getMessage());
 		}
 		finally{
-			try {
-				socketClient.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			close(socketClient);
+		}
+	}
+	
+	/**
+	 * Close the given channel
+	 * 
+	 * @param channel
+	 */
+	private void close(SocketChannel channel){
+		try {
+			channel.close();
+		} catch (IOException e) {
+			System.err.println("An error has occured during closing channel");
 		}
 	}
 
-	public void addSupervisorServerClientListener(
-			SupervisorServerClientListener listener) {
+	public void addSupervisorServerClientListener(SupervisorServerClientListener listener) {
 		this.listeners.add(listener);
 	}
 
-	public void removeSupervisorServerClientListener(
-			SupervisorServerClientListener listener) {
+	public void removeSupervisorServerClientListener(SupervisorServerClientListener listener) {
 		this.listeners.remove(listener);
 	}
 
-	protected void fireSensorConfigurationChanged(SensorNode node,
-			SensorConfiguration conf) {
+	protected void fireSensorConfigurationChanged(SensorNode node, SensorConfiguration conf) {
 		for (SupervisorServerClientListener listener : this.listeners) {
 			listener.sensorConfigurationChanged(node, conf);
 		}

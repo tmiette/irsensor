@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.supervisor;
+package fr.umlv.irsensor.supervisor.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,7 @@ import java.util.Properties;
 
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.fields.CatchArea;
-import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
+import fr.umlv.irsensor.supervisor.configuration.exception.ParsingConfigurationException;
 import fr.umlv.irsensor.util.Pair;
 
 public class ConfigurationBuilder {

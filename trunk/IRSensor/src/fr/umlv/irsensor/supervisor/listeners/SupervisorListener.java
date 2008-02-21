@@ -1,6 +1,8 @@
-package fr.umlv.irsensor.supervisor;
+package fr.umlv.irsensor.supervisor.listeners;
 
 import java.net.InetAddress;
+
+import fr.umlv.irsensor.supervisor.SensorNode;
 
 public interface SupervisorListener {
 

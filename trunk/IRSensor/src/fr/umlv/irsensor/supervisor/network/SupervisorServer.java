@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.supervisor;
+package fr.umlv.irsensor.supervisor.network;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -15,6 +15,7 @@ import fr.umlv.irsensor.common.fields.ErrorCode;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorServerListener;
 
 public class SupervisorServer {
 
