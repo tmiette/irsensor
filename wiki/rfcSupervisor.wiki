@@ -88,10 +88,10 @@ After registering a new node, SS has to configure it before it can start it. A S
 | Header | Id | Catch Area | Clock | Autonomy | Quality | Payload |
 -------------------------------------------------------------------
 
-6 bytes     n bytes
------------------------------
-| Parent address | Optional |
------------------------------
+6 bytes n         4 bytes      n bytes
+-----------------------------------------
+| Parent address | ID parent | Optional |
+-----------------------------------------
 Figure 6-1-3-1: SETCONF packet
 
 
@@ -318,7 +318,5 @@ A state is represented by a code:
 00000000 – UP
 00000001 – DOWN
 00000010 – PAUSE or STANDBY
-
-
 
 
