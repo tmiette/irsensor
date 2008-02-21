@@ -19,155 +19,160 @@ import fr.umlv.irsensor.util.Pair;
 
 public class Sensor {
 
-  private SensorConfiguration conf;
+	private SensorConfiguration conf;
 
-  private int id;
+	private int id;
 
-  private SensorState state = SensorState.DOWN;
+	private SensorState state = SensorState.DOWN;
 
-  private final SupervisorClient supervisorClient;
-  private DataClient dataClient;
-  private SensorClient sensorClient;
-  private SupervisorSensorServer supervisorServer;
-  private SensorServer sensorServer;
+	private final SupervisorClient supervisorClient;
+	private DataClient dataClient;
+	private SensorClient sensorClient;
+	private SupervisorSensorServer supervisorServer;
+	private SensorServer sensorServer;
 
-  private final ArrayList<Pair<Integer, InetAddress>> children;
+	private final String supervisorServerAddr;
+	private final String dataServerAddr;
 
-  public Sensor(final PacketDispatcher supervisorServer,
-      final PacketDispatcher sensorServer) throws IOException {
-    this.supervisorClient = new SupervisorClient(this);
+	private final ArrayList<Pair<Integer, InetAddress>> children;
 
-    try {
-      this.supervisorClient.registrySensor();
-      System.out.println("id recu " + this.id);
-      this.supervisorServer = new SupervisorSensorServer(this.id);
-      this.supervisorServer
-          .addSupervisorSensorListener(new SupervisorSensorListener() {
-            @Override
-            public void reqDataReceived(CatchArea area, int clock, int quality) {
-              if (conf != null && state.equals(SensorState.UP)) {
+	public Sensor(final PacketDispatcher supervisorServer,
+			final PacketDispatcher sensorServer, String dataServerAddr, String supervisorServerAddr) throws IOException {
+		this.dataServerAddr = dataServerAddr;
+		this.supervisorServerAddr = supervisorServerAddr;
+		this.supervisorClient = new SupervisorClient(this);
 
-              }
-            }
+		try {
+			this.supervisorClient.registrySensor();
+			System.out.println("id recu " + this.id);
+			this.supervisorServer = new SupervisorSensorServer(this.id);
+			this.supervisorServer
+			.addSupervisorSensorListener(new SupervisorSensorListener() {
+				@Override
+				public void reqDataReceived(CatchArea area, int clock, int quality) {
+					if (conf != null && state.equals(SensorState.UP)) {
 
-            @Override
-            public void confReceived(SensorConfiguration conf) {
-              if (conf == null || state.equals(SensorState.PAUSE)
-                  || state.equals(SensorState.PAUSE)) {
-                Sensor.this.conf = conf;
-                System.out.println("New conf received.");
-              }
-            }
+					}
+				}
 
-            @Override
-            public void stateChanged(SensorState state) {
-              if (Sensor.this.conf != null) {
-                Sensor.this.state = state;
-                switch (state) {
-                case DOWN:
-                case PAUSE:
-                  stopSensorServer();
-                  stopSensorClient();
-                  stopDataClient();
-                  break;
-                case UP:
-                  startSensorServer(sensorServer, id);
-                  startSensorClient(conf.getParentId(), id, conf
-                      .getParentAddress());
-                  startDataClient();
-                  break;
-                default:
-                  break;
-                }
-              }
-            }
-          });
+				@Override
+				public void confReceived(SensorConfiguration conf) {
+					if (conf == null || state.equals(SensorState.PAUSE)
+							|| state.equals(SensorState.PAUSE)) {
+						Sensor.this.conf = conf;
+						System.out.println("New conf received.");
+					}
+				}
 
-      supervisorServer.register(this.supervisorServer);
-    } catch (MalformedPacketException e) {
-      e.printStackTrace();
-    } catch (IdAlreadyUsedException e) {
-      e.printStackTrace();
-    }
+				@Override
+				public void stateChanged(SensorState state) {
+					if (Sensor.this.conf != null) {
+						Sensor.this.state = state;
+						switch (state) {
+						case DOWN:
+						case PAUSE:
+							stopSensorServer();
+							stopSensorClient();
+							stopDataClient();
+							break;
+						case UP:
+							startSensorServer(sensorServer, id);
+							startSensorClient(conf.getParentId(), id, conf
+									.getParentAddress());
+							startDataClient();
+							break;
+						default:
+							break;
+						}
+					}
+				}
+			});
 
-    this.children = new ArrayList<Pair<Integer, InetAddress>>();
-  }
+			supervisorServer.register(this.supervisorServer);
+		} catch (MalformedPacketException e) {
+			e.printStackTrace();
+		} catch (IdAlreadyUsedException e) {
+			e.printStackTrace();
+		}
 
-  public void setId(int id) {
-    this.id = id;
-  }
+		this.children = new ArrayList<Pair<Integer, InetAddress>>();
+	}
 
-  public int getId() {
-    return this.id;
-  }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-  public SensorConfiguration getConfiguration() {
-    return this.conf;
-  }
+	public int getId() {
+		return this.id;
+	}
 
-  public SupervisorClient getSupervisorClient() {
-    return this.supervisorClient;
-  }
+	public SensorConfiguration getConfiguration() {
+		return this.conf;
+	}
 
-  private void startSensorServer(PacketDispatcher dispatcher, int id) {
-    this.sensorServer = new SensorServer(id);
-    this.sensorServer.addSensorServerListener(new SensorServerListener() {
-      @Override
-      public void helloRequestReceived(int id, InetAddress address) {
-        children.add(new Pair<Integer, InetAddress>(id, address));
-      }
+	public SupervisorClient getSupervisorClient() {
+		return this.supervisorClient;
+	}
 
-      @Override
-      public void reqDataReceived(CatchArea area, int clock, int quality) {
-        // TODO Auto-generated method stub
+	private void startSensorServer(PacketDispatcher dispatcher, int id) {
+		this.sensorServer = new SensorServer(id);
+		this.sensorServer.addSensorServerListener(new SensorServerListener() {
+			@Override
+			public void helloRequestReceived(int id, InetAddress address) {
+				children.add(new Pair<Integer, InetAddress>(id, address));
+			}
 
-      }
-    });
-    try {
-      dispatcher.register(Sensor.this.sensorServer);
-    } catch (IdAlreadyUsedException e) {
-      e.printStackTrace();
-    }
-  }
+			@Override
+			public void reqDataReceived(CatchArea area, int clock, int quality) {
+				// TODO Auto-generated method stub
 
-  private void startSensorClient(int idD, int idS, InetAddress address) {
-    this.sensorClient = new SensorClient();
-    this.sensorClient.addSensorClientListener(new SensorClientListener() {
-      @Override
-      public void helloReplyReceived() {
-        // do nothing, my father is correctly connected
-      }
+			}
+		});
+		try {
+			dispatcher.register(Sensor.this.sensorServer);
+		} catch (IdAlreadyUsedException e) {
+			e.printStackTrace();
+		}
+	}
 
-      @Override
-      public void repDataReceived(byte[] data) {
-        // TODO Auto-generated method stub
+	private void startSensorClient(int idD, int idS, InetAddress address) {
+		this.sensorClient = new SensorClient();
+		this.sensorClient.addSensorClientListener(new SensorClientListener() {
+			@Override
+			public void helloReplyReceived() {
+				// do nothing, my father is correctly connected
+			}
 
-      }
-    });
-    this.sensorClient.sendHelloRequest(idD, idS, address);
-  }
+			@Override
+			public void repDataReceived(byte[] data) {
+				// TODO Auto-generated method stub
 
-  private void stopSensorServer() {
-    // TODO
-  }
+			}
+		});
+		this.sensorClient.sendHelloRequest(idD, idS, address);
+	}
 
-  private void stopSensorClient() {
-    // TODO
-  }
+	private void stopSensorServer() {
+		// TODO
+	}
 
-  private void startDataClient() {
-    this.dataClient = new DataClient();
-    this.dataClient.addSensorDataListener(new SensorDataListener() {
-      @Override
-      public void dataReceived(byte[] data) {
-        // TODO Auto-generated method stub
+	private void stopSensorClient() {
+		// TODO
+	}
 
-      }
-    });
-  }
+	private void startDataClient() {
+		this.dataClient = new DataClient(this.dataServerAddr);
+		this.dataClient.addSensorDataListener(new SensorDataListener() {
+			@Override
+			public void dataReceived(byte[] data) {
+				// TODO Auto-generated method stub
 
-  private void stopDataClient() {
-    // TODO
-  }
+			}
+		});
+	}
+
+	private void stopDataClient() {
+		// TODO
+	}
 
 }
