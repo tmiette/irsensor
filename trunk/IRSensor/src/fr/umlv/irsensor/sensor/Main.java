@@ -19,8 +19,11 @@ public class Main {
 	public static void main(String[] args) throws IOException, MalformedPacketException {
 		
 		if(args.length < 2){
-			
+			System.out.println("Main <data server ip> <supervisor server ip>");
+			System.exit(1);
 		}
+		final String dataServerIpAddress = args[0];
+		final String supervisorServerIpAddress = args[1];
 		
 		//server part
 		final PacketDispatcher supervisorDispatcher = new PacketDispatcher(IRSensorConfiguration.SERVER_PORT_LOCAL);
@@ -28,7 +31,8 @@ public class Main {
 		final PacketDispatcher sensorDispatcher = new PacketDispatcher(31001);
 		
 		for(int i=0; i<7; i++){
-			final Sensor sensor = new Sensor(supervisorDispatcher, sensorDispatcher);
+			final Sensor sensor = new Sensor(supervisorDispatcher, sensorDispatcher, dataServerIpAddress, 
+					supervisorServerIpAddress);
 		}
 		
 		supervisorDispatcher.startDispatcher();
