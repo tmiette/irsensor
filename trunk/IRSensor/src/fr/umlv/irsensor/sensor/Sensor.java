@@ -55,25 +55,27 @@ public class Sensor {
 
             @Override
             public void stateChanged(SensorState state) {
-              Sensor.this.state = state;
-              switch (state) {
-              case DOWN:
-                // TODO shutdown sensorClient et sensorServer
-                break;
-              case PAUSE:
-                // TODO shutdown sensorClient et sensorServer
-                break;
-              case UP:
-                Sensor.this.sensorServer = new SensorServer(id);
-                Sensor.this.sensorClient = new SensorClient();
-                try {
-                  sensorServer.register(Sensor.this.sensorServer);
-                } catch (IdAlreadyUsedException e) {
-                  e.printStackTrace();
+              if (Sensor.this.conf != null) {
+                Sensor.this.state = state;
+                switch (state) {
+                case DOWN:
+                  // TODO shutdown sensorClient et sensorServer
+                  break;
+                case PAUSE:
+                  // TODO shutdown sensorClient et sensorServer
+                  break;
+                case UP:
+                  Sensor.this.sensorServer = new SensorServer(id);
+                  Sensor.this.sensorClient = new SensorClient(id, conf.getParentAddress());
+                  try {
+                    sensorServer.register(Sensor.this.sensorServer);
+                  } catch (IdAlreadyUsedException e) {
+                    e.printStackTrace();
+                  }
+                  break;
+                default:
+                  break;
                 }
-                break;
-              default:
-                break;
               }
             }
           });
