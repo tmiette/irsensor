@@ -3,7 +3,7 @@ package fr.umlv.irsensor.common.fields;
 
 public enum ErrorCode {
   CONNECT_ERR("00010000"), CONF_ERR("00000001"), STATE_ERR("00000010"), IS_DOWN(
-      "00000011"), CANNOT_REPLY("00000100"), OK("00000000");
+      "00000011"), CANNOT_REPLY("00000100"), OK("00000000"), INVALID_PACKET("00010001");
   private final byte code;
 
   private ErrorCode(String code) {
