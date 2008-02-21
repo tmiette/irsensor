@@ -61,9 +61,9 @@ idD : id of the parent (destination) node.
 5.1.2. Parent answer
 When a sensor node receive a HELLO REQUEST packet on the default port, it adds the source sensor to the list of its childs. These children will be used for the data requests later. The sensor have to reply to its new children with a HELLO REPLY packet setting up the error code to null.
 
-2 bytes    4 bytes     4 bytes 
-									 -------------------------------
-| Opcode | idS   | error code |					 -------------------------------
+2 bytes    4 bytes     4 bytes  4 bytes
+									 -----------------------------------------
+| Opcode | idD   |  idS   |  error code |					 -----------------------------------------
 Figure 5.1.2-1 HELLO REQUEST packet
 
 
