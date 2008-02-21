@@ -25,14 +25,10 @@ public class RepHelloPacket implements SensorPacket {
 
     // Tests if the id is valid and sets it
     index += PacketFields.OPCODE.getLength();
-    int sourceId = packet.getInt(index);
-    if (sourceId < 0) throw new MalformedPacketException("Illegal sourceId");
-
-    // Tests if the id is valid and sets it
-    index += PacketFields.ID.getLength();
     int dId = packet.getInt(index);
     if (dId < 0) throw new MalformedPacketException("Illegal detination id");
-    
+
+    // Tests if the id is valid and sets it
     index += PacketFields.ID.getLength();
     int sId = packet.getInt(index);
     if (sId < 0) throw new MalformedPacketException("Illegal source id");
