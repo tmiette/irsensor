@@ -1,6 +1,7 @@
 package fr.umlv.irsensor.sensor;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
@@ -23,9 +24,8 @@ public class Sensor {
   private SensorState state = SensorState.DOWN;
 
   private final SupervisorClient supervisorClient;
-  private final DataClient dataClient = new DataClient();
-  private SensorClient sensorClient = new SensorClient();
-
+  private DataClient dataClient;
+  private SensorClient sensorClient;
   private SupervisorSensorServer supervisorServer;
   private SensorServer sensorServer;
 
@@ -41,7 +41,9 @@ public class Sensor {
           .addSupervisorSensorListener(new SupervisorSensorListener() {
             @Override
             public void reqDataReceived(CatchArea area, int clock, int quality) {
+              if (conf != null && state.equals(SensorState.UP)) {
 
+              }
             }
 
             @Override
@@ -59,19 +61,15 @@ public class Sensor {
                 Sensor.this.state = state;
                 switch (state) {
                 case DOWN:
-                  // TODO shutdown sensorClient et sensorServer
-                  break;
                 case PAUSE:
-                  // TODO shutdown sensorClient et sensorServer
+                  stopSensorServer();
+                  stopSensorClient();
+                  stopDataClient();
                   break;
                 case UP:
-                  Sensor.this.sensorServer = new SensorServer(id);
-                  Sensor.this.sensorClient = new SensorClient(id, conf.getParentAddress());
-                  try {
-                    sensorServer.register(Sensor.this.sensorServer);
-                  } catch (IdAlreadyUsedException e) {
-                    e.printStackTrace();
-                  }
+                  startSensorServer(sensorServer, id);
+                  startSensorClient(id, conf.getParentAddress());
+                  startDataClient();
                   break;
                 default:
                   break;
@@ -103,4 +101,60 @@ public class Sensor {
   public SupervisorClient getSupervisorClient() {
     return this.supervisorClient;
   }
+
+  private void startSensorServer(PacketDispatcher dispatcher, int id) {
+    this.sensorServer = new SensorServer(id);
+    this.sensorServer.addSensorServerListener(new SensorServerListener() {
+      @Override
+      public void helloRequestReceived(int id, InetAddress address) {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void reqDataReceived(CatchArea area, int clock, int quality) {
+        // TODO Auto-generated method stub
+
+      }
+    });
+    try {
+      dispatcher.register(Sensor.this.sensorServer);
+    } catch (IdAlreadyUsedException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void startSensorClient(int id, InetAddress address) {
+    this.sensorClient = new SensorClient(id, conf.getParentAddress());
+    this.sensorClient.addSensorClientListener(new SensorClientListener() {
+      @Override
+      public void helloReplyReceived() {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void repDataReceived(byte[] data) {
+        // TODO Auto-generated method stub
+
+      }
+    });
+  }
+
+  private void stopSensorServer() {
+    // TODO
+  }
+
+  private void stopSensorClient() {
+    // TODO
+  }
+
+  private void startDataClient() {
+    this.dataClient = new DataClient();
+  }
+
+  private void stopDataClient() {
+    // TODO
+  }
+
 }
