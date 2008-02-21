@@ -9,9 +9,9 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.data.RepDataPacket;
 import fr.umlv.irsensor.sensor.SensorDataListener;

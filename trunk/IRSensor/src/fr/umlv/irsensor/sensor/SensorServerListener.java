@@ -2,7 +2,7 @@ package fr.umlv.irsensor.sensor;
 
 import java.net.InetAddress;
 
-import fr.umlv.irsensor.common.CatchArea;
+import fr.umlv.irsensor.common.fields.CatchArea;
 
 public interface SensorServerListener {
 

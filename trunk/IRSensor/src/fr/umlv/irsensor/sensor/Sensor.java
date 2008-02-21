@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.SensorState;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 import fr.umlv.irsensor.sensor.networkClients.DataClient;

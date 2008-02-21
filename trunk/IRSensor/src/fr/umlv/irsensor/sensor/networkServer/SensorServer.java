@@ -8,11 +8,10 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
-import fr.umlv.irsensor.common.CatchArea;
-import fr.umlv.irsensor.common.DecodeOpCode;
 import fr.umlv.irsensor.common.IRSensorConfiguration;
-import fr.umlv.irsensor.common.OpCode;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.sensor.ReqHelloPacket;
 import fr.umlv.irsensor.sensor.SensorServerListener;

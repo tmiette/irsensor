@@ -8,9 +8,9 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.umlv.irsensor.common.DecodePacket;
 import fr.umlv.irsensor.common.IRSensorConfiguration;
-import fr.umlv.irsensor.common.OpCode;
+import fr.umlv.irsensor.common.fields.OpCode;
+import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.sensor.SensorClientListener;
 

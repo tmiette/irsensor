@@ -1,8 +1,8 @@
 package fr.umlv.irsensor.sensor;
 
-import fr.umlv.irsensor.common.CatchArea;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.SensorState;
+import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.SensorState;
 
 public interface SupervisorSensorListener {
 	
