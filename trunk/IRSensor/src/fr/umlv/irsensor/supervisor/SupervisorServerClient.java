@@ -119,7 +119,7 @@ public class SupervisorServerClient {
 				System.out.println("Received a data request answer");
 				try {
 					RepDataPacket packet = RepDataPacket.getPacket(buffer);
-					
+					fireAnswerDataReceived(packet.getDatas());
 				} catch (MalformedPacketException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -164,7 +164,7 @@ public class SupervisorServerClient {
 		}
 	}
 	
-	protected void fireAnswerDataReceived(Object data) {
+	protected void fireAnswerDataReceived(byte[] data) {
 		for (SupervisorServerClientListener listener : this.listeners) {
 			listener.answerDataReceived(data);
 		}

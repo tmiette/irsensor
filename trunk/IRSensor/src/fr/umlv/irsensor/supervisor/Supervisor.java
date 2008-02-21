@@ -84,8 +84,8 @@ public class Supervisor {
 			}
 
 			@Override
-			public void answerDataReceived(Object data) {
-
+			public void answerDataReceived(byte[] data) {
+				fireAnswerDataReceived(data);
 			}
 		});
 

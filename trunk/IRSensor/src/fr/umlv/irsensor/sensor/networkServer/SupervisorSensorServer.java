@@ -67,6 +67,8 @@ public class SupervisorSensorServer implements PacketRegisterable{
 				System.out.println(e.getMessage());
 				return;
 			}
+			System.out.println("Request data received");
+			
 			fireReqDataReceived(reqDataPacket.getCatchArea(), reqDataPacket.getClock(), reqDataPacket.getQuality());
 			this.isWaitingForAnswer = true;
 			this.channel = channel;

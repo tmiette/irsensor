@@ -9,6 +9,6 @@ public interface SupervisorServerClientListener {
 
   public void sensorStateChanged(SensorNode node, SensorState state);
   
-  public void answerDataReceived(Object data);
+  public void answerDataReceived(byte[] data);
   
 }
