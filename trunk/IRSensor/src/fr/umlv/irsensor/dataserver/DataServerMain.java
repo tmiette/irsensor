@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 import fr.umlv.irsensor.util.IRSensorLogger;
 
-public class Main {
+public class DataServerMain {
 	public static void main(String[] args) {
 		IRSensorLogger.startLogger("data");
 		IRSensorLogger.postMessage(Level.FINE, "Data Server Application is started");

@@ -83,19 +83,26 @@ public class DataServerServer {
 			@Override
 			public void run() {
 				try {
+				  int i = 0;
+				  System.out.println("i'm reading");
 					clientChannel.read(dst);
+					System.out.println("I read"+ i++);
 					dst.flip();
 					// Parse request and retrieve catch area
 					ReqDataPacket packet = ReqDataPacket.getPacket(dst);
 					System.out.println("Received REQDATA from client : "+packet);
 					// Create image area
 					BufferedImage subImage = completeCapturedZone.getSubImage(packet.getCatchArea());
-					
+					System.out.println("I read"+ i++);
 					// Prepare response
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					System.out.println("I read"+ i++);
 					ImageIO.write(subImage, completeCapturedZone.getFileExtension(), bos);
+					System.out.println("I read"+ i++);
 					ByteBuffer sendBuffer = PacketFactory.createRepData(packet.getId(), 12, bos.toByteArray().length, bos.toByteArray());
+					System.out.println("write not done");
 					clientChannel.write(sendBuffer);
+					System.out.println("write done");
 					dst.clear();
 				}
 				catch (MalformedPacketException e){

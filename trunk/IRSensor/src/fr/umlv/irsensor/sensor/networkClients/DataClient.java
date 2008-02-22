@@ -28,6 +28,7 @@ public class DataClient {
   private final List<SensorDataListener> listeners = new ArrayList<SensorDataListener>();
   private final ScheduledExecutorService executor = Executors
       .newSingleThreadScheduledExecutor();
+  private final int INITIAL_DEMAND = 0;
 
   public DataClient(final int id, final CatchArea catchArea, final int quality,
       final int clock, final String serverAddr) {
@@ -39,12 +40,13 @@ public class DataClient {
       throw new AssertionError(uhe.getMessage());
     }
 
-    this.executor.schedule(new Runnable() {
+    this.executor.scheduleWithFixedDelay(new Runnable() {
       @Override
       public void run() {
+        System.out.println("coucou " + id);
         retrieveData(id, catchArea, quality, clock);
       }
-    }, clock, TimeUnit.MILLISECONDS);
+    }, INITIAL_DEMAND, clock, TimeUnit.SECONDS);
   }
 
   public void retrieveData(final int id, CatchArea catchArea,
@@ -58,6 +60,7 @@ public class DataClient {
       // whereas date is the time when it was taken
       channel.write(buffer);
       channel.read(dataServerRepDataBuffer);
+      System.out.println("read dataclient");
       dataServerRepDataBuffer.flip();
       try {
         RepDataPacket packetReceived = RepDataPacket
@@ -65,7 +68,7 @@ public class DataClient {
         byte[] im = packetReceived.getDatas();
 
         firedataReceived(System.currentTimeMillis(), im);
-        // displayImage(im);
+        close();
       } catch (MalformedPacketException e) {
         System.err.println("Malformed packet received from data server "
             + e.getMessage());

@@ -13,8 +13,6 @@ import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
-import sun.rmi.server.Dispatcher;
-
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.CatchArea;
@@ -221,21 +219,32 @@ public class Sensor {
             array[i++] = im;
           }
 
+          byte[] dataToSend = new byte[0];
           if (array.length > 0) {
-            BufferedImage mergedImage = ViewSight.createImageFromSubParts(array);
+            BufferedImage mergedImage = ViewSight
+                .createImageFromSubParts(array);
             ByteArrayOutputStream mergedDatas = new ByteArrayOutputStream();
             try {
-              ImageIO.write(mergedImage, ViewSight.getFileExtension(), mergedDatas);
+              ImageIO.write(mergedImage, ViewSight.getFileExtension(),
+                  mergedDatas);
             } catch (IOException e) {
               // TODO Auto-generated catch block
               e.printStackTrace();
             }
 
-            byte[] dataToSend = mergedDatas.toByteArray();
+            dataToSend = mergedDatas.toByteArray();
+
+          }
+          
+          if (conf.getParentId() == -1) {
+            /* Sink code */
+            // this.supervisorClient.sendRepData(this.conf.getParentAddress(),
+            // this.id);
+            System.out.println("reponse finale");
+          } else {
             sensorClient.sendRepData(conf.getParentAddress(), conf
                 .getParentId(), mimeType, dataToSend.length, dataToSend);
           }
-
         }
       }
     });

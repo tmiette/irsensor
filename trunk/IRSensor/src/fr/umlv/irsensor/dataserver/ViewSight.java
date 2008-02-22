@@ -47,16 +47,22 @@ public class ViewSight {
 	 * @return the sub image
 	 */
 	public BufferedImage getSubImage(CatchArea area){
+	  System.out.println("start sub im");
 		if (area.getP1().getX() + area.getAreaWidth() > image.getWidth() ||
 				area.getP1().getY() + area.getAreaHeight() > image.getHeight()
-		) throw new IllegalArgumentException("Cannot retrieve a sub part of an image if it is larger that the main image file");
+		) System.exit(-1);
+//		  throw new IllegalArgumentException("Cannot retrieve a sub part of an image if it is larger that the main image file");
+		System.out.println("throw");
 		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		for (int j = 0; j < image.getHeight(null); j++) {
+		  System.out.println(j);
 			for (int k = 0; k < image.getWidth(null); k++) {
+			  System.out.println(k);
 				if (k >= area.getP1().getX() && k <= area.getP2().getX() && j >= area.getP1().getY() && j <= area.getP2().getY())
 					im.setRGB(k, j, image.getRGB(k, j));
 			}
 		}
+		System.out.println("this is done !");
 		return im;
 	}
 

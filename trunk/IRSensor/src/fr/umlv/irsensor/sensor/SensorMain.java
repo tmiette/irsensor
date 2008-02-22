@@ -17,7 +17,7 @@ import fr.umlv.irsensor.util.IRSensorLogger;
  * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
  * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  */
-public class Main {
+public class SensorMain {
 	public static void main(String[] args) throws IOException, MalformedPacketException {
 		
 		if(args.length < 2){

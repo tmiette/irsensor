@@ -16,12 +16,12 @@ import fr.umlv.irsensor.util.IRSensorLogger;
  * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
  * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  */
-public class Main {
+public class SupervisorMain {
 	public static void main(String[] args) {
 
 		IRSensorLogger.startLogger("supervisor");
 		IRSensorLogger.postMessage(Level.FINE, "Supervisor Application is started");
-		ByteBuffer bb = ByteBuffer.allocate(100000000);
+		ByteBuffer bb = ByteBuffer.allocate(10000);
 		// schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 		SwingUtilities.invokeLater(new Runnable() {
