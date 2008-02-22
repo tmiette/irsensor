@@ -1,8 +1,14 @@
 
 package fr.umlv.irsensor.dataserver;
 
+import java.util.logging.Level;
+
+import fr.umlv.irsensor.util.IRSensorLogger;
+
 public class Main {
 	public static void main(String[] args) {
+		IRSensorLogger.startLogger("data");
+		IRSensorLogger.postMessage(Level.FINE, "Data Server Application is started");
 		
 		DataServerServer server = new DataServerServer();
 		try  {
