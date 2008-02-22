@@ -1,11 +1,13 @@
 package fr.umlv.irsensor.sensor;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
+import fr.umlv.irsensor.util.IRSensorLogger;
  
 /**
  * Main class for the sensor application -- sensor.jar
@@ -22,6 +24,10 @@ public class Main {
 			System.out.println("Main <data server ip> <supervisor server ip>");
 			System.exit(1);
 		}
+		
+		IRSensorLogger.startLogger("sensor");
+		IRSensorLogger.postMessage(Level.FINE, "Sensor Application is started");
+		
 		final String dataServerIpAddress = args[0];
 		final String supervisorServerIpAddress = args[1];
 		
