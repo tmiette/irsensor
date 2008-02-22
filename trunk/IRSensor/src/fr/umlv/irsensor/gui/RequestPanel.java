@@ -26,12 +26,12 @@ public class RequestPanel {
 		final JLabel areaLabel = new JLabel("Catch area :");
 		final JLabel qualityLabel = new JLabel("Quality :");
 		final JLabel clockLabel = new JLabel("Clock :");
-		final JTextField area1XField = new JTextField();
-		final JTextField area1YField = new JTextField();
-		final JTextField area2XField = new JTextField();
-		final JTextField area2YField = new JTextField();
-		final JTextField qualityField = new JTextField();
-		final JTextField clockField = new JTextField();
+		final JTextField area1XField = new JTextField("15");
+		final JTextField area1YField = new JTextField("15");
+		final JTextField area2XField = new JTextField("15");
+		final JTextField area2YField = new JTextField("15");
+		final JTextField qualityField = new JTextField("15");
+		final JTextField clockField = new JTextField("15");
 		final JButton submit = new JButton("Submit");
 		submit.addActionListener(new ActionListener(){
 
