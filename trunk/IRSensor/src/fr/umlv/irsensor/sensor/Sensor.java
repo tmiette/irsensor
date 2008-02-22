@@ -44,9 +44,11 @@ public class Sensor {
   private final ArrayList<Pair<Integer, InetAddress>> children;
 
   private final ExecutorService executor = Executors.newFixedThreadPool(2);
-
-  private int nbrOfRepData = 0;
   
+  private int clockRequired = -1;
+
+  private final ArrayList<Pair<byte[], Integer>> dataReceived;
+
   private final LinkedList<Pair<Date, byte[]>> capturedData;
   private static final int MAX_DATA_STORABLE = 10;
 
@@ -56,8 +58,8 @@ public class Sensor {
     this.dataServerAddr = dataServerAddr;
     this.supervisorServerAddr = supervisorServerAddr;
     this.supervisorClient = new SupervisorClient(this);
-    
-    this.capturedData = new LinkedList<Pair<Date,byte[]>>();
+
+    this.capturedData = new LinkedList<Pair<Date, byte[]>>();
 
     try {
       this.supervisorClient.registrySensor();
@@ -116,6 +118,7 @@ public class Sensor {
     }
 
     this.children = new ArrayList<Pair<Integer, InetAddress>>();
+    this.dataReceived = new ArrayList<Pair<byte[], Integer>>();
   }
 
   public void setId(int id) {
@@ -147,6 +150,7 @@ public class Sensor {
       @Override
       public void reqDataReceived(CatchArea area, int clock, int quality) {
         System.out.println(Sensor.this.id + " receive a req data");
+        clockRequired = clock;
         if (children.size() > 0) {
           sendReqData(area, clock, quality);
         } else {
@@ -157,15 +161,13 @@ public class Sensor {
 
       @Override
       public void repDataReceived(byte[] data, int mimeType) {
-        nbrOfRepData++;
-        //TODO Store data
-        
-        if (nbrOfRepData == children.size()) {
-          //TODO Get data stored
-          //TODO Get my dataClient
-          //TODO Join all data
-          //TODO Send it
-//          sendRepData(); TODO clock missed
+        dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
+        if (dataReceived.size() == children.size()) {
+          // TODO Get data stored
+          // TODO Get my dataClient
+          // TODO Join all data
+          // TODO Send it
+          // sendRepData(); TODO clock missed
         }
       }
     });
@@ -232,7 +234,7 @@ public class Sensor {
   }
 
   private void sendRepData(int date) {
-    nbrOfRepData = 0;
+    clockRequired = -1;
     System.out.println("Send rep data " + this.id);
     if (this.conf.getParentId() == -1) {
       /* Sink code */
@@ -242,13 +244,13 @@ public class Sensor {
     } else {
       byte[] data = null;
       for (Pair<Date, byte[]> CapData : this.capturedData) {
-        //FIXME
+        // FIXME
         if (CapData.getFirstElement().getMinutes() == date) {
           data = CapData.getSecondElement();
         }
       }
-      //TODO why send len in a repdata packet ?
-      //TODO mimetype
+      // TODO why send len in a repdata packet ?
+      // TODO mimetype
       this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
           .getParentId(), 0, data.length, data);
     }
