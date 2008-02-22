@@ -44,12 +44,12 @@ public class Sensor {
   private final ArrayList<Pair<Integer, InetAddress>> children;
 
   private final ExecutorService executor = Executors.newFixedThreadPool(2);
-  
+
   private int clockRequired = -1;
 
   private final ArrayList<Pair<byte[], Integer>> dataReceived;
 
-  private final LinkedList<Pair<Date, byte[]>> capturedData;
+  private final LinkedList<Pair<byte[], Long>> capturedData;
   private static final int MAX_DATA_STORABLE = 10;
 
   public Sensor(final PacketDispatcher supervisorServer,
@@ -58,8 +58,6 @@ public class Sensor {
     this.dataServerAddr = dataServerAddr;
     this.supervisorServerAddr = supervisorServerAddr;
     this.supervisorClient = new SupervisorClient(this);
-
-    this.capturedData = new LinkedList<Pair<Date, byte[]>>();
 
     try {
       this.supervisorClient.registrySensor();
@@ -118,6 +116,7 @@ public class Sensor {
     }
 
     this.children = new ArrayList<Pair<Integer, InetAddress>>();
+    this.capturedData = new LinkedList<Pair<byte[], Long>>();
     this.dataReceived = new ArrayList<Pair<byte[], Integer>>();
   }
 
@@ -203,13 +202,13 @@ public class Sensor {
         .getQuality(), this.conf.getClock(), this.dataServerAddr);
     this.dataClient.addSensorDataListener(new SensorDataListener() {
       @Override
-      public void dataReceived(Date date, byte[] data) {
+      public void dataReceived(long currentDate, byte[] data) {
         /* Check if place is left in fifo */
         if (capturedData.size() >= MAX_DATA_STORABLE) {
           capturedData.removeLast();
         }
         /* Add captured data to fifo */
-        capturedData.addFirst(new Pair<Date, byte[]>(date, data));
+        capturedData.addFirst(new Pair<byte[], Long>(data, currentDate));
       }
     });
   }

@@ -26,7 +26,9 @@ public class DataClient {
   private SocketChannel channel;
   private ByteBuffer dataServerRepDataBuffer = ByteBuffer.allocate(300000);
   private final List<SensorDataListener> listeners = new ArrayList<SensorDataListener>();
-  private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+  private final ScheduledExecutorService executor = Executors
+      .newSingleThreadScheduledExecutor();
+
   public DataClient(final int id, final CatchArea catchArea, final int quality,
       final int clock, final String serverAddr) {
 
@@ -37,11 +39,11 @@ public class DataClient {
       throw new AssertionError(uhe.getMessage());
     }
 
-    this.executor.schedule(new Runnable(){
-    	@Override
-    	public void run() {
-    		retrieveData(id, catchArea, quality, clock);
-    	}
+    this.executor.schedule(new Runnable() {
+      @Override
+      public void run() {
+        retrieveData(id, catchArea, quality, clock);
+      }
     }, clock, TimeUnit.MILLISECONDS);
   }
 
@@ -61,8 +63,8 @@ public class DataClient {
         RepDataPacket packetReceived = RepDataPacket
             .getPacket(dataServerRepDataBuffer);
         byte[] im = packetReceived.getDatas();
-        Date d = Calendar.getInstance().getTime();
-        firedataReceived(d, im);
+
+        firedataReceived(System.currentTimeMillis(), im);
         // displayImage(im);
       } catch (MalformedPacketException e) {
         System.err.println("Malformed packet received from data server "
@@ -85,7 +87,8 @@ public class DataClient {
 
   public void close() {
     try {
-      if (channel != null) channel.close();
+      if (channel != null)
+        channel.close();
     } catch (IOException e) {
       System.err.println("close()");
       System.exit(1);
@@ -96,9 +99,9 @@ public class DataClient {
     this.listeners.add(listener);
   }
 
-  protected void firedataReceived(Date date, byte[] data) {
+  protected void firedataReceived(long currentDate, byte[] data) {
     for (SensorDataListener l : this.listeners) {
-      l.dataReceived(date, data);
+      l.dataReceived(currentDate, data);
     }
   }
 }
