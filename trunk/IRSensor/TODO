@@ -1,0 +1,18 @@
+#intégration de l'api de julien pour la fusion des données (SensorHandler), 
+d'après Tom il faut juste appeler les méthodes aux bons endroits. --> Tom ou Seb
+
+#gérer l'affichage de la réponse coté supervisor -> Tom
+
+#finir la doc dévelopeur, reste la partie de Julien -> Julien
+
+#mieux gérer les exceptions -> Alan
+
+#régler le bug de logger -> Alan
+
+#argument à passer dans certains programmes, ip address & fichier de conf -> Alan
+
+#autres bugs en tout genre -> Alan
+
+#construction du ant -> Julien (attention, il faut créer 3 jar, voir sujet du projet)
+
+#Lundi 25, tests finaux et déploiement de l'application (création des jar etc).
