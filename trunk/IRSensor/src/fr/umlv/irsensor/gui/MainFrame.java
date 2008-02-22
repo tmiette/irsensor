@@ -114,7 +114,7 @@ public class MainFrame {
 
   private void createTabbedPane() {
     final JScrollPane scroll = new JScrollPane(new SupervisorTable(
-        new SupervisorTableModel(this.supervisor)).getJTable());
+        new SupervisorTableModel(this.supervisor)).getMainPanel());
     scroll.setBorder(BorderFactory.createTitledBorder("Sensors :"));
     RequestModel model = new RequestModel(this.supervisor);
     this.mainContainer.addTab("Sensors", scroll);

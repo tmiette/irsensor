@@ -67,6 +67,15 @@ public class SupervisorTableModel extends AbstractTableModel {
     return this.supervisor.getSensorNodes().size();
   }
 
+  public void buildNetworkConfiguration() {
+    executor.submit(new Runnable() {
+      @Override
+      public void run() {
+        supervisor.buildNetworkConfiguration();
+      }
+    });
+  }
+
   @Override
   public Object getValueAt(int rowIndex, int columnIndex) {
     SensorNode sensor = this.supervisor.getSensorNodes().get(rowIndex);
