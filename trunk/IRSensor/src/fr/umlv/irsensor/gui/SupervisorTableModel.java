@@ -94,6 +94,7 @@ public class SupervisorTableModel extends AbstractTableModel {
           }
           supervisor.setState(min, SensorState.UP);
           lastIdBooted = min;
+          
           if (min == -1) {
             break;
           }
