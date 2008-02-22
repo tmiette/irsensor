@@ -13,14 +13,14 @@ import fr.umlv.irsensor.common.fields.CatchArea;
 public class ViewSight {
 
 	private BufferedImage image;
-	private String fileExtension = null;
+	private static String fileExtension = null;
 
 	public ViewSight(String file) {
 		try {
 			final File resource = new File(file);
 			int dot = -1;
 			if ((dot = file.lastIndexOf(".")) != -1){
-				this.fileExtension = file.substring(dot + 1);
+				fileExtension = file.substring(dot + 1);
 			}
 			this.image = ImageIO.read(resource);	
 		}
@@ -34,7 +34,7 @@ public class ViewSight {
 	 * Retrieves the file extension that describes the data hold by the data server
 	 * @return the file extension
 	 */
-	public String getFileExtension(){
+	public static String getFileExtension(){
 		if (fileExtension == null)
 			throw new IllegalStateException("Could not retrieve file extension in filename");
 		return fileExtension;
@@ -102,22 +102,38 @@ public class ViewSight {
 	 * @param images a list of buffered images representing a sub part of the main image
 	 * @return the new reconstituted image
 	 */
-	public BufferedImage createImageFromSubParts(BufferedImage... images){
-		if (images.length == 0) throw new IllegalArgumentException("No image given");
-		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		for (int i = 0; i < images.length; i++) {
-			BufferedImage image = images[i];
-			for (int j = 0; j < image.getHeight(null); j++) {
-				for (int k = 0; k < image.getWidth(null); k++) {
-					int rgb = image.getRGB(k, j);
-					if (rgb != 0)
-						im.setRGB(k, j, rgb);
-				}
-			}
-		}
-		return im;
-	}
+//	public BufferedImage createImageFromSubParts(BufferedImage... images){
+//		if (images.length == 0) throw new IllegalArgumentException("No image given");
+//		BufferedImage im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+//		for (int i = 0; i < images.length; i++) {
+//			BufferedImage image = images[i];
+//			for (int j = 0; j < image.getHeight(null); j++) {
+//				for (int k = 0; k < image.getWidth(null); k++) {
+//					int rgb = image.getRGB(k, j);
+//					if (rgb != 0)
+//						im.setRGB(k, j, rgb);
+//				}
+//			}
+//		}
+//		return im;
+//	}
 
+	
+	 public static BufferedImage createImageFromSubParts(BufferedImage... images){
+	    if (images.length == 0) throw new IllegalArgumentException("No image given");
+	    BufferedImage im = new BufferedImage(images[0].getWidth(), images[0].getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+	    for (int i = 0; i < images.length; i++) {
+	      BufferedImage image = images[i];
+	      for (int j = 0; j < image.getHeight(null); j++) {
+	        for (int k = 0; k < image.getWidth(null); k++) {
+	          int rgb = image.getRGB(k, j);
+	          if (rgb != 0)
+	            im.setRGB(k, j, rgb);
+	        }
+	      }
+	    }
+	    return im;
+	  }
 
 }
 

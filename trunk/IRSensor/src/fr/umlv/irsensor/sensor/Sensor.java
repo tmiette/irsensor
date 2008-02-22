@@ -1,20 +1,23 @@
 package fr.umlv.irsensor.sensor;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+
+import javax.imageio.ImageIO;
 
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.SensorState;
+import fr.umlv.irsensor.dataserver.ViewSight;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 import fr.umlv.irsensor.sensor.networkClients.DataClient;
@@ -22,6 +25,7 @@ import fr.umlv.irsensor.sensor.networkClients.SensorClient;
 import fr.umlv.irsensor.sensor.networkClients.SupervisorClient;
 import fr.umlv.irsensor.sensor.networkServer.SensorServer;
 import fr.umlv.irsensor.sensor.networkServer.SupervisorSensorServer;
+import fr.umlv.irsensor.util.IRSensorLogger;
 import fr.umlv.irsensor.util.Pair;
 
 public class Sensor {
@@ -160,13 +164,64 @@ public class Sensor {
 
       @Override
       public void repDataReceived(byte[] data, int mimeType) {
+        IRSensorLogger.postMessage(Level.INFO, "repDataReceived");
         dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
+
         if (dataReceived.size() == children.size()) {
-          // TODO Get data stored
-          // TODO Get my dataClient
-          // TODO Join all data
-          // TODO Send it
-          // sendRepData(); TODO clock missed
+          // Get data stored
+          byte[] dt = null;
+          long time = System.currentTimeMillis() - clockRequired;
+
+          for (Pair<byte[], Long> CapData : capturedData) {
+            if (CapData.getSecondElement() <= time) {
+              IRSensorLogger.postMessage(Level.INFO, "time found " + time);
+              dt = CapData.getFirstElement();
+              break;
+            }
+          }
+
+          ArrayList<BufferedImage> imagesToMerge = new ArrayList<BufferedImage>();
+          if (dt == null) {
+            // Date not found
+            IRSensorLogger.postMessage(Level.WARNING, "time found " + time);
+            // TODO
+          } else {
+            BufferedImage myImage = null;
+            try {
+              myImage = ImageIO.read(new ByteArrayInputStream(dt));
+            } catch (IOException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+            if (myImage != null) {
+              imagesToMerge.add(myImage);
+            }
+          }
+
+          for (Pair<byte[], Integer> pair : dataReceived) {
+            BufferedImage sonImage = null;
+            try {
+              sonImage = ImageIO.read(new ByteArrayInputStream(pair
+                  .getFirstElement()));
+              imagesToMerge.add(sonImage);
+            } catch (IOException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+
+          }
+
+          BufferedImage result = ViewSight
+              .createImageFromSubParts((BufferedImage[]) imagesToMerge
+                  .toArray());
+          ByteArrayOutputStream bos = new ByteArrayOutputStream();
+          try {
+            ImageIO.write(result, ViewSight.getFileExtension(), bos);
+          } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          sendRepData(clockRequired);
         }
       }
     });
@@ -242,13 +297,14 @@ public class Sensor {
       System.out.println("reponse finale");
     } else {
       byte[] data = null;
-      for (Pair<Date, byte[]> CapData : this.capturedData) {
-        // FIXME
-        if (CapData.getFirstElement().getMinutes() == date) {
-          data = CapData.getSecondElement();
+      long time = System.currentTimeMillis() - date;
+
+      for (Pair<byte[], Long> CapData : capturedData) {
+        if (CapData.getSecondElement() <= time) {
+          data = CapData.getFirstElement();
+          break;
         }
       }
-      // TODO why send len in a repdata packet ?
       // TODO mimetype
       this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
           .getParentId(), 0, data.length, data);
