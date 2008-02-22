@@ -2,9 +2,11 @@ package fr.umlv.irsensor.common;
 
 import fr.umlv.irsensor.common.fields.CatchArea;
 
-public interface DataServerHandler<T> {
+public interface DataServerHandler {
 	
-	public T getSubData(CatchArea area);
+	public Object getSubData(CatchArea area);
 	
-	public T reduceData(T data);
+	public byte[] dataToByteArray(Object data, String name);
+	
+	public Object reduceData(Object data);
 }

@@ -1,14 +1,16 @@
 package fr.umlv.irsensor.common;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLConnection;
 
 import javax.imageio.ImageIO;
 
 import fr.umlv.irsensor.common.fields.CatchArea;
 
-public class ImageDataHandler implements DataServerHandler<BufferedImage>  {
+public class ImageDataHandler implements DataServerHandler  {
 
 	private BufferedImage image;
 	private String imageExtension;
@@ -43,7 +45,7 @@ public class ImageDataHandler implements DataServerHandler<BufferedImage>  {
 	}
 
 	@Override
-	public BufferedImage reduceData(BufferedImage data) {
+	public BufferedImage reduceData(Object data) {
 		final int height = image.getHeight();
 		final int width = image.getWidth();
 		int minX1 = width, minY1 = height;
@@ -71,5 +73,19 @@ public class ImageDataHandler implements DataServerHandler<BufferedImage>  {
 			}
 		}
 		return im;
+	}
+
+	@Override
+	public byte[] dataToByteArray(Object data, String name) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			BufferedImage imData = (BufferedImage)data;
+			ImageIO.write(imData, URLConnection.guessContentTypeFromName(name), bos);
+		}
+		catch(IOException e){
+			System.err.println("Cannot get bytes from data");
+			return new byte[0];
+		}
+		return bos.toByteArray();
 	}
 }
