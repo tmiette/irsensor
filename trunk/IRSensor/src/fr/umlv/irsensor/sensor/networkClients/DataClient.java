@@ -1,7 +1,5 @@
 package fr.umlv.irsensor.sensor.networkClients;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -12,8 +10,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.swing.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
@@ -27,7 +26,7 @@ public class DataClient {
   private SocketChannel channel;
   private ByteBuffer dataServerRepDataBuffer = ByteBuffer.allocate(300000);
   private final List<SensorDataListener> listeners = new ArrayList<SensorDataListener>();
-
+  private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
   public DataClient(final int id, final CatchArea catchArea, final int quality,
       final int clock, final String serverAddr) {
 
@@ -38,11 +37,12 @@ public class DataClient {
       throw new AssertionError(uhe.getMessage());
     }
 
-    new Timer(clock, new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        retrieveData(id, catchArea, quality, clock);
-      }
-    }).start();
+    this.executor.schedule(new Runnable(){
+    	@Override
+    	public void run() {
+    		retrieveData(id, catchArea, quality, clock);
+    	}
+    }, clock, TimeUnit.MILLISECONDS);
   }
 
   public void retrieveData(final int id, CatchArea catchArea,
