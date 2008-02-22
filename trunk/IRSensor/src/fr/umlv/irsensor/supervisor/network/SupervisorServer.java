@@ -101,11 +101,6 @@ public class SupervisorServer {
 					}
 				}
 				fireRegistrationTerminated();
-				try {
-					shutdown();
-				} catch (IOException e) {
-					System.err.println("IO error : "+e.getMessage());
-				}
 			}
 		}).start();
 	}
@@ -114,8 +109,17 @@ public class SupervisorServer {
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
+				ByteBuffer data = ByteBuffer.allocate(10);
 				for (;;) {
-					
+					SocketChannel client = null;
+					try{
+						client = SupervisorServer.this.servChannel.accept();
+						
+						
+					}
+					catch(IOException e){
+						
+					}
 				}
 			}
 		});
