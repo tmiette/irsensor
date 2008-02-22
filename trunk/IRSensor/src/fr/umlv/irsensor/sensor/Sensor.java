@@ -308,8 +308,10 @@ public class Sensor {
         }
       }
       // TODO mimetype
-      this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
-          .getParentId(), 0, data.length, data);
+      if (data != null) {
+        this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
+            .getParentId(), 0, data.length, data);
+      }
     }
   }
 
