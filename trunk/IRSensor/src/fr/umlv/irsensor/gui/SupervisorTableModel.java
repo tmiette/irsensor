@@ -1,7 +1,6 @@
 package fr.umlv.irsensor.gui;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -74,26 +73,28 @@ public class SupervisorTableModel extends AbstractTableModel {
       @Override
       public void run() {
         List<SensorNode> list = supervisor.getSensorNodes();
-        ArrayList<Integer> booted = new ArrayList<Integer>();
+        int lastIdBooted = -1;
 
         // connect the root sensor
         for (SensorNode node : list) {
           if (node.getParentId() == -1) {
             supervisor.setState(node.getId(), SensorState.UP);
-            booted.add(node.getId());
+            lastIdBooted = node.getId();
           }
         }
 
         // connect all others sensors
         for (;;) {
+          int min = -1;
           for (SensorNode node : list) {
-            if (booted.get(node.getId()) == null
-                && booted.get(node.getParentId()) != null) {
-              supervisor.setState(node.getId(), SensorState.UP);
-              booted.add(node.getId());
+            if (node.getId() > lastIdBooted
+                && (node.getId() < min || min == -1)) {
+              min = node.getId();
             }
           }
-          if(booted.size() == list.size()){
+          supervisor.setState(min, SensorState.UP);
+          lastIdBooted = min;
+          if (min == -1) {
             break;
           }
         }

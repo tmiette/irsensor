@@ -13,6 +13,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -105,10 +106,10 @@ public class SupervisorTable {
         model.buildNetworkConfiguration();
       }
     });
-    buttonPanel.add(buttonPanel);
+    buttonPanel.add(buildButton);
 
     this.mainPanel = new JPanel(new BorderLayout());
-    this.mainPanel.add(table, BorderLayout.CENTER);
+    this.mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
     this.mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
   }
