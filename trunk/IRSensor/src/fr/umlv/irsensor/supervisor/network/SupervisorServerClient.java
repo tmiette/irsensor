@@ -129,23 +129,6 @@ public class SupervisorServerClient {
 					IRSensorConfiguration.SERVER_PORT_LOCAL));
 
 			socketClient.write(PacketFactory.createReqData(node.getId(), cArea, quality, clock));
-			
-			//wait for the answer
-			final ByteBuffer buffer = ByteBuffer.allocate(64);
-			socketClient.read(buffer);
-			buffer.flip();
-			
-			if (DecodePacket.getOpCode(buffer) == OpCode.REPDATA) {
-				System.out.println("Received a data request answer");
-				try {
-					RepDataPacket packet = RepDataPacket.getPacket(buffer);
-					fireAnswerDataReceived(packet.getDatas());
-				} catch (MalformedPacketException e) {
-					System.err.println("Invalid packet for Supervisor Server "+e.getMessage());
-				}
-			} else {
-				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
-			}
 		} catch (IOException e) {
 			System.err.println("IO error "+e.getMessage());
 		}
@@ -186,11 +169,4 @@ public class SupervisorServerClient {
 			listener.sensorStateChanged(node, state);
 		}
 	}
-	
-	protected void fireAnswerDataReceived(byte[] data) {
-		for (SupervisorServerClientListener listener : this.listeners) {
-			listener.answerDataReceived(data);
-		}
-	}
-
 }

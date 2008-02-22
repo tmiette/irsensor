@@ -77,6 +77,11 @@ public class Supervisor {
 			
 			@Override
 			public void ErrorCodeReceived(ErrorCode code) {}
+
+			@Override
+			public void answerDataReceived(byte[] data) {
+				fireAnswerDataReceived(data);
+			}
 		});
 		
 		//listen to the client part
@@ -92,11 +97,6 @@ public class Supervisor {
 			public void sensorStateChanged(SensorNode node, SensorState state) {
 				node.setState(state);
 				fireSensorStateChanged(node);
-			}
-
-			@Override
-			public void answerDataReceived(byte[] data) {
-				fireAnswerDataReceived(data);
 			}
 		});
 

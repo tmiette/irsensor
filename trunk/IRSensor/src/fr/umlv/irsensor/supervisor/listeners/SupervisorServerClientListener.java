@@ -30,12 +30,4 @@ public interface SupervisorServerClientListener {
 	 * @param state
 	 */
 	public void sensorStateChanged(SensorNode node, SensorState state);
-	
-	/**
-	 * Send a notification when the answer of a request is incoming
-	 * 
-	 * @param data
-	 */
-	public void answerDataReceived(byte[] data);
-
 }

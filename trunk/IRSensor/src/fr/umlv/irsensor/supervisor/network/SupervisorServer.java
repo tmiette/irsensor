@@ -1,5 +1,6 @@
 package fr.umlv.irsensor.supervisor.network;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -12,10 +13,13 @@ import java.util.List;
 import java.util.logging.Level;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
+import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.ErrorCode;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
+import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorServerClientListener;
 import fr.umlv.irsensor.supervisor.listeners.SupervisorServerListener;
 import fr.umlv.irsensor.util.IRSensorLogger;
 
@@ -36,6 +40,8 @@ public class SupervisorServer {
 	private final List<SupervisorServerListener> listeners = new ArrayList<SupervisorServerListener>();
 
 	private ServerSocketChannel servChannel;
+	
+	private static final int DATA_BUFFER = 1000000; //1 mo
 
 	public SupervisorServer() {
 		try {
@@ -109,16 +115,31 @@ public class SupervisorServer {
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
-				ByteBuffer data = ByteBuffer.allocate(10);
+				ByteBuffer data = ByteBuffer.allocate(DATA_BUFFER);
 				for (;;) {
 					SocketChannel client = null;
 					try{
 						client = SupervisorServer.this.servChannel.accept();
+						client.read(data);
+						data.flip();
 						
-						
+						if(DecodePacket.getOpCode(data) == OpCode.REPDATA){
+							try {
+								RepDataPacket packet = RepDataPacket.getPacket(data);
+								fireAnswerDataReceived(packet.getDatas());
+							} catch (MalformedPacketException e) {
+								System.err.println("Invalid packet for Supervisor Server "+e.getMessage());
+							}
+						}
+						else{
+							client.write(PacketFactory.createAck(-1, ErrorCode.INVALID_PACKET));
+						}
 					}
 					catch(IOException e){
 						
+					}
+					finally{
+						close(client);
 					}
 				}
 			}
@@ -167,6 +188,12 @@ public class SupervisorServer {
 	protected void fireRegistrationTerminated() {
 		for (SupervisorServerListener l : this.listeners) {
 			l.registrationTerminated();
+		}
+	}
+	
+	protected void fireAnswerDataReceived(byte[] data) {
+		for (SupervisorServerListener listener : this.listeners) {
+			listener.answerDataReceived(data);
 		}
 	}
 }

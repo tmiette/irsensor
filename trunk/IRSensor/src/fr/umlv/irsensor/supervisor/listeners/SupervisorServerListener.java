@@ -34,4 +34,11 @@ public interface SupervisorServerListener {
 	 * Send a notification when all the SensorNode have been registered
 	 */
 	public void registrationTerminated();
+	
+	/**
+	 * Send a notification when the answer of a request is incoming
+	 * 
+	 * @param data
+	 */
+	public void answerDataReceived(byte[] data);
 }
