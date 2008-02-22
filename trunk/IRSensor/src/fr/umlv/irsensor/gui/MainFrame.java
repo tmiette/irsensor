@@ -19,9 +19,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 
-import fr.umlv.irsensor.supervisor.ConfigurationBuilder;
 import fr.umlv.irsensor.supervisor.Supervisor;
-import fr.umlv.irsensor.supervisor.exception.ParsingConfigurationException;
+import fr.umlv.irsensor.supervisor.configuration.ConfigurationBuilder;
+import fr.umlv.irsensor.supervisor.configuration.exception.ParsingConfigurationException;
 
 public class MainFrame {
 

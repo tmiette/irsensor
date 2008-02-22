@@ -7,7 +7,7 @@ import java.util.List;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
-import fr.umlv.irsensor.supervisor.SupervisorListener;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorListener;
 
 public class RequestModel {
 	

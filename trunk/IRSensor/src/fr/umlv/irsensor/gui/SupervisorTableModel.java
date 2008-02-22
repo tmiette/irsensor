@@ -12,7 +12,7 @@ import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.SensorState;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.Supervisor;
-import fr.umlv.irsensor.supervisor.SupervisorListener;
+import fr.umlv.irsensor.supervisor.listeners.SupervisorListener;
 
 public class SupervisorTableModel extends AbstractTableModel {
 
