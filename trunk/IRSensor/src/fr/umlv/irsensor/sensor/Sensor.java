@@ -13,6 +13,8 @@ import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
+import sun.rmi.server.Dispatcher;
+
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.CatchArea;
@@ -95,7 +97,7 @@ public class Sensor {
                 switch (state) {
                 case DOWN:
                 case PAUSE:
-                  stopSensorServer();
+                  stopSensorServer(sensorServer);
                   stopSensorClient();
                   stopDataClient();
                   break;
@@ -244,8 +246,8 @@ public class Sensor {
     this.sensorClient.sendHelloRequest(idD, idS, address);
   }
 
-  private void stopSensorServer() {
-    // TODO
+  private void stopSensorServer(PacketDispatcher dispatcher) {
+    dispatcher.unregister(id);
   }
 
   private void stopSensorClient() {
