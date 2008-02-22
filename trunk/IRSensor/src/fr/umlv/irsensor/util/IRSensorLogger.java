@@ -35,6 +35,10 @@ public class IRSensorLogger {
 		}
 	}
 	
+	public static void postMessage(Level level, String msg, Throwable t){
+		logger.log(level, msg);
+	}
+	
 	public static void postMessage(Level level, String msg){
 		logger.log(level, msg);
 	}
