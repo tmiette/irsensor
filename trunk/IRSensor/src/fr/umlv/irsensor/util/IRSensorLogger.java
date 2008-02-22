@@ -22,13 +22,11 @@ public class IRSensorLogger {
 	
 	private static final String loggerName = "irSensorLogger";
 	
-	private static final String loggerFileName = "IRSensor.log";
-	
 	private static final Logger logger = Logger.getLogger(loggerName);
 
-	public static void startLogger() {
+	public static void startLogger(String filename) {
 		try {
-			final FileHandler file = new FileHandler("log/"+loggerFileName, true);
+			final FileHandler file = new FileHandler("log/"+filename, true);
 			logger.addHandler(file);
 			logger.setLevel(Level.ALL);
 			file.setFormatter(new SimpleFormatter());
