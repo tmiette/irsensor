@@ -104,10 +104,21 @@ public class SupervisorServer {
 				try {
 					shutdown();
 				} catch (IOException e) {
-					System.err.println("IO erro : "+e.getMessage());
+					System.err.println("IO error : "+e.getMessage());
 				}
 			}
 		}).start();
+	}
+	
+	public void listenRepData(){
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				for (;;) {
+					
+				}
+			}
+		});
 	}
 
 	

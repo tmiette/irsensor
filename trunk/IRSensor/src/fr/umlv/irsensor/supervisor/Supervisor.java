@@ -166,6 +166,7 @@ public class Supervisor {
 				}
 			}
 		}
+		IRSensorLogger.postMessage(Level.FINE, "A data request has been sent");
 		this.client.dataRequest(this.rootNode, cArea, clock, quality); 
 	}
 
