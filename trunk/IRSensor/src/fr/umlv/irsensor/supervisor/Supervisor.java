@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.fields.CatchArea;
@@ -16,6 +17,7 @@ import fr.umlv.irsensor.supervisor.listeners.SupervisorServerClientListener;
 import fr.umlv.irsensor.supervisor.listeners.SupervisorServerListener;
 import fr.umlv.irsensor.supervisor.network.SupervisorServer;
 import fr.umlv.irsensor.supervisor.network.SupervisorServerClient;
+import fr.umlv.irsensor.util.IRSensorLogger;
 import fr.umlv.irsensor.util.Pair;
 
 /**
@@ -65,10 +67,12 @@ public class Supervisor {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been registered");
 				for (Pair<Integer, SensorConfiguration> pair : sensorConfs) {
 					setConf(Supervisor.this.sensors.get(pair.getFirstElement()), pair.getSecondElement());
-				}	
+				}
+				
+				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been configured");
 			}
 			
 			@Override

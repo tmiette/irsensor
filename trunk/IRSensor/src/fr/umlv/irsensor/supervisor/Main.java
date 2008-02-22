@@ -1,8 +1,11 @@
 package fr.umlv.irsensor.supervisor;
 
+import java.util.logging.Level;
+
 import javax.swing.SwingUtilities;
 
 import fr.umlv.irsensor.gui.MainFrame;
+import fr.umlv.irsensor.util.IRSensorLogger;
 
 /**
  * Main class for the supervisor server application -- supervisor.jar
@@ -13,16 +16,18 @@ import fr.umlv.irsensor.gui.MainFrame;
  * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  */
 public class Main {
-  public static void main(String[] args) {
+	public static void main(String[] args) {
 
-    // schedule a job for the event dispatch thread:
-    // creating and showing this application's GUI.
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        new MainFrame().launch();
-      }
-    });
-
-  }
+		IRSensorLogger.startLogger("supervisor");
+		IRSensorLogger.postMessage(Level.FINE, "Supervisor Application is started");
+		
+		// schedule a job for the event dispatch thread:
+		// creating and showing this application's GUI.
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new MainFrame().launch();
+			}
+		});
+	}
 
 }

@@ -9,6 +9,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.fields.ErrorCode;
@@ -16,6 +17,7 @@ import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.supervisor.listeners.SupervisorServerListener;
+import fr.umlv.irsensor.util.IRSensorLogger;
 
 /**
  * Define the server part of the <code>Supervisor</code>	 
@@ -39,6 +41,7 @@ public class SupervisorServer {
 		try {
 			this.servChannel = ServerSocketChannel.open();
 			servChannel.socket().bind(new InetSocketAddress(serverPort));
+			IRSensorLogger.postMessage(Level.FINE, "Supervisor Server is listening on "+serverPort);
 		} catch (IOException e) {
 			System.err.println("IO Error : "+e.getMessage());
 			System.exit(1); //the application cannot continue
