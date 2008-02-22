@@ -12,7 +12,7 @@ import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.sensor.RepDataPacket;
 import fr.umlv.irsensor.common.packets.sensor.ReqHelloPacket;
-import fr.umlv.irsensor.common.packets.supervisor.ReqDataPacket;
+import fr.umlv.irsensor.common.packets.sensor.ReqDataPacket;
 import fr.umlv.irsensor.sensor.SensorServerListener;
 import fr.umlv.irsensor.sensor.dispatcher.PacketRegisterable;
 
