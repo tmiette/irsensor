@@ -27,14 +27,17 @@ public class PacketDispatcher {
 	private final HashMap<Integer, PacketRegisterable> packetRegisterables = new HashMap<Integer, PacketRegisterable>(); 
 	
 	private boolean isRunning;
+	
+	private String name;
 	/**
 	 * A constructor with the server socket port
 	 * The socket is bound on the local host
 	 * 
 	 * @param port
 	 */
-	public PacketDispatcher(int port) {
+	public PacketDispatcher(int port, String name) {
 		this.socketPort = port;
+		this.name = name;
 	}
 	
 	public void startDispatcher(){
@@ -64,7 +67,8 @@ public class PacketDispatcher {
 								final PacketRegisterable p = packetRegisterables.get(DecodePacket.getId(buffer));
 								
 								if(p != null){
-									final ByteBuffer packet = buffer;
+									System.out.println(name+" : Receive a packet for "+p.getId()+" "+DecodePacket.getOpCode(buffer));
+									final ByteBuffer packet = buffer.duplicate();
 									p.setPacket(packet, client);
 								}
 								buffer.clear();
@@ -89,6 +93,7 @@ public class PacketDispatcher {
 	public void register(PacketRegisterable packetRegisterable) throws IdAlreadyUsedException {
 		if(!this.isRunning){
 			if(this.packetRegisterables.containsKey(packetRegisterable.getId())) throw new IdAlreadyUsedException();
+			System.out.println("Want to be registered "+packetRegisterable.getId());
 			this.packetRegisterables.put(packetRegisterable.getId(), packetRegisterable);
 		}
 	}
