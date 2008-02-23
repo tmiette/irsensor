@@ -167,8 +167,7 @@ public class Sensor {
         IRSensorLogger.postMessage(Level.INFO, "repDataReceived");
         dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
 
-        // FIXME exemple d'affichage des données recu par 2 (deux fois
-        // normallement)
+        // FIXME exemple d'affichage des données recu des deux fils de 2
         if (id == 2) {
           final JFrame frame = new JFrame("Default title");
           frame.setSize(new Dimension(800, 600));
@@ -177,7 +176,7 @@ public class Sensor {
           frame.setVisible(true);
         }
 
-        if (dataReceived.size() == children.size() + 1) {
+        if (dataReceived.size() == children.size()) {
 
           // Get data stored
           byte[] dt = null;
@@ -243,6 +242,7 @@ public class Sensor {
 
           }
 
+          // EXEMPLE d'affichage du merge des deux fils de 2
           /*
            * if (id == 2) { final JFrame frame = new JFrame("Default title");
            * frame.setSize(new Dimension(800, 600));
