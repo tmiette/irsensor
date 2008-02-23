@@ -1,4 +1,4 @@
-package fr.umlv.irsensor.common;
+package fr.umlv.irsensor.common.data.handler;
 
 public interface SensorHandler {
 

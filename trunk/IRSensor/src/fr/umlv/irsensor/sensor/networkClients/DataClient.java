@@ -7,8 +7,6 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.CatchArea;
+import fr.umlv.irsensor.common.fields.ErrorCode;
+import fr.umlv.irsensor.common.fields.OpCode;
+import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.data.RepDataPacket;
 import fr.umlv.irsensor.sensor.SensorDataListener;
@@ -43,7 +44,6 @@ public class DataClient {
     this.executor.scheduleWithFixedDelay(new Runnable() {
       @Override
       public void run() {
-        System.out.println("coucou " + id);
         retrieveData(id, catchArea, quality, clock);
       }
     }, INITIAL_DEMAND, clock, TimeUnit.SECONDS);
@@ -56,18 +56,31 @@ public class DataClient {
       channel.connect(serverAddr);
       ByteBuffer buffer = PacketFactory.createReqData(id, catchArea, quality,
           clock);
-      // TODO beware clock is different from date, clock is the capture interval
-      // whereas date is the time when it was taken
       channel.write(buffer);
       channel.read(dataServerRepDataBuffer);
-      System.out.println("read dataclient");
       dataServerRepDataBuffer.flip();
       try {
-        RepDataPacket packetReceived = RepDataPacket
-            .getPacket(dataServerRepDataBuffer);
-        byte[] im = packetReceived.getDatas();
 
-        firedataReceived(System.currentTimeMillis(), im);
+        OpCode code = DecodePacket.getOpCode(dataServerRepDataBuffer);
+
+        switch (code) {
+        case ACK:
+          System.err.println(ErrorCode.getErrorMessage(DecodePacket
+              .getErrorCode(dataServerRepDataBuffer)));
+          break;
+        case REPDATA:
+          System.out.println("data correctly received");
+          RepDataPacket packetReceived = RepDataPacket
+              .getPacket(dataServerRepDataBuffer);
+          byte[] im = packetReceived.getDatas();
+
+          firedataReceived(System.currentTimeMillis(), packetReceived
+              .getMimetype(), im);
+          break;
+        default:
+          break;
+        }
+
         close();
       } catch (MalformedPacketException e) {
         System.err.println("Malformed packet received from data server "
@@ -78,15 +91,6 @@ public class DataClient {
       close();
     }
   }
-
-  // private void displayImage(byte[] zone){
-  // JFrame frame = new JFrame();
-  // frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-  // frame.setSize(600,600);
-  // final ImageIcon imageIcon = new ImageIcon(zone);
-  // frame.getContentPane().add(new JLabel(imageIcon));
-  // frame.setVisible(true);
-  // }
 
   public void close() {
     try {
@@ -102,9 +106,9 @@ public class DataClient {
     this.listeners.add(listener);
   }
 
-  protected void firedataReceived(long currentDate, byte[] data) {
+  protected void firedataReceived(long currentDate, int mimeType, byte[] data) {
     for (SensorDataListener l : this.listeners) {
-      l.dataReceived(currentDate, data);
+      l.dataReceived(currentDate, mimeType, data);
     }
   }
 }

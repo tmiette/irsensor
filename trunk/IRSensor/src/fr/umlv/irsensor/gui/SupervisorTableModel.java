@@ -92,12 +92,14 @@ public class SupervisorTableModel extends AbstractTableModel {
               min = node.getId();
             }
           }
-          supervisor.setState(min, SensorState.UP);
-          lastIdBooted = min;
-          
+
           if (min == -1) {
             break;
           }
+
+          supervisor.setState(min, SensorState.UP);
+          lastIdBooted = min;
+
         }
 
       }

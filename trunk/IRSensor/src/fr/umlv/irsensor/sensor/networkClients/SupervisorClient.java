@@ -52,7 +52,7 @@ public class SupervisorClient {
 		channel.write(PacketFactory.createAck(id, ErrorCode.OK));
 	}
 
-	public void sendRepData(InetAddress address, int id) {
+	public void sendRepData(int id) {
 		SocketChannel socketClient = null;
 		try {
 			socketClient = SocketChannel.open();

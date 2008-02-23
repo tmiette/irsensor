@@ -1,12 +1,15 @@
-package fr.umlv.irsensor.common;
+package fr.umlv.irsensor.common.data.handler;
 
+import fr.umlv.irsensor.common.data.MimeTypes;
 import fr.umlv.irsensor.common.fields.CatchArea;
 
 public interface DataServerHandler {
 	
 	public Object getSubData(CatchArea area);
 	
-	public byte[] dataToByteArray(Object data, String name);
+	public byte[] dataToByteArray(Object data);
 	
 	public Object reduceData(Object data);
+	
+	public MimeTypes getMimeType();
 }

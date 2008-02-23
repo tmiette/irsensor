@@ -1,8 +1,6 @@
 package fr.umlv.irsensor.sensor;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -11,13 +9,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import fr.umlv.irsensor.common.SensorConfiguration;
+import fr.umlv.irsensor.common.data.MimeTypes;
+import fr.umlv.irsensor.common.data.MimetypeException;
+import fr.umlv.irsensor.common.data.handler.SensorHandlers;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.SensorState;
-import fr.umlv.irsensor.dataserver.ViewSight;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 import fr.umlv.irsensor.sensor.networkClients.DataClient;
@@ -42,7 +44,6 @@ public class Sensor {
   private SupervisorSensorServer supervisorServer;
   private SensorServer sensorServer;
 
-  private final String supervisorServerAddr;
   private final String dataServerAddr;
 
   private final ArrayList<Pair<Integer, InetAddress>> children;
@@ -60,7 +61,6 @@ public class Sensor {
       final PacketDispatcher sensorServer, String dataServerAddr,
       String supervisorServerAddr) throws IOException {
     this.dataServerAddr = dataServerAddr;
-    this.supervisorServerAddr = supervisorServerAddr;
     this.supervisorClient = new SupervisorClient(this);
 
     try {
@@ -166,8 +166,18 @@ public class Sensor {
       public void repDataReceived(byte[] data, int mimeType) {
         IRSensorLogger.postMessage(Level.INFO, "repDataReceived");
         dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
-        System.out.println("j'ai recu mes fils " + dataReceived.size());
-        if (dataReceived.size() == children.size()) {
+
+        // FIXME exemple d'affichage des données recu par 2 (deux fois
+        // normallement)
+        if (id == 2) {
+          final JFrame frame = new JFrame("Default title");
+          frame.setSize(new Dimension(800, 600));
+          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          frame.setContentPane(new JLabel(new ImageIcon(data)));
+          frame.setVisible(true);
+        }
+
+        if (dataReceived.size() == children.size() + 1) {
 
           // Get data stored
           byte[] dt = null;
@@ -175,72 +185,75 @@ public class Sensor {
 
           for (Pair<byte[], Long> CapData : capturedData) {
             if (CapData.getSecondElement() <= time) {
-              IRSensorLogger.postMessage(Level.INFO, "time found " + time);
               dt = CapData.getFirstElement();
               break;
             }
           }
 
-          ArrayList<BufferedImage> imagesToMerge = new ArrayList<BufferedImage>();
+          ArrayList<Object> dataToMerge = new ArrayList<Object>();
           if (dt == null) {
-            // Date not found
+            // Date not found, do nothing
             IRSensorLogger.postMessage(Level.WARNING, "time not found " + time);
-            // TODO
           } else {
-            BufferedImage myImage = null;
+            Object myData = null;
             try {
-              myImage = ImageIO.read(new ByteArrayInputStream(dt));
-            } catch (IOException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+              myData = SensorHandlers.byteArrayToData(dt, MimeTypes
+                  .getMimeType(mimeType));
+            } catch (MimetypeException e) {
+              // do nothing
             }
-            if (myImage != null) {
-              imagesToMerge.add(myImage);
+            if (myData != null) {
+              dataToMerge.add(myData);
             }
           }
 
           for (Pair<byte[], Integer> pair : dataReceived) {
-            BufferedImage sonImage = null;
+            Object sonData = null;
             try {
-              sonImage = ImageIO.read(new ByteArrayInputStream(pair
-                  .getFirstElement()));
-              System.out.println(sonImage);
-              if (sonImage != null) imagesToMerge.add(sonImage);
-            } catch (IOException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+              sonData = SensorHandlers.byteArrayToData(pair.getFirstElement(),
+                  MimeTypes.getMimeType(mimeType));
+              if (sonData != null) {
+                dataToMerge.add(sonData);
+              }
+            } catch (MimetypeException e) {
+              // do nothing
             }
 
           }
 
-          BufferedImage[] array = new BufferedImage[imagesToMerge.size()];
+          Object[] array = new Object[dataToMerge.size()];
           int i = 0;
-          for (BufferedImage im : imagesToMerge) {
+          for (Object im : dataToMerge) {
             array[i++] = im;
           }
 
           byte[] dataToSend = new byte[0];
           if (array.length > 0) {
-            BufferedImage mergedImage = ViewSight
-                .createImageFromSubParts(array);
-            ByteArrayOutputStream mergedDatas = new ByteArrayOutputStream();
             try {
-              ImageIO.write(mergedImage, ViewSight.getFileExtension(),
-                  mergedDatas);
-            } catch (IOException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+              MimeTypes mime = MimeTypes.getMimeType(mimeType);
+              Object mergedImage = SensorHandlers.mergeData(mime,
+                  (Object[]) array);
+              if (mergedImage != null) {
+                dataToSend = SensorHandlers.dataToByteArray(mergedImage, mime,
+                    "./src/images/code_sm.png");
+              }
+            } catch (MimetypeException e) {
+              // do noting
             }
 
-            dataToSend = mergedDatas.toByteArray();
-
           }
-          
+
+          /*
+           * if (id == 2) { final JFrame frame = new JFrame("Default title");
+           * frame.setSize(new Dimension(800, 600));
+           * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+           * frame.setContentPane(new JLabel(new ImageIcon(dataToSend)));
+           * frame.setVisible(true); }
+           */
+
           if (conf.getParentId() == -1) {
             /* Sink code */
-            // this.supervisorClient.sendRepData(this.conf.getParentAddress(),
-            // this.id);
-            System.out.println("reponse finale");
+            supervisorClient.sendRepData(id);
           } else {
             sensorClient.sendRepData(conf.getParentAddress(), conf
                 .getParentId(), mimeType, dataToSend.length, dataToSend);
@@ -280,13 +293,14 @@ public class Sensor {
         .getQuality(), this.conf.getClock(), this.dataServerAddr);
     this.dataClient.addSensorDataListener(new SensorDataListener() {
       @Override
-      public void dataReceived(long currentDate, byte[] data) {
+      public void dataReceived(long currentDate, int mimeType, byte[] data) {
         /* Check if place is left in fifo */
         if (capturedData.size() >= MAX_DATA_STORABLE) {
           capturedData.removeLast();
         }
         /* Add captured data to fifo */
         capturedData.addFirst(new Pair<byte[], Long>(data, currentDate));
+
       }
     });
   }
@@ -315,9 +329,7 @@ public class Sensor {
     System.out.println("Send rep data " + this.id);
     if (this.conf.getParentId() == -1) {
       /* Sink code */
-      // this.supervisorClient.sendRepData(this.conf.getParentAddress(),
-      // this.id);
-      System.out.println("reponse finale");
+      supervisorClient.sendRepData(id);
     } else {
       byte[] data = null;
       long time = System.currentTimeMillis() - date;
@@ -328,7 +340,7 @@ public class Sensor {
           break;
         }
       }
-      // TODO mimetype
+
       data = new byte[10];
       if (data != null) {
         this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
