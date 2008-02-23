@@ -15,6 +15,9 @@ public class ReqConPacket
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();
 
+    if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE)) { throw new MalformedPacketException(
+        "Packet too short"); }
+
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());

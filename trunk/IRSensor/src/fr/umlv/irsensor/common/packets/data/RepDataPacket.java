@@ -11,9 +11,9 @@ public class RepDataPacket
 
   private final OpCode opCode = OpCode.REPDATA;
   private final int id;
-  private final byte[] datas;
-  private int dataLen;
   private int mimetype;
+  private int dataLen;
+  private final byte[] datas;
 
   public RepDataPacket(int id, int mimeType, int dataLen, byte[] datas) {
     this.id = id;
@@ -37,6 +37,10 @@ public class RepDataPacket
     ByteBuffer packet = bb.duplicate();
     int index = 0;
 
+    if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.MIMETYPE, PacketFields.LENGHT)) { throw new MalformedPacketException(
+        "Packet too short"); }
+
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());
@@ -54,7 +58,8 @@ public class RepDataPacket
     // Tests if the state is valid and sets it
     // TODO : test erroné
     if (packet.capacity() <= PacketFields.getLength(PacketFields.OPCODE,
-        PacketFields.ID)) { throw new MalformedPacketException(
+        PacketFields.ID, PacketFields.MIMETYPE, PacketFields.LENGHT)
+        + datalen) { throw new MalformedPacketException(
         "No datas were found in REPDATA"); }
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.MIMETYPE, PacketFields.LENGHT));

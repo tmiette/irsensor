@@ -25,7 +25,11 @@ public class AckPacket
 
     if (packet == null) throw new IllegalArgumentException("Illegal packet");
     int index = 0;
-
+    
+    if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID, PacketFields.ERROR_CODE)) {
+      throw new MalformedPacketException("Packet too short");
+    }
+    
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());

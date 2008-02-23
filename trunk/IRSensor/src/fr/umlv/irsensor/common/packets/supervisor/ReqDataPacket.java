@@ -75,11 +75,10 @@ public class ReqDataPacket
     ByteBuffer packet = bb.duplicate();
     int index = 0;
 
-    int reqDataPacketLenght = PacketFields.getLength(PacketFields.OPCODE,
+    if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.QUALITY,
-        PacketFields.CLOCK);
-    if (bb.capacity() < reqDataPacketLenght)
-      throw new MalformedPacketException("ReqDataPacket too short");
+        PacketFields.CLOCK)) { throw new MalformedPacketException(
+        "Packet too short"); }
 
     // Tests if it's a valid OpCode
     final byte[] code = new byte[OpCode.getOpCodeByteSize()];

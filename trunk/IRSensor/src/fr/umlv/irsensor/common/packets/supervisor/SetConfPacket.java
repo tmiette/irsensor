@@ -109,6 +109,12 @@ public class SetConfPacket
     ByteBuffer packet = bb.duplicate();
     int index = 0;
 
+    if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
+        PacketFields.AUTONOMY, PacketFields.QUALITY, PacketFields.PAYLOAD,
+        PacketFields.IP, PacketFields.ID)) { throw new MalformedPacketException(
+        "Packet too short"); }
+
     // Tests if it's a valid OpCode
     final byte[] code = new byte[OpCode.getOpCodeByteSize()];
     packet.get(code, 0, OpCode.getOpCodeByteSize());
@@ -130,12 +136,12 @@ public class SetConfPacket
     int payload = getPayload(packet);
 
     InetAddress parent = getParent(packet);
-    
+
     int parentId = getParentId(packet);
 
     // return new SetConfPacket(id);
-    return new SetConfPacket(id, ca, clock, autonomy, quality, payload,
-        parent, parentId);
+    return new SetConfPacket(id, ca, clock, autonomy, quality, payload, parent,
+        parentId);
   }
 
   /**
@@ -143,9 +149,10 @@ public class SetConfPacket
    * 
    * @param packet packet to read.
    * @return InetAddress parent address.
-   * @throws MalformedPacketException 
+   * @throws MalformedPacketException
    */
-  private static InetAddress getParent(ByteBuffer packet) throws MalformedPacketException {
+  private static InetAddress getParent(ByteBuffer packet)
+      throws MalformedPacketException {
     byte[] parent = new byte[PacketFields.IP.getLength()];
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
@@ -167,8 +174,9 @@ public class SetConfPacket
   private static int getParentId(ByteBuffer packet) {
     packet.position(PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.CATCH_AREA, PacketFields.CLOCK,
-        PacketFields.AUTONOMY, PacketFields.PAYLOAD, PacketFields.QUALITY, PacketFields.IP));
-    
+        PacketFields.AUTONOMY, PacketFields.PAYLOAD, PacketFields.QUALITY,
+        PacketFields.IP));
+
     return packet.getInt();
   }
 
@@ -262,6 +270,5 @@ public class SetConfPacket
   public int getQuality() {
     return quality;
   }
-  
- 
+
 }

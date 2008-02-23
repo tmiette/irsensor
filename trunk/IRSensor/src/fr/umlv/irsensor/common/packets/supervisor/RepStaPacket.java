@@ -23,6 +23,10 @@ public class RepStaPacket
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();
     int index = 0;
+    
+    if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
+        PacketFields.ID, PacketFields.STATE)) { throw new MalformedPacketException(
+        "Packet too short"); }
 
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
