@@ -32,9 +32,9 @@ public class SensorMain {
 		final String supervisorServerIpAddress = args[1];
 		
 		//server part
-		final PacketDispatcher supervisorDispatcher = new PacketDispatcher(IRSensorConfiguration.SERVER_PORT_LOCAL);
+		final PacketDispatcher supervisorDispatcher = new PacketDispatcher(IRSensorConfiguration.SERVER_PORT_LOCAL, "Supervisor Dispatcher");
 		
-		final PacketDispatcher sensorDispatcher = new PacketDispatcher(31001);
+		final PacketDispatcher sensorDispatcher = new PacketDispatcher(31001, "Sensor Dispatcher");
 		
 		for(int i=0; i<7; i++){
 			final Sensor sensor = new Sensor(supervisorDispatcher, sensorDispatcher, dataServerIpAddress, 
