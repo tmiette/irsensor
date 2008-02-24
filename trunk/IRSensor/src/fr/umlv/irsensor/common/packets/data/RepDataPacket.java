@@ -5,7 +5,14 @@ import java.nio.ByteBuffer;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
-
+/**
+ * This class represents a REPDATA packet.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class RepDataPacket
     implements DataPacket {
 
@@ -75,10 +82,18 @@ public class RepDataPacket
     return this.id;
   }
 
+  /**
+   * 
+   * @return data length.
+   */
   public int getDataLenght() {
     return this.dataLen;
   }
 
+  /**
+   * 
+   * @return the mimetype.
+   */
   public int getMimetype() {
     return mimetype;
   }
@@ -88,6 +103,10 @@ public class RepDataPacket
     return this.opCode;
   }
 
+  /**
+   * 
+   * @return the datas.
+   */
   public byte[] getDatas() {
     return datas;
   }
