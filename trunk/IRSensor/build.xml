@@ -51,7 +51,7 @@
 				<exclude name="**/gui/**" />
 			</fileset>
 			<manifest>
-			 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/supervisor/SensorMain" />
+			 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/sensor/SensorMain" />
 			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
 			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
 			 </manifest>
@@ -69,7 +69,7 @@
 				<exclude name="**/gui/**" />
 			</fileset>
 			<manifest>
-			 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/supervisor/DataServerMain" />
+			 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/dataserver/DataServerMain" />
 			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
 			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
 			</manifest>
