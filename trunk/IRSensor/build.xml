@@ -10,7 +10,7 @@
 	<property name="project-name" value="MiniCompiler" />
 	<property name="src" value="${basedir}/src" />
 	<property name="mainpackagesrc" value="${src}/fr/umlv/irsensor" />
-	<property name="mainpackageclass" value="${src}/fr/umlv/irsensor" />
+	<property name="mainpackageclass" value="${classes}/fr/umlv/irsensor" />
 	<property name="classes" value="${basedir}/classes" />
 	<property name="classpath" value="${classes}" />
 	<property name="javadocDirectory" value="${basedir}/doc" />
