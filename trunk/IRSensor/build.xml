@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<project name="IRSensor" default="all">
+    <description>
+            Multimedia network sensors simulator.
+    </description>
+
+
+	<property name="authors" value="Miette Tom; Mouret Sebastien; Moreau Alan ; Pons Julien" />
+	<property name="version" value="1.0"/>
+	<property name="project-name" value="MiniCompiler" />
+	<property name="src" value="${basedir}/src" />
+	<property name="mainpackagesrc" value="${src}/fr/umlv/irsensor" />
+	<property name="mainpackageclass" value="${src}/fr/umlv/irsensor" />
+	<property name="classes" value="${basedir}/classes" />
+	<property name="classpath" value="${classes}" />
+	<property name="javadocDirectory" value="${basedir}/doc" />
+	
+	<target name="init" >
+		<echo>Building project...</echo>
+	</target>
+	
+	<target name="compile" depends="init">
+		<echo>Compiling sources...</echo>
+		<mkdir dir="${classes}"/>
+		<javac classpath="./src/fr/umlv/irsensor/" srcdir="${src}" destdir="${classes}" />
+	</target>
+	
+	<target name="jar" depends="compile">
+		<jar destfile="supervisor.jar" >
+			<fileset dir="${mainpackageclass}/supervisor"></fileset>
+			<fileset dir="${mainpackageclass}/common"></fileset>
+			<fileset dir="${mainpackageclass}/util"></fileset>
+			<fileset dir="${mainpackageclass}/gui"></fileset>
+			<fileset dir="${mainpackagesrc}/common"></fileset>
+			<fileset dir="${mainpackagesrc}/util"></fileset>
+			<fileset dir="${mainpackagesrc}/supervisor"></fileset>
+			<fileset dir="${mainpackagesrc}/gui"></fileset>
+			<manifest>
+			 		<attribute name="MAIN-CLASS" value="SupervisorMain" />
+			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
+			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
+			 </manifest>
+		</jar>
+		<jar destfile="dataserver.jar" >
+			<fileset dir="${mainpackageclass}/dataserver"></fileset>
+			<fileset dir="${mainpackageclass}/common"></fileset>
+			<fileset dir="${mainpackageclass}/util"></fileset>
+			<fileset dir="${mainpackagesrc}/dataserver"></fileset>
+			<fileset dir="${mainpackagesrc}/common"></fileset>
+			<fileset dir="${mainpackagesrc}/util"></fileset>
+			<manifest>
+			 		<attribute name="MAIN-CLASS" value="DataServerMain" />
+			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
+			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
+			 </manifest>
+		</jar>
+		<jar destfile="sensor.jar" >
+			<fileset dir="${mainpackageclass}/common"></fileset>
+			<fileset dir="${mainpackageclass}/util"></fileset>
+			<fileset dir="${mainpackageclass}/sensor"></fileset>
+			<fileset dir="${mainpackagesrc}/common"></fileset>
+			<fileset dir="${mainpackagesrc}/util"></fileset>
+			<fileset dir="${mainpackagesrc}/sensor"></fileset>
+			<manifest>
+			 		<attribute name="MAIN-CLASS" value="SensorMain" />
+			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
+			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
+			 </manifest>
+		</jar>
+	</target>
+	
+	<target name="all" depends="javadoc" description="Building MiniCompiler ...">
+	</target>
+	
+	
+	<target name="javadoc" depends="jar">
+		<echo>Generating javadoc in ${javadocDirectory} ...</echo>
+		<mkdir dir="${javadocDirectory}" description="Generates javadoc"/>
+		<javadoc classpath="." sourcepath="${src}" destdir="${javadocDirectory}"></javadoc>
+	</target>
+	
+	<target name="clean" description="Cleans project">
+		<echo>Cleaning files...</echo>
+		<delete dir="${javadocDirectory}" includeemptydirs="true" verbose="false"/>		
+		<delete dir="${classes}" includeemptydirs="true" verbose="false"/>
+		<delete file="supervisor.jar" verbose="false"/>
+		<delete file="dataserver.jar" verbose="false"/>
+		<delete file="sensor.jar" verbose="false"/>
+	</target>
+
+</project>
