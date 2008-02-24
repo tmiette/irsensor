@@ -9,8 +9,6 @@
 	<property name="version" value="1.0"/>
 	<property name="project-name" value="MiniCompiler" />
 	<property name="src" value="${basedir}/src" />
-	<property name="mainpackagesrc" value="${src}/fr/umlv/irsensor" />
-	<property name="mainpackageclass" value="${classes}/fr/umlv/irsensor" />
 	<property name="classes" value="${basedir}/classes" />
 	<property name="classpath" value="${classes}" />
 	<property name="javadocDirectory" value="${basedir}/doc" />
@@ -26,46 +24,55 @@
 	</target>
 	
 	<target name="jar" depends="compile">
-		<jar destfile="supervisor.jar" >
-			<fileset dir="${mainpackageclass}/supervisor"></fileset>
-			<fileset dir="${mainpackageclass}/common"></fileset>
-			<fileset dir="${mainpackageclass}/util"></fileset>
-			<fileset dir="${mainpackageclass}/gui"></fileset>
-			<fileset dir="${mainpackagesrc}/common"></fileset>
-			<fileset dir="${mainpackagesrc}/util"></fileset>
-			<fileset dir="${mainpackagesrc}/supervisor"></fileset>
-			<fileset dir="${mainpackagesrc}/gui"></fileset>
+		<jar destfile="supervisor.jar" defaultexcludes="true">
+		<fileset dir="${src}">
+			<exclude name="**/sensor/**" />
+			<exclude name="**/dataserver/**" />
+		</fileset>
+		<fileset dir="${classes}">
+					<exclude name="**/sensor/**" />
+					<exclude name="**/dataserver/**" />
+		</fileset>
+		<manifest>
+		 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/supervisor/SupervisorMain" />
+		 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
+		 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
+		 </manifest>
+		</jar>
+		<jar destfile="sensor.jar" defaultexcludes="true">
+			<fileset dir="${src}">
+				<exclude name="**/supervisor/**" />
+				<exclude name="**/dataserver/**" />
+				<exclude name="**/gui/**" />
+			</fileset>
+			<fileset dir="${classes}">
+				<exclude name="**/supervisor/**" />
+				<exclude name="**/dataserver/**" />
+				<exclude name="**/gui/**" />
+			</fileset>
 			<manifest>
-			 		<attribute name="MAIN-CLASS" value="SupervisorMain" />
+			 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/supervisor/SensorMain" />
 			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
 			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
 			 </manifest>
 		</jar>
-		<jar destfile="dataserver.jar" >
-			<fileset dir="${mainpackageclass}/dataserver"></fileset>
-			<fileset dir="${mainpackageclass}/common"></fileset>
-			<fileset dir="${mainpackageclass}/util"></fileset>
-			<fileset dir="${mainpackagesrc}/dataserver"></fileset>
-			<fileset dir="${mainpackagesrc}/common"></fileset>
-			<fileset dir="${mainpackagesrc}/util"></fileset>
+			 			
+		<jar destfile="dataserver.jar" defaultexcludes="true">
+			<fileset dir="${src}">
+				<exclude name="**/supervisor/**" />
+				<exclude name="**/sensor/**" />
+				<exclude name="**/gui/**" />
+			</fileset>
+			<fileset dir="${classes}">
+				<exclude name="**/supervisor/**" />
+				<exclude name="**/sensor/**" />
+				<exclude name="**/gui/**" />
+			</fileset>
 			<manifest>
-			 		<attribute name="MAIN-CLASS" value="DataServerMain" />
+			 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/supervisor/DataServerMain" />
 			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
 			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
-			 </manifest>
-		</jar>
-		<jar destfile="sensor.jar" >
-			<fileset dir="${mainpackageclass}/common"></fileset>
-			<fileset dir="${mainpackageclass}/util"></fileset>
-			<fileset dir="${mainpackageclass}/sensor"></fileset>
-			<fileset dir="${mainpackagesrc}/common"></fileset>
-			<fileset dir="${mainpackagesrc}/util"></fileset>
-			<fileset dir="${mainpackagesrc}/sensor"></fileset>
-			<manifest>
-			 		<attribute name="MAIN-CLASS" value="SensorMain" />
-			 		<attribute name="IMPLEMENTATION_VERSION" value="${version}"/>
-			 		<attribute name="IMPLEMENTATION_VENDOR" value="${authors}"/>
-			 </manifest>
+			</manifest>
 		</jar>
 	</target>
 	
