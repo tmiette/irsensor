@@ -1,7 +1,14 @@
 package fr.umlv.irsensor.common.fields;
 
 import java.nio.ByteBuffer;
-
+/**
+ * This enumeration represents the supervisor protocol lead packet.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public enum SupervisorProtocolOpCode {
 
   REQCON("00000000") {
@@ -44,14 +51,27 @@ public enum SupervisorProtocolOpCode {
     this.code = Byte.parseByte(code, 2);
   }
 
+  /**
+   * 
+   * @return byte corresponding to {@link OpCode}.
+   */
   public Byte getCode() {
     return this.code;
   }
 
+  /**
+   * 
+   * @return {@link OpCode} size.
+   */
   public static int getOpCodeByteSize() {
     return 1;
   }
 
+  /**
+   * Transcode a given bytebuffer to a {@link SupervisorProtocolOpCode}.
+   * @param bb bytebuffer to transcode.
+   * @return {@link SupervisorProtocolOpCode} corresponding.
+   */
   public static SupervisorProtocolOpCode getOpcode(ByteBuffer bb) {
     byte opcod = bb.get(0);
     for (SupervisorProtocolOpCode opcode : SupervisorProtocolOpCode.values()) {
@@ -60,6 +80,11 @@ public enum SupervisorProtocolOpCode {
     return null;
   }
 
+  /**
+   * Tests if the given byte array is a valid {@link SensorProtocolOpCode}.
+   * @param opcode to test.
+   * @return {@link SensorProtocolOpCode} corresponding.
+   */
   public boolean equals(byte[] opcode) {
     boolean flag = false;
     for (int i = 0; i < SupervisorProtocolOpCode.getOpCodeByteSize(); i++) {

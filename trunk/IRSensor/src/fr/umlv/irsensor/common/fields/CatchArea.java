@@ -1,5 +1,14 @@
 package fr.umlv.irsensor.common.fields;
 
+/**
+ * This class represents a data area that a sensor can capture. This area is an
+ * abstract of an oblong and it is composed of two points.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class CatchArea {
 
   private final Point p1;
@@ -15,20 +24,32 @@ public class CatchArea {
     this(new Point(x1, y1), new Point(x2, y2));
   }
 
+  /**
+   * @return the first point.
+   */
   public Point getP1() {
     return this.p1;
   }
 
+  /**
+   * @return the second point.
+   */
   public Point getP2() {
     return this.p2;
   }
 
-  public int getAreaWidth(){
-	  return p2.x - p1.x;
+  /**
+   * @return the area width.
+   */
+  public int getAreaWidth() {
+    return p2.x - p1.x;
   }
 
-  public int getAreaHeight(){
-	  return p2.y - p1.y;
+  /**
+   * @return the area height.
+   */
+  public int getAreaHeight() {
+    return p2.y - p1.y;
   }
 
   @Override

@@ -2,6 +2,15 @@ package fr.umlv.irsensor.common.fields;
 
 import java.nio.ByteBuffer;
 
+/**
+ * this enumeration associates a byte value to an Opcode. An {@link OpCode}
+ * specify a packet type.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public enum OpCode {
 
   REQCON("00000000") {
@@ -53,14 +62,27 @@ public enum OpCode {
     this.code = Byte.parseByte(code, 2);
   }
 
+  /**
+   * 
+   * @return byte {@link OpCode} value.
+   */
   public Byte getCode() {
     return this.code;
   }
 
+  /**
+   * 
+   * @return {@link OpCode} size.
+   */
   public static int getOpCodeByteSize() {
     return 1;
   }
 
+  /**
+   * Transcodes a bytebuffer to a {@link OpCode}.
+   * @param bb bytebuffer to transcode.
+   * @return {@link OpCode} corresponding.
+   */
   public static OpCode getOpcode(ByteBuffer bb) {
     byte opcod = bb.get(0);
     for (OpCode opcode : OpCode.values()) {
@@ -69,6 +91,11 @@ public enum OpCode {
     return null;
   }
 
+  /**
+   * Tests if a byte array is a valid {@link OpCode}.
+   * @param opcode byte array to test.
+   * @return if the opcode is a valid {@link OpCode}.
+   */
   public boolean equals(byte[] opcode) {
     boolean flag = false;
     for (int i = 0; i < OpCode.getOpCodeByteSize(); i++) {

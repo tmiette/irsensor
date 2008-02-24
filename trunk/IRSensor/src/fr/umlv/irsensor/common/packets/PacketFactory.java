@@ -257,6 +257,13 @@ public class PacketFactory {
     return buffer;
   }
 
+  /**
+   * Returns a bytebuffer corresponding to a REPHELLO packet.
+   * 
+   * @param sourceId sensor source.
+   * @param destId destination sensor.
+   * @return REPHELLO packet.
+   */
   public static ByteBuffer createRepHello(int sourceId, int destId) {
     int bufSize = PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID,
         PacketFields.ID);
@@ -270,6 +277,14 @@ public class PacketFactory {
     return buffer;
   }
 
+  /**
+   * Returns a bytebuffer corresponding to a REQHELLO packet.
+   * 
+   * @param sourceId sensor source.
+   * @param destId destination sensor.
+   * @param code {@link ErrorCode} to set.
+   * @return REQHELLO packet.
+   */
   public static ByteBuffer createReqHello(int sourceId, int destId,
       ErrorCode code) {
     int bufSize = PacketFields.getLength(PacketFields.OPCODE, PacketFields.ID,
