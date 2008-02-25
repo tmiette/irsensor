@@ -7,8 +7,8 @@
 								THE DATA PROTOCOL
                    
 1. Purpose
-    The Data Protocol is used in multimedia sensors network. It enables to provide
-datas for abstract sensors. This protocol is unnecessary in a real sensors network.
+    The Data Protocol is used in multimedia sensors network. It provides
+datas for abstract sensors. This protocol isn't necessary in a real sensors network.
 
 2. Overview of the Protocol
     To use an abstract sensors network, we need a server simulator. Indeed, sensors
@@ -22,11 +22,11 @@ The server transmits the right data corresponding to the given parameters.
 
 3. Relation to other Protocols
     This protocol works over TCP. Indeed, it needs to use reliable data deliveries. TCP provides
-a such feature. This protocol does not need real time features that UDP offers.
+a such feature. This protocol does not need real time features that UDP might offer.
 
 4. Initial
     The connection is initiated by a sensor which wants to retrieve the datas that it has to
-transmit. It sends a request to obtain the datas and the server answers it by giving it the datas 
+transmit. It sends a request to obtain the datas and the server answers to it by giving the datas 
 the sensor was expecting.
 The Data Protocol uses the port number 31002 to communicate with sensors.
 
@@ -40,7 +40,7 @@ The Data Protocol uses the port number 31002 to communicate with sensors.
         2       reply to request (REPDATA)
         3       error packet (ACK)
    
-As mentionned, a request for data is sent by sensors to get information according to
+As mentionned above, a request for data is sent by sensors to get information according to
 the given parameters :
 
                   2 bytes     4 bytes         8 bytes       4 bytes
@@ -53,7 +53,7 @@ the given parameters :
 - Catch Area : the catch area of the data
 - Quality : the quality of the data catched
 
-After that, the server can answer or send an error packet. The packet which contains
+Once the REQDATA has been sent, the server can reply either by sending the requested data or either send an error packet. The packet which contains
 the request response is described below :
 
 			   2 bytes     4 bytes      4 bytes       4 bytes     n bytes
