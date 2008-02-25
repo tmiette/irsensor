@@ -74,7 +74,6 @@ public class DataClient {
           RepDataPacket packetReceived = RepDataPacket
               .getPacket(dataServerRepDataBuffer);
           byte[] im = packetReceived.getDatas();
-
           firedataReceived(System.currentTimeMillis(), packetReceived
               .getMimetype(), im);
           break;
