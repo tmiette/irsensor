@@ -4,8 +4,10 @@ package fr.umlv.irsensor.util;
  * 
  * This class associates two elements.
  * 
- * @author MIETTE Tom
- * @author MOURET Sebastien
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
  * 
  * @param <E1>
  *            first element.
