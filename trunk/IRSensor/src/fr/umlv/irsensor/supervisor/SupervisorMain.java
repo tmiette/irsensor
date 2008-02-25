@@ -1,6 +1,5 @@
 package fr.umlv.irsensor.supervisor;
 
-import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
@@ -20,7 +19,6 @@ public class SupervisorMain {
 	public static void main(String[] args) {
 
 		IRSensorLogger.postMessage(Level.FINE, "Supervisor Application is started");
-		ByteBuffer bb = ByteBuffer.allocate(10000);
 		// schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 		SwingUtilities.invokeLater(new Runnable() {
@@ -28,13 +26,6 @@ public class SupervisorMain {
 				new MainFrame().launch();
 			}
 		});
-		try {
-			Thread.sleep(10000);
-			bb = null;
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

@@ -43,6 +43,7 @@ public class RepDataPacket
       throws MalformedPacketException {
     if (bb == null) throw new IllegalArgumentException("Empty REPDATA packet");
     ByteBuffer packet = bb.duplicate();
+    packet.clear();
     int index = 0;
 
     if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,

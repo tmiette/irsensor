@@ -20,23 +20,23 @@ import fr.umlv.irsensor.util.IRSensorLogger;
 public class SensorMain {
 	public static void main(String[] args) throws IOException, MalformedPacketException {
 		
-		if(args.length < 2){
-			System.out.println("Main <data server ip> <supervisor server ip>");
+		if(args.length < 3){
+			System.out.println("Main <sensors> <data server ip> <supervisor server ip>");
 			System.exit(1);
 		}
 		
 		IRSensorLogger.startLogger("sensor");
 		IRSensorLogger.postMessage(Level.FINE, "Sensor Application is started");
 		
-		final String dataServerIpAddress = args[0];
-		final String supervisorServerIpAddress = args[1];
+		final String dataServerIpAddress = args[1];
+		final String supervisorServerIpAddress = args[2];
 		
 		//server part
 		final PacketDispatcher supervisorDispatcher = new PacketDispatcher(IRSensorConfiguration.SERVER_PORT_LOCAL, "Supervisor Dispatcher");
 		
 		final PacketDispatcher sensorDispatcher = new PacketDispatcher(31001, "Sensor Dispatcher");
 		
-		for(int i=0; i<7; i++){
+		for(int i=0; i<Integer.parseInt(args[0]); i++){
 			final Sensor sensor = new Sensor(supervisorDispatcher, sensorDispatcher, dataServerIpAddress, 
 					supervisorServerIpAddress);
 		}

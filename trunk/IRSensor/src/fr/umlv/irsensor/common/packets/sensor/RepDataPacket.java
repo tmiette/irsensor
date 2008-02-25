@@ -48,12 +48,15 @@ public class RepDataPacket
 
     if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.LENGHT, PacketFields.MIMETYPE)) { throw new MalformedPacketException(
-        "Packet too short"); }
+        "Packet too " +
+        "short"); }
 
+/*    
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());
     if (!OpCode.REPDATA.equals(code)) throw new MalformedPacketException();
+*/
 
     // Tests if the id is valid and sets it
     index += PacketFields.OPCODE.getLength();

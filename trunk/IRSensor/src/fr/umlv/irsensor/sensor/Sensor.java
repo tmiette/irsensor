@@ -282,6 +282,7 @@ public class Sensor {
         /* Add captured data to fifo */
         currentDate = 0l;
         capturedData.addFirst(new Pair<byte[], Long>(data, currentDate));
+        
       }
     });
   }
@@ -325,6 +326,8 @@ public class Sensor {
         }
       }
 
+      System.out.println("SIZE : " + this.capturedData.size());
+      
       if (data == null) {
         data = new byte[0];
       }
