@@ -41,10 +41,11 @@ public class DataClient {
       throw new AssertionError(uhe.getMessage());
     }
 
+    System.out.println("Ask data each " + clock);
     this.executor.scheduleWithFixedDelay(new Runnable() {
       @Override
       public void run() {
-        retrieveData(id, catchArea, quality, clock);
+    	retrieveData(id, catchArea, quality, clock);
       }
     }, INITIAL_DEMAND, clock, TimeUnit.SECONDS);
   }

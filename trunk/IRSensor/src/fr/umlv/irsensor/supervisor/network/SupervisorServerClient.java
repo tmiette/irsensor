@@ -8,14 +8,11 @@ import java.util.ArrayList;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.SensorConfiguration;
-import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.ErrorCode;
-import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.SensorState;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
-import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.listeners.SupervisorServerClientListener;
 

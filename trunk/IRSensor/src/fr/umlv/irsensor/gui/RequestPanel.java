@@ -26,12 +26,12 @@ public class RequestPanel {
 		final JLabel areaLabel = new JLabel("Catch area :");
 		final JLabel qualityLabel = new JLabel("Quality :");
 		final JLabel clockLabel = new JLabel("Clock :");
-		final JTextField area1XField = new JTextField("15");
-		final JTextField area1YField = new JTextField("15");
-		final JTextField area2XField = new JTextField("15");
-		final JTextField area2YField = new JTextField("15");
+		final JTextField area1XField = new JTextField("0");
+		final JTextField area1YField = new JTextField("0");
+		final JTextField area2XField = new JTextField("500");
+		final JTextField area2YField = new JTextField("500");
 		final JTextField qualityField = new JTextField("15");
-		final JTextField clockField = new JTextField("15");
+		final JTextField clockField = new JTextField("0");
 		final JButton submit = new JButton("Submit");
 		submit.addActionListener(new ActionListener(){
 
@@ -91,9 +91,9 @@ public class RequestPanel {
 				.addComponent(areaLabel).addComponent(area1XField).addComponent(
 						area1YField).addComponent(area2XField).addComponent(area2YField));
 		vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-				.addComponent(clockLabel).addComponent(qualityField));
+				.addComponent(qualityLabel).addComponent(qualityField));
 		vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-				.addComponent(qualityLabel).addComponent(clockField));
+				.addComponent(clockLabel).addComponent(clockField));
 		vGroup.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(
 				submit));
 		layout.setVerticalGroup(vGroup);
