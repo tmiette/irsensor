@@ -41,7 +41,6 @@ public class DataClient {
       throw new AssertionError(uhe.getMessage());
     }
 
-    System.out.println("Ask data each " + clock);
     this.executor.scheduleWithFixedDelay(new Runnable() {
       @Override
       public void run() {
@@ -70,7 +69,6 @@ public class DataClient {
               .getErrorCode(dataServerRepDataBuffer)));
           break;
         case REPDATA:
-          System.out.println("data correctly received");
           RepDataPacket packetReceived = RepDataPacket
               .getPacket(dataServerRepDataBuffer);
           byte[] im = packetReceived.getDatas();
@@ -87,7 +85,6 @@ public class DataClient {
             + e.getMessage());
       }
     } catch (IOException e) {
-      System.err.println("connect()");
       close();
     }
   }

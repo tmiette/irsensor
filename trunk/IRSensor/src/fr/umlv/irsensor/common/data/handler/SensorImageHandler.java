@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URLConnection;
 
 import javax.imageio.ImageIO;
 
@@ -20,17 +19,9 @@ public class SensorImageHandler implements SensorHandler {
   }
 
   @Override
-  public byte[] dataToByteArray(Object data, String name) {
+  public byte[] dataToByteArray(Object data, String fileExtension) { 
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     try {
-      //FIXME
-      String mimeString = URLConnection.guessContentTypeFromName(name);
-      String[] split = mimeString.split("/");
-      if (split.length < 2) {
-        return null;
-      }
-      String fileExtension = split[1];
-      //FIXME
       BufferedImage imData = (BufferedImage) data;
       ImageIO.write(imData, fileExtension, bos);
     } catch (IOException e) {

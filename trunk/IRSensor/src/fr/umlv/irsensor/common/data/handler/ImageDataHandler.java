@@ -92,6 +92,7 @@ public class ImageDataHandler implements DataServerHandler {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     try {
       BufferedImage imData = (BufferedImage) data;
+      System.out.println("file ext " + fileExtension);
       ImageIO.write(imData, fileExtension, bos);
     } catch (IOException e) {
       System.err.println("Cannot get bytes from data");

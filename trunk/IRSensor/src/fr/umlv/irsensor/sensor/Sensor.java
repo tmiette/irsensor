@@ -62,7 +62,6 @@ public class Sensor {
 
     try {
       this.supervisorClient.registrySensor();
-      System.out.println("id recu " + this.id);
       this.supervisorServer = new SupervisorSensorServer(this.id);
       this.supervisorServer
           .addSupervisorSensorListener(new SupervisorSensorListener() {
@@ -221,14 +220,13 @@ public class Sensor {
               MimeTypes mime = MimeTypes.getMimeType(mimeType);
               mergedImage = SensorHandlers.mergeData(mime, (Object[]) array);
               if (mergedImage != null) {
-                dataToSend = SensorHandlers.dataToByteArray(mergedImage, mime,
-                    mime.getFileExtension());
+                dataToSend = SensorHandlers.dataToByteArray(mergedImage, mime);
               }
             } catch (MimetypeException e) {
               // do noting
             }
           }
-
+          
           if (conf.getParentId() == -1) {
             /* Sink code */
             supervisorClient.sendRepData(id, mimeType, dataToSend.length,
@@ -253,7 +251,6 @@ public class Sensor {
       @Override
       public void helloReplyReceived() {
         // do nothing, my father is correctly connected
-        System.out.println("Hello reply receveid to " + Sensor.this.id);
       }
     });
     this.sensorClient.sendHelloRequest(idD, idS, address);
@@ -331,7 +328,7 @@ public class Sensor {
       if (data == null) {
         data = new byte[0];
       }
-
+      
       this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
           .getParentId(), this.mimeType.getId(), data.length, data);
 

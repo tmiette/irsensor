@@ -66,7 +66,8 @@ public class SensorServer implements PacketRegisterable {
     } else if (DecodePacket.getOpCode(packet).equals(OpCode.REPDATA)) {
       try {
         RepDataPacket repDataPacket = RepDataPacket.getPacket(packet);
-        fireRepDataReceived(repDataPacket.getDatas(), 0);
+        fireRepDataReceived(repDataPacket.getDatas(), repDataPacket
+            .getMimetype());
       } catch (MalformedPacketException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();

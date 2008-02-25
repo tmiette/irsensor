@@ -3,7 +3,7 @@ package fr.umlv.irsensor.common.data;
 public enum MimeTypes {
   IMAGE_GIF(0, "image", "gif"),
   IMAGE_PNG(1, "image", "png"),
-  IMAGE_JPEG(2, "image", "jpeg"),
+  //IMAGE_JPEG(2, "image", "jpg"),
   IMAGE_JPG(3, "image", "jpg"),
   IMAGE_TIFF(4, "image", "tiff"),
   IMAGE_BMP(5, "image", "bmp"),
@@ -43,13 +43,14 @@ public enum MimeTypes {
         + " doesn't exist.");
   }
 
-  public static MimeTypes getMimeType(String name) throws MimetypeException {
+  public static MimeTypes getMimeType(String fileExtension)
+      throws MimetypeException {
     for (MimeTypes mime : MimeTypes.values()) {
-      if (mime.name.equals(name)) {
+      if (mime.fileExtension.equals(fileExtension)) {
         return mime;
       }
     }
-    throw new MimetypeException("The type mime with name " + name
+    throw new MimetypeException("The type mime with name " + fileExtension
         + " doesn't exist.");
   }
 }
