@@ -226,7 +226,6 @@ public class Sensor {
             try {
               MimeTypes mime = MimeTypes.getMimeType(mimeType);
               mergedImage = SensorHandlers.mergeData(mime, (Object[]) array);
-
               if (mergedImage != null) {
                 dataToSend = SensorHandlers.dataToByteArray(mergedImage, mime,
                     "./src/images/code_sm.png");
@@ -234,12 +233,20 @@ public class Sensor {
             } catch (MimetypeException e) {
               // do noting
             }
-
           }
 
+          
+          final JFrame frame = new JFrame("Result of " + Sensor.this.id);
+          frame.setSize(new Dimension(800, 600));
+          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          frame.setContentPane(new JLabel(new ImageIcon(dataToSend)));
+          frame.setVisible(true);
+
+          
           if (conf.getParentId() == -1) {
             /* Sink code */
-            supervisorClient.sendRepData(id);
+            supervisorClient.sendRepData(id, mimeType, dataToSend.length,
+                dataToSend);
           } else {
             sensorClient.sendRepData(conf.getParentAddress(), conf
                 .getParentId(), mimeType, dataToSend.length, dataToSend);
@@ -319,7 +326,9 @@ public class Sensor {
     clockRequired = -1;
     if (this.conf.getParentId() == -1) {
       /* Sink code */
-      supervisorClient.sendRepData(id);
+      // FIXME
+      System.out.println("JE NE DOIS JAMAIS PASSER LA !!!!!!!!!!!!!!!!!!!");
+      // supervisorClient.sendRepData(id);
     } else {
       byte[] data = null;
       long time = System.currentTimeMillis() - date;
@@ -327,8 +336,6 @@ public class Sensor {
       // TODO
 
       for (Pair<byte[], Long> CapData : capturedData) {
-        System.out.println("cap data " + CapData.getSecondElement()
-            + " at time " + time);
         if (CapData.getSecondElement() <= time) {
           data = CapData.getFirstElement();
           break;
@@ -336,11 +343,8 @@ public class Sensor {
       }
 
       if (data == null) {
-        System.out.println(id + " Je remet data à 0");
         data = new byte[0];
       }
-
-      System.out.println(id + " envoi " + data + " de taille " + data.length);
 
       this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
           .getParentId(), this.mimeType.getId(), data.length, data);
