@@ -7,6 +7,14 @@ import fr.umlv.irsensor.common.fields.ErrorCode;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
 
+/**
+ * This class represents a ACK packet.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class AckPacket
     implements SupervisorPacket {
 
@@ -19,12 +27,19 @@ public class AckPacket
     this.errorCode = errorCode;
   }
 
+  /**
+   * Decodes a bytebuffer packet to a {@link AckPacket}.
+   * 
+   * @param packet to decode.
+   * @return corresponding {@link AckPacket}.
+   * @throws MalformedPacketException if packet contains bad data.
+   */
   public static AckPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
 
     if (packet == null) throw new IllegalArgumentException("Illegal packet");
     int index = 0;
-    
+
     if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.ERROR_CODE)) { throw new MalformedPacketException(
         "Packet too short"); }
@@ -50,6 +65,10 @@ public class AckPacket
     return new AckPacket(id, errorCode);
   }
 
+  /**
+   * 
+   * @return the {@link ErrorCode}.
+   */
   public ErrorCode getErrorCode() {
     return errorCode;
   }

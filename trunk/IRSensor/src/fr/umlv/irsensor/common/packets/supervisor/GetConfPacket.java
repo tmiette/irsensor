@@ -6,6 +6,14 @@ import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
 
+/**
+ * This class represents a GETCONF packet like an object instance.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class GetConfPacket
     implements SupervisorPacket {
 
@@ -13,11 +21,19 @@ public class GetConfPacket
 
   private final OpCode opCode = OpCode.GETCONF;
 
+  /**
+   * Decodes a bytebuffer representing a packet to a {@link GetConfPacket}
+   * instance.
+   * 
+   * @param packet to transcode.
+   * @return {@link GetConfPacket} instance corresponding.
+   * @throws MalformedPacketException if packet contains bad data.
+   */
   public static GetConfPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();
     int index = 0;
-    
+
     if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID)) { throw new MalformedPacketException(
         "Packet too short"); }
@@ -35,6 +51,10 @@ public class GetConfPacket
     return new GetConfPacket(id);
   }
 
+  /**
+   * 
+   * @param return id 
+   */
   private GetConfPacket(int id) {
     this.id = id;
   }

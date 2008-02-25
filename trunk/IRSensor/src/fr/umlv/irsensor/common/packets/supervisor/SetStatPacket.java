@@ -6,7 +6,14 @@ import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
 import fr.umlv.irsensor.common.fields.SensorState;
-
+/**
+ * This class represents a SETSTA packet like an object instance.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class SetStatPacket
     implements SupervisorPacket {
 
@@ -19,6 +26,15 @@ public class SetStatPacket
     this.state = sensorState;
   }
 
+  /**
+   * Returns {@link SetStatPacket} corresponding to packet. This methods parses the
+   * ByteBuffer and create a SetStatPacket object corresponding to it.
+   * 
+   * @param bb packet to read.
+   * @return SetStatPacket to create.
+   * @throws MalformedPacketException if the {@link ByteBuffer} isn't valid
+   *           packet.
+   */
   public static SetStatPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();

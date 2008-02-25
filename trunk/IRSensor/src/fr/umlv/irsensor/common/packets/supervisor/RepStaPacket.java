@@ -7,6 +7,14 @@ import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
 import fr.umlv.irsensor.common.fields.SensorState;
 
+/**
+ * This class represents a REPSTA packet.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class RepStaPacket
     implements SupervisorPacket {
 
@@ -19,6 +27,15 @@ public class RepStaPacket
     this.state = state;
   }
 
+  /**
+   * Parses a REPSTA packet and instantiate a new RepSta object offering
+   * method to retrieve the packet's fields
+   * 
+   * @param bb the bytebuffer containing the REPSTA packet
+   * @return an object representing this packet
+   * @throws MalformedPacketException if the expecting REPSTA packet is
+   *           malformed
+   */
   public static RepStaPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();
