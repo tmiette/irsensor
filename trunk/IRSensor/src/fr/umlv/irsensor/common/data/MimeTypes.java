@@ -3,7 +3,6 @@ package fr.umlv.irsensor.common.data;
 public enum MimeTypes {
   IMAGE_GIF(0, "image", "gif"),
   IMAGE_PNG(1, "image", "png"),
-  //IMAGE_JPEG(2, "image", "jpg"),
   IMAGE_JPG(3, "image", "jpg"),
   IMAGE_TIFF(4, "image", "tiff"),
   IMAGE_BMP(5, "image", "bmp"),
