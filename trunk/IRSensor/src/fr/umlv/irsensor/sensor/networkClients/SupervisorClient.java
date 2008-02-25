@@ -19,8 +19,6 @@ public class SupervisorClient {
   private static final byte[] serverAddress = new byte[] { (byte) 127,
       (byte) 0, (byte) 0, (byte) 1 };
 
-  private static final int SERVER_PORT = IRSensorConfiguration.SUPERVISOR_SERVER_PORT;
-
   private static final int BUFFER_SIZE = 512;
 
   private final Sensor sensor;
@@ -32,7 +30,7 @@ public class SupervisorClient {
   public void registrySensor() throws IOException, MalformedPacketException {
     SocketChannel channel = SocketChannel.open();
     channel.connect(new InetSocketAddress(InetAddress
-        .getByAddress(serverAddress), SERVER_PORT));
+        .getByAddress(serverAddress), IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
 
     ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
 
@@ -57,7 +55,7 @@ public class SupervisorClient {
     try {
       socketClient = SocketChannel.open();
       socketClient.connect(new InetSocketAddress(InetAddress
-          .getByAddress(serverAddress), SERVER_PORT));
+          .getByAddress(serverAddress), IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
       ByteBuffer b = PacketFactory.createRepData(id, mimeType, data.length,
           data);
       socketClient.write(b);
