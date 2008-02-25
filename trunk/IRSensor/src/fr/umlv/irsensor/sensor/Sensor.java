@@ -230,11 +230,8 @@ public class Sensor {
               if (mergedImage != null) {
                 dataToSend = SensorHandlers.dataToByteArray(mergedImage, mime,
                     "./src/images/code_sm.png");
-              } else {
-                System.out.println("unable to merge!!");
               }
             } catch (MimetypeException e) {
-              System.out.println("wrong mime type !!");
               // do noting
             }
 
