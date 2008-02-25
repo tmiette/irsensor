@@ -12,6 +12,7 @@ import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.ErrorCode;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.SensorState;
+import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.supervisor.ReqDataPacket;
 import fr.umlv.irsensor.common.packets.supervisor.SetConfPacket;
@@ -45,7 +46,7 @@ public class SupervisorSensorServer implements PacketRegisterable {
   @Override
   public void setPacket(ByteBuffer packet, SocketChannel channel) {
     // receive a packet from the supervisor
-    if (OpCode.getOpcode(packet) == OpCode.SETCONF) {
+    if (DecodePacket.getOpCode(packet) == OpCode.SETCONF) {
       SetConfPacket setConfPacket = null;
       try {
         setConfPacket = SetConfPacket.getPacket(packet);
@@ -60,7 +61,7 @@ public class SupervisorSensorServer implements PacketRegisterable {
       conf.setParentId(setConfPacket.getParentId());
       fireConfReceived(conf);
       this.isWaitingForAnswer = false;
-    } else if (OpCode.getOpcode(packet) == OpCode.REQDATA) {
+    } else if (DecodePacket.getOpCode(packet) == OpCode.REQDATA) {
       ReqDataPacket reqDataPacket = null;
       try {
         reqDataPacket = ReqDataPacket.getPacket(packet);
@@ -74,7 +75,7 @@ public class SupervisorSensorServer implements PacketRegisterable {
           .getClock(), reqDataPacket.getQuality());
       this.isWaitingForAnswer = true;
       this.channel = channel;
-    } else if (OpCode.getOpcode(packet) == OpCode.SETSTA) {
+    } else if (DecodePacket.getOpCode(packet) == OpCode.SETSTA) {
       SetStatPacket setStatPacket = null;
       try {
         setStatPacket = SetStatPacket.getPacket(packet);

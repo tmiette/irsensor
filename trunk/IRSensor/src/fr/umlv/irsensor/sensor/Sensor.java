@@ -234,14 +234,6 @@ public class Sensor {
               // do noting
             }
           }
-
-          
-          final JFrame frame = new JFrame("Result of " + Sensor.this.id);
-          frame.setSize(new Dimension(800, 600));
-          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          frame.setContentPane(new JLabel(new ImageIcon(dataToSend)));
-          frame.setVisible(true);
-
           
           if (conf.getParentId() == -1) {
             /* Sink code */
@@ -349,7 +341,6 @@ public class Sensor {
       this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
           .getParentId(), this.mimeType.getId(), data.length, data);
 
-      this.mimeType = null;
       this.dataReceived.clear();
     }
   }

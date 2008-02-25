@@ -1,5 +1,6 @@
 package fr.umlv.irsensor.supervisor.network;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -10,6 +11,10 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
@@ -139,7 +144,7 @@ public class SupervisorServer {
 					}
 				}
 			}
-		});
+		}).start();
 	}
 
 	

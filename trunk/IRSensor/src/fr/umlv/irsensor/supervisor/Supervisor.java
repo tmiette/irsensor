@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import javax.swing.JFrame;
+
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.ErrorCode;
@@ -66,7 +68,7 @@ public class Supervisor {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					http://www.google.fr/search?q=scattering&sourceid=navclient-ff&ie=UTF-8&rlz=1B3GGGL_frFR260FR260				// TODO Auto-generated catch block
+				  // TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been registered");
@@ -75,6 +77,10 @@ public class Supervisor {
 				}
 				
 				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been configured");
+				
+				
+				server.listenRepData();
+				
 			}
 			
 			@Override

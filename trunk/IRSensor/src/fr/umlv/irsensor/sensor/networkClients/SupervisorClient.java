@@ -1,15 +1,10 @@
 package fr.umlv.irsensor.sensor.networkClients;
 
-import java.awt.Dimension;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
@@ -63,16 +58,6 @@ public class SupervisorClient {
       socketClient = SocketChannel.open();
       socketClient.connect(new InetSocketAddress(InetAddress
           .getByAddress(serverAddress), SERVER_PORT));
-      
-      
-      System.out.println("###################### I'm here ######################");
-      final JFrame frame = new JFrame("Result");
-      frame.setSize(new Dimension(800, 600));
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setContentPane(new JLabel(new ImageIcon(data)));
-      frame.setVisible(true);
-      
-      
       ByteBuffer b = PacketFactory.createRepData(id, mimeType, data.length,
           data);
       socketClient.write(b);

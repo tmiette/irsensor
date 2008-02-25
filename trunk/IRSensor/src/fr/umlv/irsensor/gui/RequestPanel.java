@@ -69,6 +69,7 @@ public class RequestPanel {
       @Override
       public void answerReceived(byte[] data) {
         ImageIcon icon = new ImageIcon(data);
+        imageLabel.setText(null);
         imageLabel.setIcon(icon);
       }
 
