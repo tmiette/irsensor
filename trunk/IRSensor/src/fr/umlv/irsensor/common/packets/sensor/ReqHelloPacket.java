@@ -6,7 +6,14 @@ import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.ErrorCode;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
-
+/**
+ * This class represents a REQHELLO packet.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class ReqHelloPacket
     implements SensorPacket {
 
@@ -32,6 +39,13 @@ public class ReqHelloPacket
     this.errorCode = errorCode;
   }
 
+  /**
+   * Decodes a bytebuffer to a {@link ReqHelloPacket}.
+   * 
+   * @param packet to transcode.
+   * @return {@link ReqHelloPacket} instance.
+   * @throws MalformedPacketException if a packet field is invalid.
+   */
   public static ReqHelloPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException("Illegal packet");

@@ -7,6 +7,15 @@ import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
 
+/**
+ * This class represents a INFOS packet for the sensor protocol. It permits to
+ * decode a byte buffer and fill corresponding class fields.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
 public class InfosPacket
     implements SensorPacket {
 
@@ -79,6 +88,13 @@ public class InfosPacket
     return clock;
   }
 
+  /**
+   * This method decodes a bytebuffer to a {@link InfosPacket} instance.
+   * 
+   * @param packet to decode.
+   * @return {@link InfosPacket} instance.
+   * @throws MalformedPacketException if a packet field is invalid.
+   */
   public static InfosPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException("Illegal packet");
