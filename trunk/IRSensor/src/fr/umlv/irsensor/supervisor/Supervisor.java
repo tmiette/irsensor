@@ -66,7 +66,7 @@ public class Supervisor {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					http://www.google.fr/search?q=scattering&sourceid=navclient-ff&ie=UTF-8&rlz=1B3GGGL_frFR260FR260				// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been registered");

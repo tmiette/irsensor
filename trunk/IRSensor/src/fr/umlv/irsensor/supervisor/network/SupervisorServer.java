@@ -1,6 +1,5 @@
 package fr.umlv.irsensor.supervisor.network;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -19,7 +18,6 @@ import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.common.packets.supervisor.RepDataPacket;
-import fr.umlv.irsensor.supervisor.listeners.SupervisorServerClientListener;
 import fr.umlv.irsensor.supervisor.listeners.SupervisorServerListener;
 import fr.umlv.irsensor.util.IRSensorLogger;
 
