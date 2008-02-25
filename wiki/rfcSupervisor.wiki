@@ -12,9 +12,9 @@ RFC												janvier 28, 2008
 The attempt in this specification is to specify the diverse needs to permit communication and configuration 
 between sensors and their server. The objectives of SSP are described below:
 
- - to register sensors by supervisor server
+ - to register sensors
  - to provide configuration information to sensors by supervisor server (passive and active sensor configuration),
- - to provide sensor states by supervisor server,
+ - to provide sensor states,
  - to retrieve information from sensors by server,
  - to start a script which aims at configuring network sensors.
 
@@ -25,7 +25,7 @@ between sensors and their server. The objectives of SSP are described below:
 This protocol provides communication rules between the supervisor server and its sensors. 
 Sensors, which do not belong to a specific network, try to establish a communication with the supervisor server. This implementation implies that sensors know the supervisor server IP. 
 
-Once communication has been established, the server tries to retrieve the sensors state. A node can be set to different state among (stopped, standby or ready). Depending on the nodes state, the server might choose between sending the nodes configuration parameters, or alter its state.
+Once communication has been established, the server tries to retrieve the sensors state. A node can be set to different state among (stopped, standby or ready). Depending on the nodes state, the server might choose between sending the nodes configuration parameters, or alter their state.
 
 
 
@@ -36,13 +36,13 @@ This protocol runs over TCP. The use of this protocol involves the knowledge of 
 
 4. Initial Networking Sensors
 
-The use of Supervisor Server Protocol involves that a supervisor server is waiting for sensor connection
-s on port 31000. When server starts, it listens to this port. The server has to set up the networking configuration. It expects a predefined number of connection requests. 
+The use of Supervisor Server Protocol involves that a supervisor server waits for sensor connection
+s on port 31000. When the server starts, it listens to this port. The server has to set up the networking configuration. It expects a predefined number of connection requests. 
 
 After having received a connection request from a network sensor, the SS starts to configure it. 
-When all sensors are configured it can switch them on. The supervisor server will automatically 
+When all sensors are configured, it can switch them on. The supervisor server will automatically 
 discard a useless sensor contained in the network. That is to say, that the SS will accept the 
-sensor request for connection, but it will not send it its configuration parameters.
+sensor request for connection, but it won't send it its configuration parameters.
 
 
 5. Terminology
@@ -63,12 +63,12 @@ When the SS starts, it listens to port 31000 for REQCON packets. Whenever, the S
 6.1.2.  Register node
 
 When SS receives a REQCON packet from a node (see sensor side 6.2.1.), the server answers to it with 
-a REPCON packet to attribute it a unique identifier. This identifier enables to differentiate each sensor.
+a REPCON packet to attribute it a unique identifier. This identifier enables to differentiate each sensor. Therefor, several sensors can run over a single computer.
 
  The REPCON packet, allows the SS to retrieve the sender's IP address, consequently, the supervisor server
  will be able to send a configuration packet. If a problem occurs during this step, the sensor sends an ACK packet with a CONNECT-ERR code (see error codes 6.4.1.).
 
-The REPCON packet is sent to the same port that the REQCON packet was sent to. It's the only packet, which is sent using this manner other packets will use the specific supervisor server protocol port 31000.
+The REPCON packet is sent to the same port that the REQCON packet was sent to. It's the only packet, which is sent this way. Other packets will use the specific supervisor server protocol port 31000.
 
 2 bytes     4 bytes
 -------------------------
@@ -165,7 +165,7 @@ Figure 6-1-6-1: GETSTA packet
 6.2.1. Start sensor
 
 When a sensor wants to join to the network, it sends a REQCON packet on port 31000 to the
- supervisor ip address. Note that every network sensors know the SS IP address. 
+ supervisor ip address. Note that every network sensor knows the SS IP address. 
 
 2 bytes
 ----------
@@ -206,7 +206,7 @@ Figure 6-2-3-1: GETCONF packet
 6.2.4. Set state
 
 When a sensor receives a SETSTA packet from the SS (see server side 6.1.5.), it modifies its
- current state to the new state. If this new state can be correctly interpreted, the sensor replies
+ current state and replace it with the new one. If the state can be read correctly, the sensor replies
  with an ACK packet with a null error code. Otherwise the sensor sets up the error code and send
  the ACK packet (see error codes 6.3.2.).
 
@@ -258,7 +258,7 @@ The root sensor replies with a REPDATA packet.
 6.3.2. Root reply
 
 When the root sensor receives a REQDATA from the SS, it tries to reply to this request 
-(the request is handled by a sensors internal protocol). If the root sensor failed to reply, 
+(the request is handled by a sensor internal protocol). If the root sensor failed to reply, 
 it sends an ACK packet with the correct error code. Otherwise, the root sensor sends a REPDATA
  packet with the requested datas.
 2 bytes 4 bytes
@@ -318,5 +318,3 @@ A state is represented by a code:
 00000000 – UP
 00000001 – DOWN
 00000010 – PAUSE or STANDBY
-
-
