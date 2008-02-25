@@ -19,7 +19,6 @@ import fr.umlv.irsensor.util.IRSensorLogger;
 public class SupervisorMain {
 	public static void main(String[] args) {
 
-		IRSensorLogger.startLogger("supervisor");
 		IRSensorLogger.postMessage(Level.FINE, "Supervisor Application is started");
 		ByteBuffer bb = ByteBuffer.allocate(10000);
 		// schedule a job for the event dispatch thread:

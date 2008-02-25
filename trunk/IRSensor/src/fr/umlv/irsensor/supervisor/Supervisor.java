@@ -43,6 +43,8 @@ public class Supervisor {
 	private final SupervisorServerClient client;
 
 	private final ArrayList<SupervisorListener> listeners = new ArrayList<SupervisorListener>();
+	
+	private final Object hashMaplock = new Object(); 
 
 	public Supervisor(List<Pair<Integer, SensorConfiguration>> sensors) {
 		this.client = new SupervisorServerClient();
@@ -54,7 +56,7 @@ public class Supervisor {
 			public void ackConPacketReceived(int id, InetAddress ipAddress) {
 				final SensorNode sNode = new SensorNode(id);
 				sNode.setIpAddress(ipAddress);
-				Supervisor.this.sensors.put(id, sNode);
+				addSensorNode(id, sNode);
 				fireSensorNodeConnected(sNode, ipAddress);
 			}
 
@@ -69,7 +71,7 @@ public class Supervisor {
 				}
 				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been registered");
 				for (Pair<Integer, SensorConfiguration> pair : sensorConfs) {
-					setConf(Supervisor.this.sensors.get(pair.getFirstElement()), pair.getSecondElement());
+					setConf(getSensorNode(pair.getFirstElement()), pair.getSecondElement());
 				}
 				
 				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been configured");
@@ -117,7 +119,7 @@ public class Supervisor {
 	 * @param state
 	 */
 	public void setState(int id, SensorState state) {
-		SensorNode node = this.sensors.get(id);
+		SensorNode node = this.getSensorNode(id);
 		if (node != null) {
 			this.client.setState(node, state);
 		}
@@ -130,7 +132,7 @@ public class Supervisor {
 	 * @param conf
 	 */
 	public void setConf(int id, SensorConfiguration conf) {
-		SensorNode node = this.sensors.get(id);
+		SensorNode node = this.getSensorNode(id);
 		if (node != null) {
 			this.setConf(node, conf);
 		}
@@ -143,7 +145,7 @@ public class Supervisor {
 	 * @param conf
 	 */
 	public void setConf(SensorNode node, SensorConfiguration conf) {
-		SensorNode parent = this.sensors.get(conf.getParentId());
+		SensorNode parent = this.getSensorNode(conf.getParentId());
 		if (parent != null) {
 			conf.setParentAddress(parent.getAddress());
 		}
@@ -159,9 +161,9 @@ public class Supervisor {
 	 */
 	public void dataRequest(CatchArea cArea, int quality, int clock){
 		if(this.rootNode == null){
-			for(Entry<Integer, SensorNode> node: this.sensors.entrySet()){
-				if(node.getValue().getParentId() == -1){
-					this.rootNode = node.getValue();
+			for(SensorNode node: this.getSensorNodes()){
+				if(node.getParentId() == -1){
+					this.rootNode = node;
 					break;
 				}
 			}
@@ -177,10 +179,18 @@ public class Supervisor {
 	 */
 	public List<SensorNode> getSensorNodes() {
 		ArrayList<SensorNode> l = new ArrayList<SensorNode>();
-		for (Entry<Integer, SensorNode> entry : this.sensors.entrySet()) {
-			l.add(entry.getValue());
+		synchronized(hashMaplock){
+			for (Entry<Integer, SensorNode> entry : this.sensors.entrySet()) {
+				l.add(entry.getValue());
+			}
 		}
 		return l;
+	}
+	
+	public SensorNode getSensorNode(int id){
+		synchronized (hashMaplock) {
+			return this.sensors.get(id);
+		}
 	}
 
 	/**
@@ -189,7 +199,9 @@ public class Supervisor {
 	 * @param sensorNode
 	 */
 	public void addSensorNode(int key, SensorNode sensorNode) {
-		this.sensors.put(key, sensorNode);
+		synchronized (hashMaplock) {
+			this.sensors.put(key, sensorNode);
+		}
 	}
 
 	/**
@@ -199,7 +211,9 @@ public class Supervisor {
 	 * @param sensorNode
 	 */
 	public void removeSensorNode(int key) {
-		this.sensors.remove(key);
+		synchronized (hashMaplock) {
+			this.sensors.remove(key);
+		}
 	};
 	
 	/**
