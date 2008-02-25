@@ -6,12 +6,28 @@ import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
 
-public class RepHelloPacket implements SensorPacket {
+/**
+ * This class represents a REPHELLO packet.
+ * 
+ * @author Miette Tom (tmiette@etudiant.univ-mlv.fr)
+ * @author Moreau Alan (amorea04@etudiant.univ-mlv.fr)
+ * @author Mouret Sebastien (smouret@etudiant.univ-mlv.fr)
+ * @author Pons Julien (jpons@etudiant.univ-mlv.fr)
+ */
+public class RepHelloPacket
+    implements SensorPacket {
   // | Opcode | idD | idS |
   private final OpCode opCode;
   private final int destId;
   private final int sourceId;
 
+  /**
+   * Decodes a bytebuffer to a {@link RepHelloPacket}.
+   * 
+   * @param packet to transcode.
+   * @return {@link RepHelloPacket} instance.
+   * @throws MalformedPacketException if a packet field is invalid.
+   */
   public static RepHelloPacket getPacket(ByteBuffer packet)
       throws MalformedPacketException {
     if (packet == null) throw new IllegalArgumentException();
@@ -20,7 +36,7 @@ public class RepHelloPacket implements SensorPacket {
     if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
         PacketFields.ID, PacketFields.ID)) { throw new MalformedPacketException(
         "Packet too short"); }
-    
+
     // Tests if it's a valid OpCode
     final byte[] code = new byte[PacketFields.OPCODE.getLength()];
     packet.get(code, 0, PacketFields.OPCODE.getLength());
@@ -65,7 +81,7 @@ public class RepHelloPacket implements SensorPacket {
   public OpCode getOpCode() {
     return this.opCode;
   }
-  
+
   @Override
   public int getId() {
     return this.destId;
