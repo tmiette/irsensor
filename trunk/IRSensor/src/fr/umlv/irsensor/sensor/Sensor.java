@@ -1,7 +1,5 @@
 package fr.umlv.irsensor.sensor;
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -9,10 +7,6 @@ import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.data.MimeTypes;
@@ -228,13 +222,13 @@ public class Sensor {
               mergedImage = SensorHandlers.mergeData(mime, (Object[]) array);
               if (mergedImage != null) {
                 dataToSend = SensorHandlers.dataToByteArray(mergedImage, mime,
-                    "./src/images/code_sm.png");
+                    mime.getFileExtension());
               }
             } catch (MimetypeException e) {
               // do noting
             }
           }
-          
+
           if (conf.getParentId() == -1) {
             /* Sink code */
             supervisorClient.sendRepData(id, mimeType, dataToSend.length,
