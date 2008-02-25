@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.common.fields.OpCode;
 import fr.umlv.irsensor.common.fields.PacketFields;
+
 /**
  * This class represents a REPDATA packet.
  * 
@@ -105,7 +106,7 @@ public class RepDataPacket
 
   /**
    * 
-   * @return the datas.
+   * @return the data.
    */
   public byte[] getDatas() {
     return datas;
