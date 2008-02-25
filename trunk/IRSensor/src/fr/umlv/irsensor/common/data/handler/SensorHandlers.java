@@ -5,13 +5,18 @@ import java.util.HashMap;
 import fr.umlv.irsensor.common.data.MimeTypes;
 import fr.umlv.irsensor.common.data.MimetypeException;
 
-
 public class SensorHandlers {
 
   private static final HashMap<MimeTypes, SensorHandler> handlers = new HashMap<MimeTypes, SensorHandler>();
 
   static {
-    handlers.put(MimeTypes.IMAGE, new SensorImageHandler());
+    SensorImageHandler image = new SensorImageHandler();
+    handlers.put(MimeTypes.IMAGE_BMP, image);
+    handlers.put(MimeTypes.IMAGE_GIF, image);
+    handlers.put(MimeTypes.IMAGE_JPEG, image);
+    handlers.put(MimeTypes.IMAGE_JPG, image);
+    handlers.put(MimeTypes.IMAGE_PNG, image);
+    handlers.put(MimeTypes.IMAGE_TIFF, image);
   }
 
   private static SensorHandler ensureHandlerExists(MimeTypes mimeType)

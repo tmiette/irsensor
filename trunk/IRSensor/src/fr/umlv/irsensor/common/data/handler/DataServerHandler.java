@@ -12,4 +12,5 @@ public interface DataServerHandler {
 	public Object reduceData(Object data);
 	
 	public MimeTypes getMimeType();
+
 }

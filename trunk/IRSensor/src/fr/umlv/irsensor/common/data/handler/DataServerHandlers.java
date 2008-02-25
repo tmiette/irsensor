@@ -5,7 +5,6 @@ import java.net.URLConnection;
 import fr.umlv.irsensor.common.data.MimeTypes;
 import fr.umlv.irsensor.common.data.MimetypeException;
 
-
 public class DataServerHandlers {
 
   public static DataServerHandler getHandlerWithMimeType(String fileName) {
@@ -27,8 +26,18 @@ public class DataServerHandlers {
     }
 
     switch (mime) {
-    case IMAGE:
-      return new ImageDataHandler(fileName, fileExtension);
+    case IMAGE_BMP:
+      return new ImageDataHandler(MimeTypes.IMAGE_BMP, fileName, fileExtension);
+    case IMAGE_GIF:
+      return new ImageDataHandler(MimeTypes.IMAGE_GIF, fileName, fileExtension);
+    case IMAGE_JPEG:
+      return new ImageDataHandler(MimeTypes.IMAGE_JPEG, fileName, fileExtension);
+    case IMAGE_JPG:
+      return new ImageDataHandler(MimeTypes.IMAGE_JPG, fileName, fileExtension);
+    case IMAGE_PNG:
+      return new ImageDataHandler(MimeTypes.IMAGE_PNG, fileName, fileExtension);
+    case IMAGE_TIFF:
+      return new ImageDataHandler(MimeTypes.IMAGE_TIFF, fileName, fileExtension);
     case TEXT:
       return null;
     default:

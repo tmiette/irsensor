@@ -16,7 +16,10 @@ public class ImageDataHandler implements DataServerHandler {
 
   private final String fileExtension;
 
-  public ImageDataHandler(String imageName, String fileExtension) {
+  private final MimeTypes mime;
+
+  public ImageDataHandler(MimeTypes mime, String imageName, String fileExtension) {
+    this.mime = mime;
     this.fileExtension = fileExtension;
     try {
       final File resource = new File(imageName);
@@ -29,7 +32,7 @@ public class ImageDataHandler implements DataServerHandler {
 
   @Override
   public MimeTypes getMimeType() {
-    return MimeTypes.IMAGE;
+    return this.mime;
   }
 
   @Override
