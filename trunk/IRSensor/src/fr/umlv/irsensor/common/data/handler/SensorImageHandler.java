@@ -23,8 +23,16 @@ public class SensorImageHandler implements SensorHandler {
   public byte[] dataToByteArray(Object data, String name) {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     try {
+      //FIXME
+      String mimeString = URLConnection.guessContentTypeFromName(name);
+      String[] split = mimeString.split("/");
+      if (split.length < 2) {
+        return null;
+      }
+      String fileExtension = split[1];
+      //FIXME
       BufferedImage imData = (BufferedImage) data;
-      ImageIO.write(imData, URLConnection.guessContentTypeFromName(name), bos);
+      ImageIO.write(imData, fileExtension, bos);
     } catch (IOException e) {
       System.err.println("Cannot get bytes from data");
       return new byte[0];
