@@ -38,8 +38,6 @@ public class SupervisorServer {
 	private final List<SupervisorServerListener> listeners = new ArrayList<SupervisorServerListener>();
 
 	private ServerSocketChannel servChannel;
-	
-	private static final int DATA_BUFFER = 1000000; //1 mo
 
 	public SupervisorServer() {
 		try {
@@ -113,7 +111,7 @@ public class SupervisorServer {
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
-				ByteBuffer data = ByteBuffer.allocate(DATA_BUFFER);
+				ByteBuffer data = ByteBuffer.allocate(IRSensorConfiguration.PACKET_MAX_SIZE);
 				for (;;) {
 					SocketChannel client = null;
 					try{
