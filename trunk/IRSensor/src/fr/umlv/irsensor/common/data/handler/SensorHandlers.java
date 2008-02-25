@@ -23,7 +23,7 @@ public class SensorHandlers {
       throws MimetypeException {
     SensorHandler handler = handlers.get(mimeType);
     if (handler == null)
-      throw new MimetypeException("No mimetype correspondind to data "
+      throw new MimetypeException("No mime type correspondind to data "
           + mimeType);
     return handler;
   }

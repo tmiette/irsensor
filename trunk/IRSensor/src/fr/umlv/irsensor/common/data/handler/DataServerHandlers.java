@@ -17,21 +17,24 @@ public class DataServerHandlers {
     }
 
     String fileExtension = split[1];
-    
+
+    // hack for jpeg filess
+    if (fileExtension.equals("jpeg")) {
+      fileExtension = "jpg";
+    }
+
     MimeTypes mime = null;
     try {
       mime = MimeTypes.getMimeType(fileExtension);
     } catch (MimetypeException e) {
       return null;
     }
-    
+
     switch (mime) {
     case IMAGE_BMP:
       return new ImageDataHandler(MimeTypes.IMAGE_BMP, fileName, fileExtension);
     case IMAGE_GIF:
       return new ImageDataHandler(MimeTypes.IMAGE_GIF, fileName, fileExtension);
-   // case IMAGE_JPEG:
-    //  return new ImageDataHandler(MimeTypes.IMAGE_JPEG, fileName, fileExtension);
     case IMAGE_JPG:
       return new ImageDataHandler(MimeTypes.IMAGE_JPG, fileName, fileExtension);
     case IMAGE_PNG:
