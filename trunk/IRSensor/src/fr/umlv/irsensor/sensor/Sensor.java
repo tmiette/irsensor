@@ -1,6 +1,7 @@
 package fr.umlv.irsensor.sensor;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -32,351 +33,324 @@ import fr.umlv.irsensor.util.Pair;
 
 public class Sensor {
 
-	private SensorConfiguration conf;
+  private SensorConfiguration conf;
 
-	private int id;
+  private int id;
 
-	private SensorState state = SensorState.DOWN;
+  private SensorState state = SensorState.DOWN;
 
-	private final SupervisorClient supervisorClient;
-	private DataClient dataClient;
-	private SensorClient sensorClient;
-	private SupervisorSensorServer supervisorServer;
-	private SensorServer sensorServer;
+  private final SupervisorClient supervisorClient;
+  private DataClient dataClient;
+  private SensorClient sensorClient;
+  private SupervisorSensorServer supervisorServer;
+  private SensorServer sensorServer;
 
-	private final String dataServerAddr;
+  private final String dataServerAddr;
 
-	private final ArrayList<Pair<Integer, InetAddress>> children;
+  private final ArrayList<Pair<Integer, InetAddress>> children;
 
-	private final ExecutorService executor = Executors.newFixedThreadPool(2);
+  private final ExecutorService executor = Executors.newFixedThreadPool(2);
 
-	private int clockRequired = -1;
+  private int clockRequired = -1;
 
-	private final ArrayList<Pair<byte[], Integer>> dataReceived;
+  private final ArrayList<Pair<byte[], Integer>> dataReceived;
 
-	private final LinkedList<Pair<byte[], Long>> capturedData;
-	private static final int MAX_DATA_STORABLE = 10;
+  private final LinkedList<Pair<byte[], Long>> capturedData;
+  private static final int MAX_DATA_STORABLE = 10;
 
-	private MimeTypes mimeType;
+  private MimeTypes mimeType;
 
-	public Sensor(final PacketDispatcher supervisorServer,
-			final PacketDispatcher sensorServer, String dataServerAddr,
-			String supervisorServerAddr) throws IOException {
-		this.dataServerAddr = dataServerAddr;
-		this.supervisorClient = new SupervisorClient(this);
+  public Sensor(final PacketDispatcher supervisorServer,
+      final PacketDispatcher sensorServer, String dataServerAddr,
+      String supervisorServerAddr) throws IOException {
+    this.dataServerAddr = dataServerAddr;
+    this.supervisorClient = new SupervisorClient(this);
 
-		try {
-			this.supervisorClient.registrySensor();
-			System.out.println("id recu " + this.id);
-			this.supervisorServer = new SupervisorSensorServer(this.id);
-			this.supervisorServer
-					.addSupervisorSensorListener(new SupervisorSensorListener() {
-						@Override
-						public void reqDataReceived(final CatchArea area,
-								final int clock, final int quality) {
-							if (children.size() > 0) {
-								sendReqData(area, clock, quality);
-							} else {
-								sendRepData(clock);
-							}
-						}
+    try {
+      this.supervisorClient.registrySensor();
+      System.out.println("id recu " + this.id);
+      this.supervisorServer = new SupervisorSensorServer(this.id);
+      this.supervisorServer
+          .addSupervisorSensorListener(new SupervisorSensorListener() {
+            @Override
+            public void reqDataReceived(final CatchArea area, final int clock,
+                final int quality) {
+              if (children.size() > 0) {
+                sendReqData(area, clock, quality);
+              } else {
+                sendRepData(clock);
+              }
+            }
 
-						@Override
-						public void confReceived(SensorConfiguration conf) {
-							if (Sensor.this.conf == null
-									|| state.equals(SensorState.PAUSE)
-									|| state.equals(SensorState.UP)) {
-								Sensor.this.conf = conf;
-							}
-						}
+            @Override
+            public void confReceived(SensorConfiguration conf) {
+              if (Sensor.this.conf == null || state.equals(SensorState.PAUSE)
+                  || state.equals(SensorState.UP)) {
+                Sensor.this.conf = conf;
+              }
+            }
 
-						@Override
-						public void stateChanged(SensorState state) {
-							if (Sensor.this.conf != null) {
-								Sensor.this.state = state;
-								switch (state) {
-								case DOWN:
-								case PAUSE:
-									stopSensorServer(sensorServer);
-									stopSensorClient();
-									stopDataClient();
-									break;
-								case UP:
-									startSensorServer(sensorServer, id);
-									startSensorClient(conf.getParentId(), id,
-											conf.getParentAddress());
-									startDataClient();
-									break;
-								default:
-									break;
-								}
-							}
-						}
-					});
+            @Override
+            public void stateChanged(SensorState state) {
+              if (Sensor.this.conf != null) {
+                Sensor.this.state = state;
+                switch (state) {
+                case DOWN:
+                case PAUSE:
+                  stopSensorServer(sensorServer);
+                  stopSensorClient();
+                  stopDataClient();
+                  break;
+                case UP:
+                  startSensorServer(sensorServer, id);
+                  startSensorClient(conf.getParentId(), id, conf
+                      .getParentAddress());
+                  startDataClient();
+                  break;
+                default:
+                  break;
+                }
+              }
+            }
+          });
 
-			supervisorServer.register(this.supervisorServer);
-		} catch (MalformedPacketException e) {
-			e.printStackTrace();
-		} catch (IdAlreadyUsedException e) {
-			e.printStackTrace();
-		}
+      supervisorServer.register(this.supervisorServer);
+    } catch (MalformedPacketException e) {
+      e.printStackTrace();
+    } catch (IdAlreadyUsedException e) {
+      e.printStackTrace();
+    }
 
-		this.children = new ArrayList<Pair<Integer, InetAddress>>();
-		this.capturedData = new LinkedList<Pair<byte[], Long>>();
-		this.dataReceived = new ArrayList<Pair<byte[], Integer>>();
-	}
+    this.children = new ArrayList<Pair<Integer, InetAddress>>();
+    this.capturedData = new LinkedList<Pair<byte[], Long>>();
+    this.dataReceived = new ArrayList<Pair<byte[], Integer>>();
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public int getId() {
-		return this.id;
-	}
+  public int getId() {
+    return this.id;
+  }
 
-	public SensorConfiguration getConfiguration() {
-		return this.conf;
-	}
+  public SensorConfiguration getConfiguration() {
+    return this.conf;
+  }
 
-	public SupervisorClient getSupervisorClient() {
-		return this.supervisorClient;
-	}
+  public SupervisorClient getSupervisorClient() {
+    return this.supervisorClient;
+  }
 
-	private void startSensorServer(PacketDispatcher dispatcher, final int id) {
-		this.sensorServer = new SensorServer(id);
-		this.sensorServer.addSensorServerListener(new SensorServerListener() {
-			@Override
-			public void helloRequestReceived(int id, InetAddress address) {
-				// System.out.println("Hello request receveid to " +
-				// Sensor.this.id
-				// + " from " + id + ". Add it to my children list.");
-				children.add(new Pair<Integer, InetAddress>(id, address));
-			}
+  private void startSensorServer(PacketDispatcher dispatcher, final int id) {
+    this.sensorServer = new SensorServer(id);
+    this.sensorServer.addSensorServerListener(new SensorServerListener() {
+      @Override
+      public void helloRequestReceived(int id, InetAddress address) {
+        // System.out.println("Hello request receveid to " +
+        // Sensor.this.id
+        // + " from " + id + ". Add it to my children list.");
+        children.add(new Pair<Integer, InetAddress>(id, address));
+      }
 
-			@Override
-			public void reqDataReceived(CatchArea area, int clock, int quality) {
-				// System.out.println(Sensor.this.id + " receive a req data");
-				clockRequired = clock;
-				if (children.size() > 0) {
-					sendReqData(area, clock, quality);
-				} else {
-					/* Leaf code */
-					sendRepData(clock);
-				}
-			}
+      @Override
+      public void reqDataReceived(CatchArea area, int clock, int quality) {
+        // System.out.println(Sensor.this.id + " receive a req data");
+        clockRequired = clock;
+        if (children.size() > 0) {
+          sendReqData(area, clock, quality);
+        } else {
+          /* Leaf code */
+          sendRepData(clock);
+        }
+      }
 
-			@Override
-			public void repDataReceived(byte[] data, int mimeType) {
-				IRSensorLogger.postMessage(Level.INFO, "repDataReceived");
-				dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
+      @Override
+      public void repDataReceived(byte[] data, int mimeType) {
+        IRSensorLogger.postMessage(Level.INFO, "repDataReceived");
+        dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
 
-				// FIXME exemple d'affichage des données recu des deux fils de 2
-				if (id == 2) {
-					final JFrame frame = new JFrame("Default title");
-					frame.setSize(new Dimension(800, 600));
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					ImageIcon icon = new ImageIcon(data);
-					System.out.println("Etat de l'icon " + icon);
-					frame.setContentPane(new JLabel(icon));
-					frame.setVisible(true);
-				}
+        if (dataReceived.size() == children.size()) {
 
-				if (dataReceived.size() == children.size()) {
+          // Get data stored
+          byte[] dt = null;
+          long time = System.currentTimeMillis() - clockRequired;
+          time = 0l;
+          for (Pair<byte[], Long> CapData : capturedData) {
+            if (CapData.getSecondElement() <= time) {
+              dt = CapData.getFirstElement();
+              break;
+            }
+          }
 
-					// Get data stored
-					byte[] dt = null;
-					long time = System.currentTimeMillis() - clockRequired;
-					time = 0l;
-					for (Pair<byte[], Long> CapData : capturedData) {
-						if (CapData.getSecondElement() <= time) {
-							dt = CapData.getFirstElement();
-							break;
-						}
-					}
+          ArrayList<Object> dataToMerge = new ArrayList<Object>();
+          if (dt == null) {
+            // Date not found, do nothing
+            IRSensorLogger.postMessage(Level.WARNING, "time not found " + time);
+          } else {
+            Object myData = null;
+            try {
+              myData = SensorHandlers.byteArrayToData(dt, MimeTypes
+                  .getMimeType(mimeType));
+            } catch (MimetypeException e) {
+              // do nothing
+            }
+            if (myData != null) {
+              dataToMerge.add(myData);
+            }
+          }
 
-					ArrayList<Object> dataToMerge = new ArrayList<Object>();
-					if (dt == null) {
-						// Date not found, do nothing
-						IRSensorLogger.postMessage(Level.WARNING,
-								"time not found " + time);
-					} else {
-						Object myData = null;
-						try {
-							myData = SensorHandlers.byteArrayToData(dt,
-									MimeTypes.getMimeType(mimeType));
-						} catch (MimetypeException e) {
-							// do nothing
-						}
-						if (myData != null) {
-							dataToMerge.add(myData);
-						}
-					}
+          for (Pair<byte[], Integer> pair : dataReceived) {
+            Object sonData = null;
+            try {
+              sonData = SensorHandlers.byteArrayToData(pair.getFirstElement(),
+                  MimeTypes.getMimeType(mimeType));
+              if (sonData != null) {
+                dataToMerge.add(sonData);
+              }
+            } catch (MimetypeException e) {
+              // do nothing
+            }
 
-					for (Pair<byte[], Integer> pair : dataReceived) {
-						Object sonData = null;
-						try {
-							sonData = SensorHandlers.byteArrayToData(pair
-									.getFirstElement(), MimeTypes
-									.getMimeType(mimeType));
-							if (sonData != null) {
-								dataToMerge.add(sonData);
-							}
-						} catch (MimetypeException e) {
-							// do nothing
-						}
+          }
 
-					}
+          Object[] array = new Object[dataToMerge.size()];
+          int i = 0;
+          for (Object im : dataToMerge) {
+            array[i++] = im;
+          }
 
-					Object[] array = new Object[dataToMerge.size()];
-					int i = 0;
-					for (Object im : dataToMerge) {
-						array[i++] = im;
-					}
+          byte[] dataToSend = new byte[0];
+          Object mergedImage = null;
+          if (array.length > 0) {
+            try {
+              MimeTypes mime = MimeTypes.getMimeType(mimeType);
+              mergedImage = SensorHandlers.mergeData(mime, (Object[]) array);
 
-					byte[] dataToSend = new byte[0];
-					if (array.length > 0) {
-						try {
-							MimeTypes mime = MimeTypes.getMimeType(mimeType);
-							Object mergedImage = SensorHandlers.mergeData(mime,
-									(Object[]) array);
-							if (mergedImage != null) {
-								dataToSend = SensorHandlers.dataToByteArray(
-										mergedImage, mime,
-										"./src/images/code_sm.png");
-							}
-						} catch (MimetypeException e) {
-							// do noting
-						}
+              if (mergedImage != null) {
+                dataToSend = SensorHandlers.dataToByteArray(mergedImage, mime,
+                    "./src/images/code_sm.png");
+              } else {
+                System.out.println("unable to merge!!");
+              }
+            } catch (MimetypeException e) {
+              System.out.println("wrong mime type !!");
+              // do noting
+            }
 
-					}
+          }
 
-					// EXEMPLE d'affichage du merge des deux fils de 2
-					/*
-					 * if (id == 2) { final JFrame frame = new JFrame("Default
-					 * title"); frame.setSize(new Dimension(800, 600));
-					 * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					 * frame.setContentPane(new JLabel(new
-					 * ImageIcon(dataToSend))); frame.setVisible(true); }
-					 */
+          if (conf.getParentId() == -1) {
+            /* Sink code */
+            supervisorClient.sendRepData(id);
+          } else {
+            sensorClient.sendRepData(conf.getParentAddress(), conf
+                .getParentId(), mimeType, dataToSend.length, dataToSend);
+          }
+        }
+      }
+    });
+    try {
+      dispatcher.register(Sensor.this.sensorServer);
+    } catch (IdAlreadyUsedException e) {
+      e.printStackTrace();
+    }
+  }
 
-					if (conf.getParentId() == -1) {
-						/* Sink code */
-						supervisorClient.sendRepData(id);
-					} else {
-						sensorClient.sendRepData(conf.getParentAddress(), conf
-								.getParentId(), mimeType, dataToSend.length,
-								dataToSend);
-					}
-				}
-			}
-		});
-		try {
-			dispatcher.register(Sensor.this.sensorServer);
-		} catch (IdAlreadyUsedException e) {
-			e.printStackTrace();
-		}
-	}
+  private void startSensorClient(int idD, int idS, InetAddress address) {
+    this.sensorClient = new SensorClient();
+    this.sensorClient.addSensorClientListener(new SensorClientListener() {
+      @Override
+      public void helloReplyReceived() {
+        // do nothing, my father is correctly connected
+        System.out.println("Hello reply receveid to " + Sensor.this.id);
+      }
+    });
+    this.sensorClient.sendHelloRequest(idD, idS, address);
+  }
 
-	private void startSensorClient(int idD, int idS, InetAddress address) {
-		this.sensorClient = new SensorClient();
-		this.sensorClient.addSensorClientListener(new SensorClientListener() {
-			@Override
-			public void helloReplyReceived() {
-				// do nothing, my father is correctly connected
-				System.out.println("Hello reply receveid to " + Sensor.this.id);
-			}
-		});
-		this.sensorClient.sendHelloRequest(idD, idS, address);
-	}
+  private void stopSensorServer(PacketDispatcher dispatcher) {
+    dispatcher.unregister(id);
+  }
 
-	private void stopSensorServer(PacketDispatcher dispatcher) {
-		dispatcher.unregister(id);
-	}
+  private void stopSensorClient() {
+    // TODO
+  }
 
-	private void stopSensorClient() {
-		// TODO
-	}
+  private void startDataClient() {
+    this.dataClient = new DataClient(this.id, this.conf.getCArea(), this.conf
+        .getQuality(), this.conf.getClock(), this.dataServerAddr);
+    this.dataClient.addSensorDataListener(new SensorDataListener() {
+      @Override
+      public void dataReceived(long currentDate, int mimeType, byte[] data) {
+        /* Check if place is left in fifo */
+        if (capturedData.size() >= MAX_DATA_STORABLE) {
+          capturedData.removeLast();
+        }
+        try {
+          Sensor.this.mimeType = MimeTypes.getMimeType(mimeType);
+        } catch (MimetypeException e) {
+          // do nothing
+        }
+        /* Add captured data to fifo */
+        currentDate = 0l;
+        capturedData.addFirst(new Pair<byte[], Long>(data, currentDate));
+      }
+    });
+  }
 
-	private void startDataClient() {
-		this.dataClient = new DataClient(this.id, this.conf.getCArea(),
-				this.conf.getQuality(), this.conf.getClock(),
-				this.dataServerAddr);
-		this.dataClient.addSensorDataListener(new SensorDataListener() {
-			@Override
-			public void dataReceived(long currentDate, int mimeType, byte[] data) {
-				/* Check if place is left in fifo */
-				if (capturedData.size() >= MAX_DATA_STORABLE) {
-					capturedData.removeLast();
-				}
-				try {
-					Sensor.this.mimeType = MimeTypes.getMimeType(mimeType);
-				} catch (MimetypeException e) {
-					// do nothing
-				}
-				/* Add captured data to fifo */
-				currentDate = 0l;
-				capturedData
-						.addFirst(new Pair<byte[], Long>(data, currentDate));
+  private void stopDataClient() {
+    // TODO
+  }
 
-			}
-		});
-	}
+  private void sendReqData(final CatchArea cArea, final int clock,
+      final int quality) {
+    if (conf != null && state.equals(SensorState.UP)) {
+      for (final Pair<Integer, InetAddress> pair : Sensor.this.children) {
+        Sensor.this.executor.submit(new Runnable() {
+          @Override
+          public void run() {
+            Sensor.this.sensorClient.sendReqData(pair.getSecondElement(), pair
+                .getFirstElement(), cArea, clock, quality);
+          };
+        });
+      }
+    }
+  }
 
-	private void stopDataClient() {
-		// TODO
-	}
+  private void sendRepData(int date) {
+    clockRequired = -1;
+    if (this.conf.getParentId() == -1) {
+      /* Sink code */
+      supervisorClient.sendRepData(id);
+    } else {
+      byte[] data = null;
+      long time = System.currentTimeMillis() - date;
+      time = 0l;
+      // TODO
 
-	private void sendReqData(final CatchArea cArea, final int clock,
-			final int quality) {
-		if (conf != null && state.equals(SensorState.UP)) {
-			for (final Pair<Integer, InetAddress> pair : Sensor.this.children) {
-				Sensor.this.executor.submit(new Runnable() {
-					@Override
-					public void run() {
-						Sensor.this.sensorClient.sendReqData(pair
-								.getSecondElement(), pair.getFirstElement(),
-								cArea, clock, quality);
-					};
-				});
-			}
-		}
-	}
+      for (Pair<byte[], Long> CapData : capturedData) {
+        System.out.println("cap data " + CapData.getSecondElement()
+            + " at time " + time);
+        if (CapData.getSecondElement() <= time) {
+          data = CapData.getFirstElement();
+          break;
+        }
+      }
 
-	private void sendRepData(int date) {
-		clockRequired = -1;
-		if (this.conf.getParentId() == -1) {
-			/* Sink code */
-			supervisorClient.sendRepData(id);
-		} else {
-			byte[] data = null;
-			long time = System.currentTimeMillis() - date;
-			time = 0l;
-			// TODO
+      if (data == null) {
+        System.out.println(id + " Je remet data à 0");
+        data = new byte[0];
+      }
 
-			for (Pair<byte[], Long> CapData : capturedData) {
-				System.out.println("cap data " + CapData.getSecondElement()
-						+ " at time " + time);
-				if (CapData.getSecondElement() <= time) {
-					data = CapData.getFirstElement();
-					break;
-				}
-			}
+      System.out.println(id + " envoi " + data + " de taille " + data.length);
 
-			if (data == null) {
-				System.out.println(id + " Je remet data à 0");
-				data = new byte[0];
-			}
+      this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
+          .getParentId(), this.mimeType.getId(), data.length, data);
 
-			System.out.println(id + " envoi " + data + " de taille "
-					+ data.length);
-
-			this.sensorClient.sendRepData(this.conf.getParentAddress(),
-					this.conf.getParentId(), this.mimeType.getId(),
-					data.length, data);
-
-			this.mimeType = null;
-			this.dataReceived.clear();
-		}
-	}
+      this.mimeType = null;
+      this.dataReceived.clear();
+    }
+  }
 
 }
