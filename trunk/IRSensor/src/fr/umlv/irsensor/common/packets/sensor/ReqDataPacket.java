@@ -73,6 +73,7 @@ public class ReqDataPacket
 
     if (bb == null) throw new IllegalArgumentException();
     ByteBuffer packet = bb.duplicate();
+    packet.clear();
     int index = 0;
 
     if (packet.capacity() < PacketFields.getLength(PacketFields.OPCODE,
