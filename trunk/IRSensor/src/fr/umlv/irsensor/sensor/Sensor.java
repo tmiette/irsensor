@@ -159,12 +159,12 @@ public class Sensor {
       }
 
       @Override
-      public void repDataReceived(byte[] data, int mimeType) {
-        IRSensorLogger.postMessage(Level.INFO, "repDataReceived");
+      public synchronized void repDataReceived(byte[] data, int mimeType) {
         dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
+        System.out.println("data received (my id = " + id + ")");
 
         if (dataReceived.size() == children.size()) {
-
+          System.out.println(dataReceived.size() + " data received (my id = " + id + ")");
           // Get data stored
           byte[] dt = null;
           long time = System.currentTimeMillis() - clockRequired;
@@ -306,7 +306,7 @@ public class Sensor {
     }
   }
 
-  private void sendRepData(int date) {
+  private synchronized void sendRepData(int date) {
     clockRequired = -1;
     if (this.conf.getParentId() == -1) {
       /* Sink code */
@@ -325,8 +325,7 @@ public class Sensor {
           break;
         }
       }
-
-      System.out.println("SIZE : " + this.capturedData.size());
+      System.out.println("I am "+id+ " with capture area "+this.capturedData.size());
       
       if (data == null) {
         data = new byte[0];
