@@ -60,7 +60,7 @@ public class Sensor {
       final PacketDispatcher sensorServer, String dataServerAddr,
       String supervisorServerAddr) throws IOException {
     this.dataServerAddr = dataServerAddr;
-    this.supervisorClient = new SupervisorClient(this);
+    this.supervisorClient = new SupervisorClient(this, supervisorServerAddr);
 
     try {
       this.supervisorClient.registrySensor();
