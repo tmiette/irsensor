@@ -3,6 +3,7 @@ package fr.umlv.irsensor.sensor.networkClients;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -22,15 +23,23 @@ public class SupervisorClient {
   private static final int BUFFER_SIZE = 512;
 
   private final Sensor sensor;
+  
+  private InetSocketAddress serverAddr;
 
-  public SupervisorClient(Sensor sensor) {
+  public SupervisorClient(Sensor sensor, String ipAddress) {
     this.sensor = sensor;
+    try {
+		this.serverAddr = new InetSocketAddress(InetAddress.getByName(ipAddress), 
+				IRSensorConfiguration.SUPERVISOR_SERVER_PORT);
+	} catch (UnknownHostException e) {
+		System.err.println("IO Error : " + e.getMessage());
+	    System.exit(1); // the application cannot continue
+	}
   }
 
   public void registrySensor() throws IOException, MalformedPacketException {
     SocketChannel channel = SocketChannel.open();
-    channel.connect(new InetSocketAddress(InetAddress
-        .getByAddress(serverAddress), IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
+    channel.connect(this.serverAddr);
 
     ByteBuffer readBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
 
@@ -54,8 +63,7 @@ public class SupervisorClient {
     SocketChannel socketClient = null;
     try {
       socketClient = SocketChannel.open();
-      socketClient.connect(new InetSocketAddress(InetAddress
-          .getByAddress(serverAddress), IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
+      socketClient.connect(this.serverAddr);
       ByteBuffer b = PacketFactory.createRepData(id, mimeType, data.length,
           data);
       socketClient.write(b);
