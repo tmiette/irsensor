@@ -8,11 +8,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.WindowConstants;
-
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.data.MimeTypes;
 import fr.umlv.irsensor.common.data.MimetypeException;
@@ -147,15 +142,11 @@ public class Sensor {
     this.sensorServer.addSensorServerListener(new SensorServerListener() {
       @Override
       public void helloRequestReceived(int id, InetAddress address) {
-        // System.out.println("Hello request receveid to " +
-        // Sensor.this.id
-        // + " from " + id + ". Add it to my children list.");
         children.add(new Pair<Integer, InetAddress>(id, address));
       }
 
       @Override
       public void reqDataReceived(CatchArea area, int clock, int quality) {
-        // System.out.println(Sensor.this.id + " receive a req data");
         clockRequired = clock;
         if (children.size() > 0) {
           sendReqData(area, clock, quality);
@@ -191,11 +182,6 @@ public class Sensor {
             try {
               myData = SensorHandlers.byteArrayToData(dt, MimeTypes
                   .getMimeType(mimeType));
-              JFrame f = new JFrame("id : "+id);
-              f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-              f.setSize(800, 600);
-              f.setContentPane(new JLabel(new ImageIcon(dt)));
-              f.setVisible(true);
             } catch (MimetypeException e) {
               // do nothing
             }
@@ -323,9 +309,6 @@ public class Sensor {
       clockRequired = -1;
       if (this.conf.getParentId() == -1) {
         /* Sink code */
-        // FIXME
-        System.out.println("JE NE DOIS JAMAIS PASSER LA !!!!!!!!!!!!!!!!!!!");
-        // supervisorClient.sendRepData(id);
       } else {
         byte[] data = null;
         long time = System.currentTimeMillis() - date;
@@ -343,12 +326,6 @@ public class Sensor {
           data = new byte[0];
         }
         
-        JFrame f = new JFrame("id : "+id);
-        f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        f.setSize(800, 600);
-        f.setContentPane(new JLabel(new ImageIcon(data)));
-        f.setVisible(true);
-
         this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
             .getParentId(), this.mimeType.getId(), data.length, data);
 
