@@ -57,7 +57,8 @@ public class DataClient {
       ByteBuffer buffer = PacketFactory.createReqData(id, catchArea, quality,
           clock);
       channel.write(buffer);
-      channel.read(dataServerRepDataBuffer);
+      while (channel.read(dataServerRepDataBuffer) != -1) {
+      }
       dataServerRepDataBuffer.flip();
       try {
 
