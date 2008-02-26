@@ -17,7 +17,7 @@ import fr.umlv.irsensor.sensor.Sensor;
 public class SupervisorClient {
 
   private static final byte[] serverAddress = new byte[] { (byte) 192,
-      (byte) 168, (byte) 1, (byte) 2 };
+      (byte) 168, (byte) 1, (byte) 5 };
 
   private static final int BUFFER_SIZE = 512;
 

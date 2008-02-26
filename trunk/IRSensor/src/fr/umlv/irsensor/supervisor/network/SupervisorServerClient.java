@@ -48,22 +48,24 @@ public class SupervisorServerClient {
 			System.out.println("want to change state of "+node.getId()+" this state "+state);
 			ByteBuffer b = PacketFactory.createSetSta(node.getId(), state);
 			socketClient.write(b);
-
-			final ByteBuffer buffer = ByteBuffer.allocate(64);
-			socketClient.read(buffer);
-			buffer.flip();
 			
-			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-				fireSensorStateChanged(node, state);
-			}
-			else {
-				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
-			}
+
+//			final ByteBuffer buffer = ByteBuffer.allocate(64);
+//			socketClient.read(buffer);
+//			buffer.flip();
+//			
+//			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
+//				fireSensorStateChanged(node, state);
+//			}
+//			else {
+//				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
+//			}
 		} catch (IOException e) {
 			System.err.println("IO error "+e.getMessage());
 		}
 		finally{
 			close(socketClient);
+			fireSensorStateChanged(node, state);
 		}
 	}
 
@@ -92,19 +94,20 @@ public class SupervisorServerClient {
 
 			socketClient.write(b);
 
-			final ByteBuffer buffer = ByteBuffer.allocate(64);
-			socketClient.read(buffer);
-			buffer.flip();
-			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-				fireSensorConfigurationChanged(node, conf);
-			} else {
-				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
-			}
+//			final ByteBuffer buffer = ByteBuffer.allocate(64);
+//			socketClient.read(buffer);
+//			buffer.flip();
+//			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
+//				fireSensorConfigurationChanged(node, conf);
+//			} else {
+//				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
+//			}
 		} catch (IOException e) {
 			System.err.println("IO error "+e.getMessage());
 		}
 		finally{
 			close(socketClient);
+			fireSensorConfigurationChanged(node, conf);
 		}
 	}
 	

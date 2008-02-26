@@ -30,14 +30,14 @@ public class SensorClient {
         ByteBuffer b = PacketFactory.createReqHello(idS, idD, ErrorCode.OK);
         socketClient.write(b);
 
-        final ByteBuffer buffer = ByteBuffer.allocate(64);
-        socketClient.read(buffer);
-        buffer.flip();
-        if (DecodePacket.getOpCode(buffer) == OpCode.REPHELLO) {
-          fireHelloReplyReceived();
-        } else {
-          // TODO what can we do here?
-        }
+//        final ByteBuffer buffer = ByteBuffer.allocate(64);
+//        socketClient.read(buffer);
+//        buffer.flip();
+//        if (DecodePacket.getOpCode(buffer) == OpCode.REPHELLO) {
+//          fireHelloReplyReceived();
+//        } else {
+//          // TODO what can we do here?
+//        }
       } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -48,6 +48,7 @@ public class SensorClient {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
+        fireHelloReplyReceived();
       }
     }
   }

@@ -118,7 +118,7 @@ public class SupervisorServer {
           SocketChannel client = null;
           try {
             client = SupervisorServer.this.servChannel.accept();
-            client.read(data);
+            while (client.read(data) != -1);
             data.flip();
 
             if (DecodePacket.getOpCode(data) == OpCode.REPDATA) {

@@ -25,7 +25,7 @@ import fr.umlv.irsensor.sensor.SensorDataListener;
 public class DataClient {
   private InetSocketAddress serverAddr;
   private SocketChannel channel;
-  private ByteBuffer dataServerRepDataBuffer = ByteBuffer.allocate(300000);
+  private ByteBuffer dataServerRepDataBuffer = ByteBuffer.allocate(IRSensorConfiguration.PACKET_MAX_SIZE);
   private final List<SensorDataListener> listeners = new ArrayList<SensorDataListener>();
   private final ScheduledExecutorService executor = Executors
       .newSingleThreadScheduledExecutor();
