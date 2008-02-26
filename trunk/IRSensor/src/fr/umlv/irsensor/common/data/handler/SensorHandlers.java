@@ -13,7 +13,7 @@ public class SensorHandlers {
     SensorImageHandler image = new SensorImageHandler();
     handlers.put(MimeTypes.IMAGE_BMP, image);
     handlers.put(MimeTypes.IMAGE_GIF, image);
-    //handlers.put(MimeTypes.IMAGE_JPEG, image);
+    // handlers.put(MimeTypes.IMAGE_JPEG, image);
     handlers.put(MimeTypes.IMAGE_JPG, image);
     handlers.put(MimeTypes.IMAGE_PNG, image);
     handlers.put(MimeTypes.IMAGE_TIFF, image);
@@ -45,4 +45,5 @@ public class SensorHandlers {
     SensorHandler handler = ensureHandlerExists(mimeType);
     return handler.mergeData(datas);
   }
+
 }

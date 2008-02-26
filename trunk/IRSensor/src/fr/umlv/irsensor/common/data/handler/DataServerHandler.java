@@ -9,8 +9,6 @@ public interface DataServerHandler {
 	
 	public byte[] dataToByteArray(Object data);
 	
-	public Object reduceData(Object data);
-	
 	public MimeTypes getMimeType();
 
 }

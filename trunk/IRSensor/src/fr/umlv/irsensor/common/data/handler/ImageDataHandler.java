@@ -54,40 +54,6 @@ public class ImageDataHandler implements DataServerHandler {
   }
 
   @Override
-  public BufferedImage reduceData(Object data) {
-    final int height = image.getHeight();
-    final int width = image.getWidth();
-    int minX1 = width, minY1 = height;
-    int maxX2 = 0, maxY2 = 0;
-    // Retrieve the effective drawn zone
-    for (int j = 0; j < height; j++) {
-      for (int k = 0; k < width; k++) {
-        int rgb = image.getRGB(k, j);
-        if (rgb == 0)
-          continue;
-        minX1 = Math.min(minX1, k);
-        minY1 = Math.min(minY1, j);
-        maxX2 = Math.max(maxX2, k);
-        maxY2 = Math.max(maxY2, j);
-
-      }
-    }
-    // Create the reduced image
-    int newWidth = maxX2 - minX1;
-    int newHeight = maxY2 - minY1;
-    System.out.println("New width : " + newWidth + " height " + newHeight);
-    BufferedImage im = new BufferedImage(newWidth, newHeight,
-        BufferedImage.TYPE_4BYTE_ABGR);
-    for (int j = 0; j < newHeight; j++) {
-      for (int k = 0; k < newWidth; k++) {
-        int rgb = image.getRGB(k + minX1, j + minY1);
-        im.setRGB(k, j, rgb);
-      }
-    }
-    return im;
-  }
-
-  @Override
   public byte[] dataToByteArray(Object data) {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     try {
