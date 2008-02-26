@@ -41,14 +41,10 @@
 		</jar>
 		<jar destfile="sensor.jar" defaultexcludes="true">
 			<fileset dir="${src}">
-				<exclude name="**/supervisor/**" />
-				<exclude name="**/dataserver/**" />
-				<exclude name="**/gui/**" />
+				
 			</fileset>
 			<fileset dir="${classes}">
-				<exclude name="**/supervisor/**" />
-				<exclude name="**/dataserver/**" />
-				<exclude name="**/gui/**" />
+				
 			</fileset>
 			<manifest>
 			 		<attribute name="MAIN-CLASS" value="fr/umlv/irsensor/sensor/SensorMain" />
