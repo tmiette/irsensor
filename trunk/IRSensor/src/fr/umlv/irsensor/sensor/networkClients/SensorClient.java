@@ -11,8 +11,6 @@ import java.util.List;
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.ErrorCode;
-import fr.umlv.irsensor.common.fields.OpCode;
-import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.sensor.SensorClientListener;
 
@@ -30,22 +28,12 @@ public class SensorClient {
         ByteBuffer b = PacketFactory.createReqHello(idS, idD, ErrorCode.OK);
         socketClient.write(b);
 
-//        final ByteBuffer buffer = ByteBuffer.allocate(64);
-//        socketClient.read(buffer);
-//        buffer.flip();
-//        if (DecodePacket.getOpCode(buffer) == OpCode.REPHELLO) {
-//          fireHelloReplyReceived();
-//        } else {
-//          // TODO what can we do here?
-//        }
       } catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } finally {
         try {
           socketClient.close();
         } catch (IOException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
         fireHelloReplyReceived();
@@ -64,13 +52,11 @@ public class SensorClient {
       socketClient.write(b);
 
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } finally {
       try {
         socketClient.close();
       } catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -84,16 +70,13 @@ public class SensorClient {
       socketClient.connect(new InetSocketAddress(address,
           IRSensorConfiguration.SENSOR_SERVER_PORT));
       ByteBuffer b = PacketFactory.createRepData(id, mimeType, dataLen, data);
-      System.out.println("I send data " + b);
       socketClient.write(b);
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } finally {
       try {
         socketClient.close();
       } catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
