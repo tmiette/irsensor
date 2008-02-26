@@ -17,7 +17,12 @@ import fr.umlv.irsensor.util.IRSensorLogger;
  */
 public class SupervisorMain {
 	public static void main(String[] args) {
-
+		
+		if(args.length < 1){
+			System.out.println("SupervisorMain <fichier configuration>");
+			System.exit(1);
+		}
+		
 		IRSensorLogger.postMessage(Level.FINE, "Supervisor Application is started");
 		// schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
