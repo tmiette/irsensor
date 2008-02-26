@@ -5,16 +5,16 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.fields.CatchArea;
-import fr.umlv.irsensor.common.fields.ErrorCode;
 import fr.umlv.irsensor.common.fields.SensorState;
-import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.common.packets.PacketFactory;
 import fr.umlv.irsensor.supervisor.SensorNode;
 import fr.umlv.irsensor.supervisor.listeners.SupervisorServerClientListener;
+import fr.umlv.irsensor.util.IRSensorLogger;
 
 /**
  * SupervisorClient is a network client which is used to retrieve informations
@@ -45,21 +45,11 @@ public class SupervisorServerClient {
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
 					IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
-			System.out.println("want to change state of "+node.getId()+" this state "+state);
+      IRSensorLogger.postMessage(Level.INFO, "want to change state of "+node.getId()+" this state "+state);
 			ByteBuffer b = PacketFactory.createSetSta(node.getId(), state);
 			socketClient.write(b);
 			
 
-//			final ByteBuffer buffer = ByteBuffer.allocate(64);
-//			socketClient.read(buffer);
-//			buffer.flip();
-//			
-//			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-//				fireSensorStateChanged(node, state);
-//			}
-//			else {
-//				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
-//			}
 		} catch (IOException e) {
 			System.err.println("IO error "+e.getMessage());
 		}
@@ -87,24 +77,16 @@ public class SupervisorServerClient {
 			if (conf.getParentAddress() != null) {
 				parentAddress = conf.getParentAddress().getAddress();
 			}
-			System.out.println("set conf "+node.getId());
+			IRSensorLogger.postMessage(Level.INFO, "set conf "+node.getId());
 			ByteBuffer b = PacketFactory.createSetConfPacket(node.getId(), conf
 					.getCArea(), conf.getClock(), conf.getAutonomy(), conf.getQuality(),
 					conf.getPayload(), parentAddress, conf.getParentId());
 
 			socketClient.write(b);
 
-//			final ByteBuffer buffer = ByteBuffer.allocate(64);
-//			socketClient.read(buffer);
-//			buffer.flip();
-//			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-//				fireSensorConfigurationChanged(node, conf);
-//			} else {
-//				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
-//			}
 			
 		} catch (IOException e) {
-			System.err.println("IO error "+e.getMessage());
+		  IRSensorLogger.postMessage(Level.SEVERE, "IO error "+e.getMessage());
 		}
 		finally{
 			close(socketClient);
@@ -131,7 +113,7 @@ public class SupervisorServerClient {
 
 			socketClient.write(PacketFactory.createReqData(node.getId(), cArea, quality, clock));
 		} catch (IOException e) {
-			System.err.println("IO error "+e.getMessage());
+		  IRSensorLogger.postMessage(Level.SEVERE, "IO error "+e.getMessage());
 		}
 		finally{
 			close(socketClient);
@@ -147,7 +129,7 @@ public class SupervisorServerClient {
 		try {
 			if(channel.isConnected())channel.close();
 		} catch (IOException e) {
-			System.err.println("An error has occured during closing channel");
+		  IRSensorLogger.postMessage(Level.SEVERE, "An error has occured during closing channel");
 		}
 	}
 
