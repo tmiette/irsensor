@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import javax.swing.JFrame;
-
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.fields.CatchArea;
 import fr.umlv.irsensor.common.fields.ErrorCode;
@@ -64,13 +62,6 @@ public class Supervisor {
 
 			@Override
 			public void registrationTerminated() {
-				//TODO : remove this
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-				  // TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been registered");
 				for (Pair<Integer, SensorConfiguration> pair : sensorConfs) {
 					setConf(getSensorNode(pair.getFirstElement()), pair.getSecondElement());
@@ -78,9 +69,7 @@ public class Supervisor {
 				
 				IRSensorLogger.postMessage(Level.FINE, "All sensor nodes have been configured");
 				
-				
 				server.listenRepData();
-				
 			}
 			
 			@Override
