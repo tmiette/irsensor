@@ -55,6 +55,7 @@ public class Sensor {
   private MimeTypes mimeType;
   
   private final Object lock = new Object();
+ 
 
   public Sensor(final PacketDispatcher supervisorServer,
       final PacketDispatcher sensorServer, String dataServerAddr,
