@@ -26,6 +26,7 @@ public class SupervisorClient {
   
   private InetSocketAddress serverAddr;
 
+  
   public SupervisorClient(Sensor sensor, String ipAddress) {
     this.sensor = sensor;
     try {
