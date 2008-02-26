@@ -86,7 +86,7 @@ public class SupervisorServerClient {
 
 			
 		} catch (IOException e) {
-		  IRSensorLogger.postMessage(Level.SEVERE, "IO error "+e.getMessage());
+		  IRSensorLogger.postMessage(Level.SEVERE, "IO error "+e.getMessage(), e);
 		}
 		finally{
 			close(socketClient);
@@ -113,7 +113,7 @@ public class SupervisorServerClient {
 
 			socketClient.write(PacketFactory.createReqData(node.getId(), cArea, quality, clock));
 		} catch (IOException e) {
-		  IRSensorLogger.postMessage(Level.SEVERE, "IO error "+e.getMessage());
+		  IRSensorLogger.postMessage(Level.SEVERE, "IO error "+e.getMessage(), e);
 		}
 		finally{
 			close(socketClient);
@@ -129,7 +129,7 @@ public class SupervisorServerClient {
 		try {
 			if(channel.isConnected())channel.close();
 		} catch (IOException e) {
-		  IRSensorLogger.postMessage(Level.SEVERE, "An error has occured during closing channel");
+		  IRSensorLogger.postMessage(Level.SEVERE, "An error has occured during closing channel", e);
 		}
 	}
 
