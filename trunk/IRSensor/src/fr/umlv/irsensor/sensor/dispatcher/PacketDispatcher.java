@@ -60,7 +60,7 @@ public class PacketDispatcher {
             new Thread(new Runnable() {
               public void run() {
                 try {
-                  while (client.read(buffer) != -1);
+                  client.read(buffer);
                 } catch (IOException e) {
                   // TODO Auto-generated catch block
                   e.printStackTrace();

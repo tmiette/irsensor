@@ -47,8 +47,8 @@ public class SensorServer implements PacketRegisterable {
           .getInetAddress());
 
       try {
-        channel.write(PacketFactory.createRepHello(id, reqHelloPacket
-            .getSourceId()));
+//        channel.write(PacketFactory.createRepHello(id, reqHelloPacket
+//            .getSourceId()));
         channel.close();
       } catch (IOException e) {
         e.printStackTrace();
