@@ -83,6 +83,7 @@ public class SensorClient {
       socketClient.connect(new InetSocketAddress(address,
           IRSensorConfiguration.SENSOR_SERVER_PORT));
       ByteBuffer b = PacketFactory.createRepData(id, mimeType, dataLen, data);
+      System.out.println("I send data " + b);
       socketClient.write(b);
     } catch (IOException e) {
       // TODO Auto-generated catch block

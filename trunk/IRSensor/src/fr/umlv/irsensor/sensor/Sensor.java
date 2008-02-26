@@ -8,6 +8,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.WindowConstants;
+
 import fr.umlv.irsensor.common.SensorConfiguration;
 import fr.umlv.irsensor.common.data.MimeTypes;
 import fr.umlv.irsensor.common.data.MimetypeException;
@@ -53,6 +58,8 @@ public class Sensor {
   private static final int MAX_DATA_STORABLE = 10;
 
   private MimeTypes mimeType;
+  
+  private final Object lock = new Object();
 
   public Sensor(final PacketDispatcher supervisorServer,
       final PacketDispatcher sensorServer, String dataServerAddr,
@@ -159,12 +166,11 @@ public class Sensor {
       }
 
       @Override
-      public synchronized void repDataReceived(byte[] data, int mimeType) {
-        dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
-        System.out.println("data received (my id = " + id + ")");
+      public void repDataReceived(byte[] data, int mimeType) {
+        synchronized (lock) {
+                  dataReceived.add(new Pair<byte[], Integer>(data, mimeType));
 
         if (dataReceived.size() == children.size()) {
-          System.out.println(dataReceived.size() + " data received (my id = " + id + ")");
           // Get data stored
           byte[] dt = null;
           long time = System.currentTimeMillis() - clockRequired;
@@ -185,6 +191,11 @@ public class Sensor {
             try {
               myData = SensorHandlers.byteArrayToData(dt, MimeTypes
                   .getMimeType(mimeType));
+              JFrame f = new JFrame("id : "+id);
+              f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+              f.setSize(800, 600);
+              f.setContentPane(new JLabel(new ImageIcon(dt)));
+              f.setVisible(true);
             } catch (MimetypeException e) {
               // do nothing
             }
@@ -237,6 +248,7 @@ public class Sensor {
           }
         }
       }
+    }
     });
     try {
       dispatcher.register(Sensor.this.sensorServer);
@@ -306,35 +318,42 @@ public class Sensor {
     }
   }
 
-  private synchronized void sendRepData(int date) {
-    clockRequired = -1;
-    if (this.conf.getParentId() == -1) {
-      /* Sink code */
-      // FIXME
-      System.out.println("JE NE DOIS JAMAIS PASSER LA !!!!!!!!!!!!!!!!!!!");
-      // supervisorClient.sendRepData(id);
-    } else {
-      byte[] data = null;
-      long time = System.currentTimeMillis() - date;
-      time = 0l;
-      // TODO
+  private void sendRepData(int date) {
+    synchronized (lock) {
+      clockRequired = -1;
+      if (this.conf.getParentId() == -1) {
+        /* Sink code */
+        // FIXME
+        System.out.println("JE NE DOIS JAMAIS PASSER LA !!!!!!!!!!!!!!!!!!!");
+        // supervisorClient.sendRepData(id);
+      } else {
+        byte[] data = null;
+        long time = System.currentTimeMillis() - date;
+        time = 0l;
+        // TODO
 
-      for (Pair<byte[], Long> CapData : capturedData) {
-        if (CapData.getSecondElement() <= time) {
-          data = CapData.getFirstElement();
-          break;
+        for (Pair<byte[], Long> CapData : capturedData) {
+          if (CapData.getSecondElement() <= time) {
+            data = CapData.getFirstElement();
+            break;
+          }
         }
-      }
-      System.out.println("I am "+id+ " with capture area "+this.capturedData.size());
-      
-      if (data == null) {
-        data = new byte[0];
-      }
-      
-      this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
-          .getParentId(), this.mimeType.getId(), data.length, data);
 
-      this.dataReceived.clear();
+        if (data == null) {
+          data = new byte[0];
+        }
+        
+        JFrame f = new JFrame("id : "+id);
+        f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        f.setSize(800, 600);
+        f.setContentPane(new JLabel(new ImageIcon(data)));
+        f.setVisible(true);
+
+        this.sensorClient.sendRepData(this.conf.getParentAddress(), this.conf
+            .getParentId(), this.mimeType.getId(), data.length, data);
+
+        this.dataReceived.clear();
+      }
     }
   }
 
