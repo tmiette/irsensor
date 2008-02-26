@@ -50,16 +50,16 @@ public class SupervisorServerClient {
 			socketClient.write(b);
 			
 
-			final ByteBuffer buffer = ByteBuffer.allocate(64);
-			socketClient.read(buffer);
-			buffer.flip();
-			
-			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-				fireSensorStateChanged(node, state);
-			}
-			else {
-				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
-			}
+//			final ByteBuffer buffer = ByteBuffer.allocate(64);
+//			socketClient.read(buffer);
+//			buffer.flip();
+//			
+//			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
+//				fireSensorStateChanged(node, state);
+//			}
+//			else {
+//				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
+//			}
 		} catch (IOException e) {
 			System.err.println("IO error "+e.getMessage());
 		}
@@ -87,21 +87,22 @@ public class SupervisorServerClient {
 			if (conf.getParentAddress() != null) {
 				parentAddress = conf.getParentAddress().getAddress();
 			}
-
+			System.out.println("set conf "+node.getId());
 			ByteBuffer b = PacketFactory.createSetConfPacket(node.getId(), conf
 					.getCArea(), conf.getClock(), conf.getAutonomy(), conf.getQuality(),
 					conf.getPayload(), parentAddress, conf.getParentId());
 
 			socketClient.write(b);
 
-			final ByteBuffer buffer = ByteBuffer.allocate(64);
-			socketClient.read(buffer);
-			buffer.flip();
-			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
-				fireSensorConfigurationChanged(node, conf);
-			} else {
-				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
-			}
+//			final ByteBuffer buffer = ByteBuffer.allocate(64);
+//			socketClient.read(buffer);
+//			buffer.flip();
+//			if (DecodePacket.getErrorCode(buffer) == ErrorCode.OK) {
+//				fireSensorConfigurationChanged(node, conf);
+//			} else {
+//				socketClient.write(PacketFactory.createAck(node.getId(), ErrorCode.INVALID_PACKET));
+//			}
+			
 		} catch (IOException e) {
 			System.err.println("IO error "+e.getMessage());
 		}
