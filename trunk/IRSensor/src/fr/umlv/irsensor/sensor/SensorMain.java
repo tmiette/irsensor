@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.exception.MalformedPacketException;
 import fr.umlv.irsensor.sensor.dispatcher.PacketDispatcher;
-import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
 import fr.umlv.irsensor.util.IRSensorLogger;
  
 /**
@@ -21,7 +20,7 @@ public class SensorMain {
 	public static void main(String[] args) throws IOException, MalformedPacketException {
 		
 		if(args.length < 3){
-			System.out.println("Main <sensors> <data server ip> <supervisor server ip>");
+			System.out.println("SensorMain <sensors> <data server ip> <supervisor server ip>");
 			System.exit(1);
 		}
 		
@@ -37,7 +36,7 @@ public class SensorMain {
 		final PacketDispatcher sensorDispatcher = new PacketDispatcher(IRSensorConfiguration.SENSOR_SERVER_PORT, "Sensor Dispatcher");
 		
 		for(int i=0; i<Integer.parseInt(args[0]); i++){
-			final Sensor sensor = new Sensor(supervisorDispatcher, sensorDispatcher, dataServerIpAddress, 
+			new Sensor(supervisorDispatcher, sensorDispatcher, dataServerIpAddress, 
 					supervisorServerIpAddress);
 		}
 		
