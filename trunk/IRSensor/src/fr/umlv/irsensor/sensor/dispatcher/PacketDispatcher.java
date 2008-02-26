@@ -53,14 +53,24 @@ public class PacketDispatcher {
           serverSocket.socket().bind(new InetSocketAddress(socketPort));
 
           System.out.println("Dispatcher is listening on port " + socketPort);
-          final ByteBuffer buffer = ByteBuffer
-              .allocate(IRSensorConfiguration.PACKET_MAX_SIZE);
+          
           while (true) {
             final SocketChannel client = serverSocket.accept();
             new Thread(new Runnable() {
               public void run() {
+                final ByteBuffer buffer = ByteBuffer
+                .allocate(IRSensorConfiguration.PACKET_MAX_SIZE);
                 try {
-                  while( client.read(buffer) != -1);
+                  
+                  while( client.read(buffer) != -1) {
+                    System.out.println(buffer);
+                    try {
+                      Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                      // TODO Auto-generated catch block
+                      e.printStackTrace();
+                    }
+                  }
                 } catch (IOException e) {
                   // TODO Auto-generated catch block
                   e.printStackTrace();
