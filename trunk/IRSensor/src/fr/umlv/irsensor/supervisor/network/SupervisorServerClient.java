@@ -44,7 +44,7 @@ public class SupervisorServerClient {
 		try {
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
-					IRSensorConfiguration.SERVER_PORT_LOCAL));
+					IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
 			System.out.println("want to change state of "+node.getId()+" this state "+state);
 			ByteBuffer b = PacketFactory.createSetSta(node.getId(), state);
 			socketClient.write(b);
@@ -79,7 +79,7 @@ public class SupervisorServerClient {
 		try {
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
-					IRSensorConfiguration.SERVER_PORT_LOCAL));
+					IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
 
 			byte[] parentAddress = new byte[4];
 			if (conf.getParentAddress() != null) {
@@ -123,7 +123,7 @@ public class SupervisorServerClient {
 		try {
 			socketClient = SocketChannel.open();
 			socketClient.connect(new InetSocketAddress(node.getAddress(),
-					IRSensorConfiguration.SERVER_PORT_LOCAL));
+					IRSensorConfiguration.SUPERVISOR_SERVER_PORT));
 
 			socketClient.write(PacketFactory.createReqData(node.getId(), cArea, quality, clock));
 		} catch (IOException e) {
