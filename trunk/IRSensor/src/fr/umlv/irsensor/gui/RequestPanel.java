@@ -3,6 +3,7 @@ package fr.umlv.irsensor.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -15,6 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.SequentialGroup;
 
+import fr.umlv.irsensor.common.data.MimeTypes;
+import fr.umlv.irsensor.common.data.MimetypeException;
+import fr.umlv.irsensor.common.data.handler.SensorHandlers;
 import fr.umlv.irsensor.common.fields.CatchArea;
 
 public class RequestPanel {
@@ -22,6 +26,10 @@ public class RequestPanel {
   private final JPanel mainPanel;
   private final RequestModel model;
   private final JLabel imageLabel;
+  private final JTextField area1XField;
+  private final JTextField area1YField;
+  private final JTextField area2XField;
+  private final JTextField area2YField;
 
   public RequestPanel(RequestModel model) {
     this.model = model;
@@ -29,10 +37,10 @@ public class RequestPanel {
     final JLabel areaLabel = new JLabel("Catch area :");
     final JLabel qualityLabel = new JLabel("Quality :");
     final JLabel clockLabel = new JLabel("Clock :");
-    final JTextField area1XField = new JTextField("0");
-    final JTextField area1YField = new JTextField("0");
-    final JTextField area2XField = new JTextField("500");
-    final JTextField area2YField = new JTextField("500");
+    this.area1XField = new JTextField("0");
+    this.area1YField = new JTextField("0");
+    this.area2XField = new JTextField("500");
+    this.area2YField = new JTextField("500");
     final JTextField qualityField = new JTextField("15");
     final JTextField clockField = new JTextField("0");
     final JButton submit = new JButton("Submit");
@@ -68,7 +76,20 @@ public class RequestPanel {
 
       @Override
       public void answerReceived(byte[] data) {
-        ImageIcon icon = new ImageIcon(data);
+        BufferedImage im = null;
+        try {
+          im = (BufferedImage) SensorHandlers.byteArrayToData(data,
+              MimeTypes.IMAGE_PNG);
+        } catch (MimetypeException e) {
+          e.printStackTrace();
+        }
+
+        int x = Integer.parseInt(area1XField.getText());
+        int y = Integer.parseInt(area1YField.getText());
+        int w = Integer.parseInt(area2XField.getText()) - x;
+        int h = Integer.parseInt(area2YField.getText()) - y;
+        ImageIcon icon = new ImageIcon(im.getSubimage(x, y, w, h));
+        // ImageIcon icon = new ImageIcon(data);
         imageLabel.setText(null);
         imageLabel.setIcon(icon);
       }
