@@ -6,10 +6,12 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import fr.umlv.irsensor.common.IRSensorConfiguration;
 import fr.umlv.irsensor.common.packets.DecodePacket;
 import fr.umlv.irsensor.sensor.dispatcher.exception.IdAlreadyUsedException;
+import fr.umlv.irsensor.util.IRSensorLogger;
 
 /**
  * <code>PacketDispatcher</code> implements a TCP server socket on a given
@@ -52,24 +54,18 @@ public class PacketDispatcher {
 
           serverSocket.socket().bind(new InetSocketAddress(socketPort));
 
-          System.out.println("Dispatcher is listening on port " + socketPort);
-          
+          IRSensorLogger.postMessage(Level.INFO,
+              "Dispatcher is listening on port " + socketPort);
+
           while (true) {
             final SocketChannel client = serverSocket.accept();
             new Thread(new Runnable() {
               public void run() {
                 final ByteBuffer buffer = ByteBuffer
-                .allocate(IRSensorConfiguration.PACKET_MAX_SIZE);
+                    .allocate(IRSensorConfiguration.PACKET_MAX_SIZE);
                 try {
-                  
-                  while( client.read(buffer) != -1) {
-                    System.out.println(buffer);
-                    try {
-                      Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                      // TODO Auto-generated catch block
-                      e.printStackTrace();
-                    }
+
+                  while (client.read(buffer) != -1) {
                   }
                 } catch (IOException e) {
                   // TODO Auto-generated catch block
@@ -81,8 +77,9 @@ public class PacketDispatcher {
                     .get(DecodePacket.getId(buffer));
 
                 if (p != null) {
-                  System.out.println(name + " : Receive a packet for "
-                      + p.getId() + " " + DecodePacket.getOpCode(buffer));
+                  IRSensorLogger.postMessage(Level.INFO, name
+                      + " : Receive a packet for " + p.getId() + " "
+                      + DecodePacket.getOpCode(buffer));
                   final ByteBuffer packet = buffer.duplicate();
                   p.setPacket(packet, client);
                 }
@@ -110,7 +107,8 @@ public class PacketDispatcher {
     if (!this.isRunning) {
       if (this.packetRegisterables.containsKey(packetRegisterable.getId()))
         throw new IdAlreadyUsedException();
-      System.out.println("Want to be registered " + packetRegisterable.getId());
+      IRSensorLogger.postMessage(Level.INFO, "Want to be registered "
+          + packetRegisterable.getId());
       this.packetRegisterables.put(packetRegisterable.getId(),
           packetRegisterable);
     }
